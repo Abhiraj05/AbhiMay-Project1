@@ -23,7 +23,7 @@ from donors.views import user_data
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', main,name='home'),
-    path('/form', user_data,name='form'),
+    path('form/', user_data,name='form'),
     
     
 ]
