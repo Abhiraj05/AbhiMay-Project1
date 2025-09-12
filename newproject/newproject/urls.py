@@ -17,9 +17,13 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 from adminpanel.views import main
+from donors.views import user_data
+
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', main,name='home'),
+    path('/form', main,name='form'),
+    
     
 ]
