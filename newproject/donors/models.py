@@ -14,7 +14,7 @@ class BloodGroup(models.TextChoices):
 class Donor(models.Model):
     name = models.CharField(max_length=100, blank = False)
     age = models.IntegerField()
-    blood_group = models.CharField(max_length=3, choices=BloodGroup.choices, required=True)
+    blood_group = models.CharField(max_length=3, choices=BloodGroup.choices, blank=False , null=False)
     phone_number = models.CharField(max_length=10, unique=True, blank=False, null=False)
     email = models.EmailField(unique=True, blank=True, null=True)
     address = models.TextField(blank=False, null=False)
