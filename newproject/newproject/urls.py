@@ -17,13 +17,13 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 from adminpanel.views import main
-from donors.views import user_data
+from donors.views import donor_data
 
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', main,name='home'),
-    path('form/', user_data,name='form'),
+    path('form/', donor_data,name='form'),
     
     
 ]
