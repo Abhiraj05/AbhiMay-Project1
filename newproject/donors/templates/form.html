@@ -1,11 +1,18 @@
-{% extends "base.html" %}
+{% extends "form_base.html" %}
 {% block start %}
-<div>
-<div><input type="text"></div>
-<div><input type="text"></div>
-<div><input type="text"></div>
-<div><input type="text"></div>
-<div><input type="text"></div>
-<button>submit</button>
+<div class="form-container">
+  <div class="form-box">
+    <h2>Register as a Donor</h2>
+    <form action="#" method="POST">
+      <input type="text" placeholder="Full Name">
+      <input type="text" placeholder="Email">
+      <input type="text" placeholder="Phone Number">
+      <input type="text" placeholder="Blood Group">
+      <input type="text" placeholder="Location">
+      <button type="submit">Submit</button>
+    </form>
+  </div>
 </div>
+
+
 {% endblock %}
