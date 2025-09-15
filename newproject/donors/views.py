@@ -41,3 +41,6 @@ def donor_data(request):
             return "please enter the last donation date"
 
     return render(request, "form.html")
+
+def donor_eligibility(request):
+    return render(request, "eligibility_form.html")
