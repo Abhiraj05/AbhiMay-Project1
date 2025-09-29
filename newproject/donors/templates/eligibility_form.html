@@ -1,4 +1,4 @@
-{% extends "base.html" %} 
+{% extends "base.html" %}
 {% block start %}
 <div>
     <script src="https://cdn.tailwindcss.com"></script>
@@ -45,7 +45,24 @@
                 <div class="mt-12 max-w-xl mx-auto">
                     <div class="bg-white p-8 rounded-xl shadow-lg border border-gray-200">
                         <form action="#" method="POST" class="space-y-8">
-                                      {% csrf_token %}
+                            {% csrf_token %}
+
+                            <!-- ✅ Show Django Messages -->
+                            {% if messages %}
+                                <div>
+                                    {% for message in messages %}
+                                        {% if message.tags == 'error' %}
+                                            <div class="mb-4 p-3 text-sm text-red-700 bg-red-100 border border-red-300 rounded-lg">
+                                                {{ message }}
+                                            </div>
+                                        {% elif message.tags == 'success' %}
+                                            <div class="mb-4 p-3 text-sm text-green-700 bg-green-100 border border-green-300 rounded-lg">
+                                                {{ message }}
+                                            </div>
+                                        {% endif %}
+                                    {% endfor %}
+                                </div>
+                            {% endif %}
 
                             <!-- Basic Checks -->
                             <div class="space-y-4">
@@ -53,48 +70,72 @@
                                 <div class="flex items-center justify-between p-4 border rounded-md">
                                     <label for="age" class="text-gray-600">Are you between 18 and 65 years old?</label>
                                     <div class="flex gap-4">
-                                        <label class="flex items-center"><input type="radio" name="age" value="yes" class="mr-2 h-4 w-4 text-red-600 focus:ring-red-500 border-gray-300"> Yes</label>
-                                        <label class="flex items-center"><input type="radio" name="age" value="no" class="mr-2 h-4 w-4 text-red-600 focus:ring-red-500 border-gray-300"> No</label>
+                                        <label class="flex items-center">
+                                            <input type="radio" name="age" value="yes" class="mr-2 h-4 w-4 text-red-600 focus:ring-red-500 border-gray-300"> Yes
+                                        </label>
+                                        <label class="flex items-center">
+                                            <input type="radio" name="age" value="no" class="mr-2 h-4 w-4 text-red-600 focus:ring-red-500 border-gray-300"> No
+                                        </label>
                                     </div>
                                 </div>
                                 <div class="flex items-center justify-between p-4 border rounded-md">
                                     <label for="weight" class="text-gray-600">Do you weigh more than 50 kg (110 lbs)?</label>
                                     <div class="flex gap-4">
-                                        <label class="flex items-center"><input type="radio" name="weight" value="yes" class="mr-2 h-4 w-4 text-red-600 focus:ring-red-500 border-gray-300"> Yes</label>
-                                        <label class="flex items-center"><input type="radio" name="weight" value="no" class="mr-2 h-4 w-4 text-red-600 focus:ring-red-500 border-gray-300"> No</label>
+                                        <label class="flex items-center">
+                                            <input type="radio" name="weight" value="yes" class="mr-2 h-4 w-4 text-red-600 focus:ring-red-500 border-gray-300"> Yes
+                                        </label>
+                                        <label class="flex items-center">
+                                            <input type="radio" name="weight" value="no" class="mr-2 h-4 w-4 text-red-600 focus:ring-red-500 border-gray-300"> No
+                                        </label>
                                     </div>
                                 </div>
                             </div>
 
                             <!-- Health Questions -->
-                             <div class="space-y-4">
+                            <div class="space-y-4">
                                 <p class="font-semibold text-gray-700">Health & Lifestyle:</p>
                                 <div class="flex items-center justify-between p-4 border rounded-md">
                                     <label for="health" class="text-gray-600">Are you feeling healthy and well today?</label>
                                     <div class="flex gap-4">
-                                        <label class="flex items-center"><input type="radio" name="health" value="yes" class="mr-2 h-4 w-4 text-red-600 focus:ring-red-500 border-gray-300"> Yes</label>
-                                        <label class="flex items-center"><input type="radio" name="health" value="no" class="mr-2 h-4 w-4 text-red-600 focus:ring-red-500 border-gray-300"> No</label>
+                                        <label class="flex items-center">
+                                            <input type="radio" name="health" value="yes" class="mr-2 h-4 w-4 text-red-600 focus:ring-red-500 border-gray-300"> Yes
+                                        </label>
+                                        <label class="flex items-center">
+                                            <input type="radio" name="health" value="no" class="mr-2 h-4 w-4 text-red-600 focus:ring-red-500 border-gray-300"> No
+                                        </label>
                                     </div>
                                 </div>
                                 <div class="flex items-center justify-between p-4 border rounded-md">
                                     <label for="tattoo" class="text-gray-600">Have you had a tattoo or piercing in the last 6 months?</label>
                                     <div class="flex gap-4">
-                                        <label class="flex items-center"><input type="radio" name="tattoo" value="yes" class="mr-2 h-4 w-4 text-red-600 focus:ring-red-500 border-gray-300"> Yes</label>
-                                        <label class="flex items-center"><input type="radio" name="tattoo" value="no" class="mr-2 h-4 w-4 text-red-600 focus:ring-red-500 border-gray-300"> No</label>
+                                        <label class="flex items-center">
+                                            <input type="radio" name="tattoo" value="yes" class="mr-2 h-4 w-4 text-red-600 focus:ring-red-500 border-gray-300"> Yes
+                                        </label>
+                                        <label class="flex items-center">
+                                            <input type="radio" name="tattoo" value="no" class="mr-2 h-4 w-4 text-red-600 focus:ring-red-500 border-gray-300"> No
+                                        </label>
                                     </div>
                                 </div>
-                                 <div class="flex items-center justify-between p-4 border rounded-md">
+                                <div class="flex items-center justify-between p-4 border rounded-md">
                                     <label for="fever" class="text-gray-600">Have you had a fever in the last 48 hours?</label>
                                     <div class="flex gap-4">
-                                        <label class="flex items-center"><input type="radio" name="fever" value="yes" class="mr-2 h-4 w-4 text-red-600 focus:ring-red-500 border-gray-300"> Yes</label>
-                                        <label class="flex items-center"><input type="radio" name="fever" value="no" class="mr-2 h-4 w-4 text-red-600 focus:ring-red-500 border-gray-300"> No</label>
+                                        <label class="flex items-center">
+                                            <input type="radio" name="fever" value="yes" class="mr-2 h-4 w-4 text-red-600 focus:ring-red-500 border-gray-300"> Yes
+                                        </label>
+                                        <label class="flex items-center">
+                                            <input type="radio" name="fever" value="no" class="mr-2 h-4 w-4 text-red-600 focus:ring-red-500 border-gray-300"> No
+                                        </label>
                                     </div>
                                 </div>
                                 <div class="flex items-center justify-between p-4 border rounded-md">
                                     <label for="disease" class="text-gray-600">Have you ever tested positive for HIV, Hepatitis B or C?</label>
                                     <div class="flex gap-4">
-                                        <label class="flex items-center"><input type="radio" name="disease" value="yes" class="mr-2 h-4 w-4 text-red-600 focus:ring-red-500 border-gray-300"> Yes</label>
-                                        <label class="flex items-center"><input type="radio" name="disease" value="no" class="mr-2 h-4 w-4 text-red-600 focus:ring-red-500 border-gray-300"> No</label>
+                                        <label class="flex items-center">
+                                            <input type="radio" name="disease" value="yes" class="mr-2 h-4 w-4 text-red-600 focus:ring-red-500 border-gray-300"> Yes
+                                        </label>
+                                        <label class="flex items-center">
+                                            <input type="radio" name="disease" value="no" class="mr-2 h-4 w-4 text-red-600 focus:ring-red-500 border-gray-300"> No
+                                        </label>
                                     </div>
                                 </div>
                             </div>
@@ -103,12 +144,19 @@
                             <div class="pt-4 border-t">
                                 <label class="flex items-start">
                                     <input type="checkbox" id="consent" required class="mt-1 h-5 w-5 text-red-600 focus:ring-red-500 border-gray-300 rounded">
-                                    <span class="ml-3 text-sm text-gray-600">I confirm that the information I have provided is true and accurate to the best of my knowledge.</span>
+                                    <span class="ml-3 text-sm text-gray-600">
+                                        I confirm that the information I have provided is true and accurate to the best of my knowledge.
+                                    </span>
                                 </label>
                             </div>
 
+                            <!-- Submit -->
                             <div>
-                                <button type="submit" class="w-full bg-red-500 text-white font-bold py-3 px-8 rounded-lg hover:bg-red-600 transition-transform transform hover:scale-105 shadow-lg">Complete Profile</button>
+                                <button type="submit" 
+                                    class="w-full bg-red-500 text-white font-bold py-3 px-8 rounded-lg hover:bg-red-600 
+                                           transition-transform transform hover:scale-105 shadow-lg">
+                                    Complete Profile
+                                </button>
                             </div>
                         </form>
                     </div>
@@ -116,6 +164,5 @@
             </div>
         </section>
     </main>
-    
 </div>
 {% endblock %}

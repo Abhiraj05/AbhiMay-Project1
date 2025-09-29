@@ -1,9 +1,11 @@
 from django.shortcuts import render, redirect
 from donors.models import Donor
+from newproject import urls
+from django.contrib import messages
+
 
 def donor_data(request):
-    error = None  # initialize error
-
+    error = None  
     if request.method == "POST":
         name = request.POST.get("donor-name")
         age = request.POST.get("age")
@@ -15,7 +17,7 @@ def donor_data(request):
         location = request.POST.get("location")
         last_donation_date = request.POST.get("last_donation_date")
 
-        # validation
+
         if not name:
             error = "Please enter your name."
         elif not age:
@@ -31,7 +33,7 @@ def donor_data(request):
         elif not last_donation_date:
             error = "Please enter the last donation date."
 
-        # if any error, render the same form with error
+       
         if error:
             return render(request, "form.html", {"error": error,
                                                  "name": name,
@@ -44,7 +46,7 @@ def donor_data(request):
                                                  "location": location,
                                                  "last_donation_date": last_donation_date})
 
-        # save data if no error
+        
         Donor.objects.create(
             name=name,
             age=age,
@@ -61,7 +63,6 @@ def donor_data(request):
     return render(request, "form.html")
 
 
-
 def donor_eligibility(request):
     if request.method == "POST":
         age = request.POST.get("age")
@@ -70,12 +71,24 @@ def donor_eligibility(request):
         tattoo = request.POST.get("tattoo")
         fever = request.POST.get("fever")
         hiv = request.POST.get("disease")
-        if age == "yes" and weight == "yes" and health_conditon == "yes" and tattoo == "no" and fever == "no" and hiv == "no":
-            return redirect("")
-        elif age == "yes" and weight == "yes" and health_conditon == "yes" and tattoo == "yes" and fever == "yes" and hiv == "yes":
-            return redirect("")
-        elif age == "no" and weight == "no" and health_conditon == "no" and tattoo == "no" and fever == "no" and hiv == "no":
-            return redirect("")
 
-        return redirect("/")
+        is_eligible = (
+            age == "yes" and weight == "yes" and
+            health_conditon == "yes" and tattoo == "no" and
+            fever == "no" and hiv == "no"
+        )
+
+        if is_eligible:
+            messages.success(
+                request,
+                "🎉 Thank you! You have successfully registered as a donor."
+            )
+            return redirect("/")  
+        else:
+            messages.error(
+                request,
+                "❌ Sorry, you are not eligible to donate blood right now."
+            )
+            return redirect("eligibility")
+
     return render(request, "eligibility_form.html")
