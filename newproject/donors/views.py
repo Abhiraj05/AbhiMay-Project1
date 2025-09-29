@@ -33,16 +33,7 @@ def donor_data(request):
 
         # if any error, render the same form with error
         if error:
-            return render(request, "form.html", {"error": error,
-                                                 "name": name,
-                                                 "age": age,
-                                                 "gender": gender,
-                                                 "blood_group": blood_group,
-                                                 "address": address,
-                                                 "phone_no": phone_no,
-                                                 "email": email,
-                                                 "location": location,
-                                                 "last_donation_date": last_donation_date})
+            return render(request, "form.html", {"error": error})
 
         # save data if no error
         Donor.objects.create(
