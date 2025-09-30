@@ -16,7 +16,7 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-from adminpanel.views import main
+from adminpanel.views import main,login,sign_up
 from donors.views import donor_data , donor_eligibility
 
 
@@ -25,5 +25,8 @@ urlpatterns = [
     path('', main, name='home'),
     path('form/', donor_data, name='form'),
     path('eligibility/', donor_eligibility, name='eligibility'),
+    path('signup/', sign_up, name='signup'),
+    path('login/', login, name='login'),
+    
 ]
 

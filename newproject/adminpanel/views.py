@@ -36,7 +36,7 @@ def sign_up(request):
         else:
             messages.success(request, "user already exist")
             return redirect("/")
-    return render(request,"login.html")
+    return render(request,"sign_up.html")
 
 
 def login(request):
