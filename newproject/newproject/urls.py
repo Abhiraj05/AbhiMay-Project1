@@ -22,9 +22,8 @@ from donors.views import donor_data , donor_eligibility
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', main,name='home'),
-    path('form/', donor_data,name='form'),
+    path('', main, name='home'),
+    path('form/', donor_data, name='form'),
     path('eligibility/', donor_eligibility, name='eligibility'),
-    
-    
 ]
+
