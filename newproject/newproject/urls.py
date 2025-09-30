@@ -18,6 +18,7 @@ from django.contrib import admin
 from django.urls import path
 from adminpanel.views import main
 from donors.views import donor_data , donor_eligibility
+from home.views import find_donor
 
 
 urlpatterns = [
@@ -25,5 +26,6 @@ urlpatterns = [
     path('', main, name='home'),
     path('form/', donor_data, name='form'),
     path('eligibility/', donor_eligibility, name='eligibility'),
+    path('finddonors/', find_donor, name='finddonors'),
 ]
 
