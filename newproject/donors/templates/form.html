@@ -72,7 +72,12 @@
 
                         <form action="#" method="POST" class="space-y-6">
                             {% csrf_token %}
-
+            <!-- ✅ Error block added here -->
+                        {% if error %}
+                        <div class="mb-4 p-3 bg-red-100 text-red-700 rounded">
+                          {{ error }}
+                        </div>
+                        {% endif %}
                             <div>
                                 <label for="full-name" class="block text-sm font-semibold text-gray-700">Full Name</label>
                                 <input type="text" name="donor-name" id="full-name" placeholder="John Doe" class="mt-1 block w-full px-4 py-3 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-red-500 focus:border-red-500" value="{{ name|default:"" }}">
@@ -129,12 +134,7 @@
  
                             </div>
                             <div>
-                                 <!-- ✅ Error block added here -->
-                        {% if error %}
-                        <div class="mb-4 p-3 bg-red-100 text-red-700 rounded">
-                          {{ error }}
-                        </div>
-                        {% endif %}
+                     
                                 <button type="submit" class="w-full bg-red-500 text-white font-bold py-3 px-8 rounded-lg hover:bg-red-600 transition-transform transform hover:scale-105 shadow-lg">Submit Registration</button>
                             </div>
                         </form>
