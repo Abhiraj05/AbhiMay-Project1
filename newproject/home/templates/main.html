@@ -22,7 +22,7 @@
 
     <div class="min-h-screen hero-bg">
         <!-- Header -->
-        <header class="absolute top-0 left-0 right-0 z-10">
+        <header>
             <div class="container mx-auto px-6 py-4">
                 <nav class="flex items-center justify-between">
                     <!-- Logo -->
@@ -40,15 +40,9 @@
                         <a href="#" class="text-gray-600 hover:text-red-500 transition-colors">Contact</a>
                     </div>
                     <!-- CTA Button -->
-                    <div>
+                    <div class="flex items-center">
                         <a href="login/" class="hidden md:inline-block bg-red-500 text-white font-semibold px-5 py-2 rounded-lg hover:bg-red-600 transition-transform transform hover:scale-105 shadow-md">Login</a>
-                        <button id="menu-btn" class="md:hidden focus:outline-none">
-                            <svg class="w-6 h-6 text-gray-800" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
-                            </svg>
-                        </button>
-                          <a href="signup/" class="hidden md:inline-block bg-white text-red-500 font-semibold px-5 py-2 rounded-lg hover:bg-red-600 transition-transform transform hover:scale-105 shadow-md">Signup</a>
-                        <button id="menu-btn" class="md:hidden focus:outline-none">
+                        <button id="menu-btn" class="md:hidden focus:outline-none ml-4">
                             <svg class="w-6 h-6 text-gray-800" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
                             </svg>
@@ -57,30 +51,29 @@
                 </nav>
                 <!-- Mobile Menu -->
                 <div id="mobile-menu" class="hidden md:hidden mt-4">
-                    <a href="#" class="block text-gray-600 py-2">Find Donors</a>
+                    <a href="finddonors/" class="block text-gray-600 py-2">Find Donors</a>
                     <a href="#" class="block text-gray-600 py-2">Blood Banks</a>
                     <a href="#" class="block text-gray-600 py-2">About</a>
                     <a href="#" class="block text-gray-600 py-2">Contact</a>
-                    <a href="#" class="block bg-red-500 text-white font-semibold text-center mt-2 px-5 py-2 rounded-lg hover:bg-red-600">Login</a>
+                    <a href="login/" class="block bg-red-500 text-white font-semibold text-center mt-2 px-5 py-2 rounded-lg hover:bg-red-600">Login</a>
                 </div>
             </div>
         </header>
 
         <!-- Hero Section -->
-        <main class="container mx-auto px-6 pt-32 md:pt-40 pb-12">
-            <div class="grid md:grid-cols-2 gap-12 items-center flex-wrap">
+        <main class="container mx-auto px-6 pt-16 md:pt-24 pb-12">
+            <div class="grid md:grid-cols-2 gap-12 items-center">
                 <!-- Left Content -->
                 <div class="text-center md:text-left">
-                    {# ✅ SUCCESS messages appear here, just above badge #}
                     {% if messages %}
-                      {% for message in messages %}
-                        {% if message.tags == 'success' %}
-                          <div class="mb-4 px-4 py-3 rounded bg-green-100 border border-green-400 text-green-700" role="alert">
-                            <strong class="font-bold">Success!</strong>
-                            <span class="block sm:inline">{{ message }}</span>
-                          </div>
-                        {% endif %}
-                      {% endfor %}
+                        {% for message in messages %}
+                            {% if message.tags == 'success' %}
+                                <div class="mb-4 px-4 py-3 rounded bg-green-100 border border-green-400 text-green-700" role="alert">
+                                    <strong class="font-bold">Success!</strong>
+                                    <span class="block sm:inline">{{ message }}</span>
+                                </div>
+                            {% endif %}
+                        {% endfor %}
                     {% endif %}
 
                     <span class="inline-block bg-red-100 text-red-600 text-sm font-semibold px-4 py-1 rounded-full mb-4">
@@ -96,7 +89,7 @@
                         <a href="form/" class="bg-red-500 text-white font-bold py-3 px-8 rounded-lg text-center hover:bg-red-600 transition-transform transform hover:scale-105 shadow-lg">
                             Become a Donor
                         </a>
-                        <a href="#" class="bg-white text-gray-700 font-bold py-3 px-8 rounded-lg text-center hover:bg-gray-100 transition-colors border border-gray-300 shadow-lg">
+                        <a href="finddonors/" class="bg-white text-gray-700 font-bold py-3 px-8 rounded-lg text-center hover:bg-gray-100 transition-colors border border-gray-300 shadow-lg">
                             Request Blood
                         </a>
                     </div>
@@ -120,47 +113,38 @@
         <div class="container mx-auto">
             <h2 class="text-3xl md:text-4xl font-bold text-gray-800 text-center">How It Works</h2>
             <p class="mt-2 text-lg text-gray-500 text-center max-w-2xl mx-auto">
-                A simple 3-step process to connect donors with those in need.
+                A simple, safe, and secure 3-step process to connect you with help.
             </p>
             <div class="grid md:grid-cols-3 gap-12 mt-12 text-center">
+                <!-- Step 1 -->
                 <div class="p-8 border border-gray-200 rounded-xl hover:shadow-xl transition-shadow">
                     <div class="bg-red-100 text-red-500 rounded-full h-16 w-16 inline-flex items-center justify-center mb-4">
-                        <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" 
-                             xmlns="http://www.w3.org/2000/svg">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
-                                  d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 
-                                  112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
+                        <svg class="w-8 h-8" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z" />
                         </svg>
                     </div>
-                    <h3 class="text-xl font-bold mb-2">Register as a Donor</h3>
-                    <p class="text-gray-500">Create your profile in minutes and become a part of our lifesaving community.</p>
+                    <h3 class="text-xl font-bold mb-2">Submit an Urgent Request</h3>
+                    <p class="text-gray-500">Fill out a simple and secure form with the patient's details and required blood group.</p>
                 </div>
+                <!-- Step 2 -->
                 <div class="p-8 border border-gray-200 rounded-xl hover:shadow-xl transition-shadow">
                     <div class="bg-red-100 text-red-500 rounded-full h-16 w-16 inline-flex items-center justify-center mb-4">
-                        <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" 
-                             xmlns="http://www.w3.org/2000/svg">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
-                                  d="M21 21l-6-6m2-5a7 7 0 
-                                  11-14 0 7 7 0 0114 0z"/>
+                        <svg class="w-8 h-8" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                             <path stroke-linecap="round" stroke-linejoin="round" d="M14.857 17.082a23.848 23.848 0 005.454-1.31A8.967 8.967 0 0118 9.75v-.7V9A6 6 0 006 9v.75a8.967 8.967 0 01-2.312 6.022c1.733.64 3.56 1.085 5.455 1.31m5.714 0a24.255 24.255 0 01-5.714 0m5.714 0a3 3 0 11-5.714 0" />
                         </svg>
                     </div>
-                    <h3 class="text-xl font-bold mb-2">Find or Request</h3>
-                    <p class="text-gray-500">Search for donors by blood type and location or post a blood request.</p>
+                    <h3 class="text-xl font-bold mb-2">Donors are Notified</h3>
+                    <p class="text-gray-500">Our system instantly and privately alerts all matching, verified donors in the nearby area.</p>
                 </div>
+                <!-- Step 3 -->
                 <div class="p-8 border border-gray-200 rounded-xl hover:shadow-xl transition-shadow">
                     <div class="bg-red-100 text-red-500 rounded-full h-16 w-16 inline-flex items-center justify-center mb-4">
-                        <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" 
-                             xmlns="http://www.w3.org/2000/svg">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
-                                  d="M17.657 16.657L13.414 20.9a1.998 
-                                  1.998 0 01-2.827 0l-4.244-4.243a8 8 0 
-                                  1111.314 0z"/>
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
-                                  d="M15 11a3 3 0 11-6 0 3 3 0z"/>
+                        <svg class="w-8 h-8" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                             <path stroke-linecap="round" stroke-linejoin="round" d="M7.5 8.25h9m-9 3H12m-9.75 1.51c0 1.6 1.123 2.994 2.707 3.227 1.129.166 2.27.293 3.423.379.35.026.67.21.865.501L12 21l2.755-4.133a1.14 1.14 0 01.865-.501 48.172 48.172 0 003.423-.379c1.584-.233 2.707-1.626 2.707-3.228V6.741c0-1.602-1.123-2.995-2.707-3.228A48.394 48.394 0 0012 3c-2.392 0-4.744.175-7.043.513C3.373 3.746 2.25 5.14 2.25 6.741v6.018z" />
                         </svg>
                     </div>
-                    <h3 class="text-xl font-bold mb-2">Connect & Donate</h3>
-                    <p class="text-gray-500">Receive notifications and connect with donors or patients at nearby locations.</p>
+                    <h3 class="text-xl font-bold mb-2">Get Connected Securely</h3>
+                    <p class="text-gray-500">You receive a donor's contact details via SMS only after they have accepted your request.</p>
                 </div>
             </div>
         </div>
@@ -201,7 +185,7 @@
             <p class="mt-4 text-lg max-w-2xl mx-auto opacity-90">
                 Your decision to donate blood can save a life, or even several if your blood is separated into its components. Register today.
             </p>
-            <a href="#" class="mt-8 inline-block bg-white text-red-500 font-bold py-3 px-8 rounded-lg text-center hover:bg-red-100 transition-all transform hover:scale-105">
+            <a href="form/" class="mt-8 inline-block bg-white text-red-500 font-bold py-3 px-8 rounded-lg text-center hover:bg-red-100 transition-all transform hover:scale-105">
                 Join The Community
             </a>
         </div>
@@ -212,7 +196,7 @@
         <div class="container mx-auto py-10 px-6">
             <div class="grid md:grid-cols-3 gap-8">
                 <div>
-                    <h3 class="font-bold text-xl mb-2">Rakthadaan</h3>
+                    <h3 class="font-bold text-xl mb-2">Rakthdaan</h3>
                     <p class="text-gray-400">Connecting blood donors with recipients to save lives.</p>
                 </div>
                 <div>
@@ -232,7 +216,7 @@
                 </div>
             </div>
             <div class="mt-8 border-t border-gray-700 pt-6 text-center text-gray-500">
-                &copy; 2024 Rakthadaan. All Rights Reserved.
+                &copy; 2024 Rakthdaan. All Rights Reserved.
             </div>
         </div>
     </footer>
