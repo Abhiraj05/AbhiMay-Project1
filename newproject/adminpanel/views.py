@@ -16,9 +16,10 @@ def user_exist(username,password):
 
 def sign_up(request):
     if request.method  == "POST":
-        username=username.POST.get("")
-        password=password.POST.get("")
-        confirm_password=confirm_password.POST.get("")
+        username=request.POST.get("username")
+        email=request.POST.get("email")
+        password=request.POST.get("password")
+        confirm_password=request.POST.get("confirm_password")
         
         if value_check(username):
             messages.warning("please the enter the username")
@@ -30,21 +31,19 @@ def sign_up(request):
             messages.warning("password is not matching")
 
         if not user_exist(username,password):
-            User_Registration.objects.create(username=username,password=password)
+            User_Registration.objects.create(username=username,email=email,password=password)
             messages.success(request, "user register successfully")
-            return redirect("/")
+            return redirect("login/")
         else:
             messages.success(request, "user already exist")
-            return redirect("/")
+            return redirect("signup/")
     return render(request,"sign_up.html")
 
 
-def login(request):
-    
+def login(request): 
     if request.method  == "POST":
-        username=username.POST.get("")
-        password=password.POST.get("")
-        confirm_password=confirm_password.POST.get("")
+        username=request.POST.get("username")
+        password=request.POST.get("password")
         
         if value_check(username):
             messages.warning("please the enter the username")
@@ -54,5 +53,11 @@ def login(request):
         
         if user_exist(username,password):
             messages.warning("user not register")
+            return redirect("login/")
+        else:
+            messages.warning("login successful")
+            return redirect("finddonors/")
+    
+            
            
     return render(request,"login.html")
