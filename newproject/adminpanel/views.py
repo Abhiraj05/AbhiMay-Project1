@@ -59,6 +59,9 @@ def login(request):
             
         elif len(password)>=6:
             error="Password length should be a minimum of 6 characters."
+                   
+            if error:
+                 return render(request,"login.html",{"error":error})
             
         if user_exist(username,password):
             message="user not register."
