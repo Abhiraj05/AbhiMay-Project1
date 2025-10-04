@@ -16,7 +16,7 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-from adminpanel.views import main,login,sign_up
+from adminpanel.views import main,login_view, logout_view
 from donors.views import donor_data , donor_eligibility
 from home.views import find_donor
 
@@ -27,7 +27,8 @@ urlpatterns = [
     path('form/', donor_data, name='form'),
     path('eligibility/', donor_eligibility, name='eligibility'),
     path('finddonors/', find_donor, name='finddonors'),
-    path('signup/', sign_up, name='signup'),
-    path('login/', login, name='login'),
+    # path('signup/', sign_up, name='signup'),
+    path('login/', login_view, name='login'),
+    path('logout/', logout_view, name='logout'),
 ]
 

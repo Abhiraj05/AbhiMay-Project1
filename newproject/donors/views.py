@@ -1,44 +1,61 @@
 from django.shortcuts import render, redirect
 from donors.models import Donor
-from newproject import urls
 from django.contrib import messages
-
+from django.contrib.auth.models import User # Import the User model
 
 def donor_data(request):
-    error = None  
+    error = None 
     if request.method == "POST":
-        name = request.POST.get("donor-name")
+        name = request.POST.get("donor_name")
         age = request.POST.get("age")
         gender = request.POST.get("gender")
-        blood_group = request.POST.get("blood-group")
-        address = request.POST.get("address")
-        phone_no = request.POST.get("phone-no")
         email = request.POST.get("email")
-        location = request.POST.get("location")
+        phone_no = request.POST.get("phone_no")
+        password = request.POST.get("password")
+        confirm_password = request.POST.get("confirm_password")
+        blood_group = request.POST.get("blood_group")
+        address = request.POST.get("location")
         last_donation_date = request.POST.get("last_donation_date")
-
 
         if not name:
             error = "Please enter your name."
         elif not age:
             error = "Please enter your age."
         elif int(age) < 18:
-            error = "You cannot donate blood."
-        elif not address:
-            error = "Please enter your address."
+            error = "Sorry, you must be at least 18 years old to register."
         elif not phone_no:
             error = "Please enter your phone number."
         elif not email:
             error = "Please enter your email."
-        elif not last_donation_date:
-            error = "Please enter the last donation date."
+        elif User.objects.filter(email=email).exists():
+            error = "A user with this email address already exists."
+        elif not password or not confirm_password:
+            error = "Please enter and confirm your password."
+        elif password != confirm_password:
+            error = "Passwords do not match."
 
-       
         if error:
-            return render(request, "form.html", {"error": error})
+            
+            context = {
+                'error': error, 'name': name, 'age': age, 'gender': gender, 
+                'phone_no': phone_no, 'email': email, 'address': address, 
+                'last_donation_date': last_donation_date
+            }
+            return render(request, "form.html", context)
+
+        
+        user = User.objects.create_user(
+            username=email,
+            email=email,
+            password=password
+        )
+       
+        user.first_name = name.split(' ')[0]
+        user.save()
 
         
         Donor.objects.create(
+            user=user,
             name=name,
             age=age,
             blood_group=blood_group,
@@ -46,7 +63,7 @@ def donor_data(request):
             phone_number=phone_no,
             email=email,
             address=address,
-            last_donation_date=last_donation_date
+            last_donation_date=last_donation_date if last_donation_date else None
         )
 
         return redirect("/eligibility")
@@ -56,17 +73,17 @@ def donor_data(request):
 
 def donor_eligibility(request):
     if request.method == "POST":
-        age = request.POST.get("age")
-        weight = request.POST.get("weight")
-        health_conditon = request.POST.get("health")
-        tattoo = request.POST.get("tattoo")
-        fever = request.POST.get("fever")
-        hiv = request.POST.get("disease")
+        age_check = request.POST.get("age")
+        weight_check = request.POST.get("weight")
+        health_condition = request.POST.get("health")
+        tattoo_check = request.POST.get("tattoo")
+        fever_check = request.POST.get("fever")
+        hiv_check = request.POST.get("disease")
 
         is_eligible = (
-            age == "yes" and weight == "yes" and
-            health_conditon == "yes" and tattoo == "no" and
-            fever == "no" and hiv == "no"
+            age_check == "yes" and weight_check == "yes" and
+            health_condition == "yes" and tattoo_check == "no" and
+            fever_check == "no" and hiv_check == "no"
         )
 
         if is_eligible:
@@ -74,12 +91,13 @@ def donor_eligibility(request):
                 request,
                 "🎉 Thank you! You have successfully registered as a donor."
             )
-            return redirect("/")  
+            return redirect("/") 
         else:
             messages.error(
                 request,
-                "❌ Sorry, you are not eligible to donate blood right now."
+                "❌ Sorry, you are not eligible to donate blood based on your answers."
             )
-            return redirect("eligibility")
+            return redirect("eligibility") 
 
     return render(request, "eligibility_form.html")
+

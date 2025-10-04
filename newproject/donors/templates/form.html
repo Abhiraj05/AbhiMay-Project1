@@ -22,24 +22,24 @@
             <nav class="flex items-center justify-between">
                 <!-- Logo -->
                 <div class="flex items-center space-x-2">
-                    <a href="index.html" class="flex items-center space-x-2">
+                    <a href="/" class="flex items-center space-x-2">
                         <svg class="h-8 w-8 text-red-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12z" />
                         </svg>
-                        <h1 class="text-2xl font-bold text-gray-800">Rakthadaan</h1>
+                        <h1 class="text-2xl font-bold text-gray-800">Rakthdaan</h1>
                     </a>
                 </div>
 
                 <!-- Desktop Navigation Links -->
                 <div class="hidden md:flex items-center space-x-8">
-                    <a href="index.html#find-donors" class="text-gray-600 hover:text-red-500 transition-colors">Find Donors</a>
-                    <a href="index.html#blood-banks" class="text-gray-600 hover:text-red-500 transition-colors">Blood Banks</a>
-                    <a href="index.html#about" class="text-gray-600 hover:text-red-500 transition-colors">About</a>
+                    <a href="/finddonors/" class="text-gray-600 hover:text-red-500 transition-colors">Find Donors</a>
+                    <a href="#" class="text-gray-600 hover:text-red-500 transition-colors">Blood Banks</a>
+                    <a href="#" class="text-gray-600 hover:text-red-500 transition-colors">About</a>
                 </div>
 
                 <!-- CTA Button -->
                 <div>
-                    <a href="#" class="hidden md:inline-block bg-red-500 text-white font-semibold px-5 py-2 rounded-lg hover:bg-red-600 transition-transform transform hover:scale-105 shadow-md">Login</a>
+                    <a href="/login/" class="hidden md:inline-block bg-red-500 text-white font-semibold px-5 py-2 rounded-lg hover:bg-red-600 transition-transform transform hover:scale-105 shadow-md">Login</a>
                     <button id="menu-btn" class="md:hidden focus:outline-none">
                         <svg class="w-6 h-6 text-gray-800" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
@@ -49,10 +49,10 @@
             </nav>
              <!-- Mobile Menu -->
             <div id="mobile-menu" class="hidden md:hidden mt-4">
-                <a href="index.html#find-donors" class="block text-gray-600 py-2">Find Donors</a>
-                <a href="index.html#blood-banks" class="block text-gray-600 py-2">Blood Banks</a>
-                <a href="index.html#about" class="block text-gray-600 py-2">About</a>
-                <a href="#" class="block bg-red-500 text-white font-semibold text-center mt-2 px-5 py-2 rounded-lg hover:bg-red-600">Login</a>
+                <a href="/finddonors/" class="block text-gray-600 py-2">Find Donors</a>
+                <a href="#" class="block text-gray-600 py-2">Blood Banks</a>
+                <a href="#" class="block text-gray-600 py-2">About</a>
+                <a href="/login/" class="block bg-red-500 text-white font-semibold text-center mt-2 px-5 py-2 rounded-lg hover:bg-red-600">Login</a>
             </div>
         </div>
     </header>
@@ -62,55 +62,68 @@
         <section class="py-20 px-6">
             <div class="container mx-auto">
                 <div class="text-center">
-                    <h2 class="text-3xl md:text-4xl font-bold text-gray-800">Register as a Donor</h2>
-                    <p class="mt-2 text-lg text-gray-500 max-w-2xl mx-auto">Join our community of lifesavers today. Your information is secure and will only be used to connect you with those in need.</p>
+                    <h2 class="text-3xl md:text-4xl font-bold text-gray-800">Become a Donor</h2>
+                    <p class="mt-2 text-lg text-gray-500 max-w-2xl mx-auto">Create your account to join our lifesaving community. Your information is secure and will only be used to connect you with those in need.</p>
                 </div>
                 
                 <div class="mt-12 max-w-xl mx-auto">
                     <div class="bg-white p-8 rounded-xl shadow-lg border border-gray-200">
-                       
-
                         <form action="#" method="POST" class="space-y-6">
                             {% csrf_token %}
-            <!-- ✅ Error block added here -->
-                        {% if error %}
-                        <div class="mb-4 p-3 bg-red-100 text-red-700 rounded">
-                          {{ error }}
-                        </div>
-                        {% endif %}
+                            <!-- Error block -->
+                            {% if error %}
+                            <div class="mb-4 p-3 bg-red-100 text-red-700 rounded-md">
+                                {{ error }}
+                            </div>
+                            {% endif %}
+                            
+                            <!-- Personal Information -->
                             <div>
                                 <label for="full-name" class="block text-sm font-semibold text-gray-700">Full Name</label>
-                                <input type="text" name="donor-name" id="full-name" placeholder="John Doe" class="mt-1 block w-full px-4 py-3 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-red-500 focus:border-red-500" value="{{ name|default:"" }}">
-                            </div>
-                            <div>
-                                <label for="age" class="block text-sm font-semibold text-gray-700">Age</label>
-                                <input type="text" name="age" id="age" placeholder="25" class="mt-1 block w-full px-4 py-3 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-red-500 focus:border-red-500" value="{{ age|default:"" }}">
-                            </div>
-                            <div>
-                                <label for="gender" class="block text-sm font-semibold text-gray-700">Gender</label>
-                                <select id="gender" name="gender" class="mt-1 block w-full px-4 py-3 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-red-500 focus:border-red-500">
-                                    <option>Select</option>
-                                    <option {% if gender == "Male" %}selected{% endif %}>Male</option>
-                                    <option  {% if gender == "Female" %}selected{% endif %} >Female</option>
-                                </select>
-                            </div>
-                            <div>
-                                <label for="email" class="block text-sm font-semibold text-gray-700">Email Address</label>
-                                <input type="email" name="email" id="email" placeholder="you@example.com" class="mt-1 block w-full px-4 py-3 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-red-500 focus:border-red-500"  value="{{ email|default:"" }}">
-                            </div>
-                            <div>
-                                <label for="phone" class="block text-sm font-semibold text-gray-700">Phone Number</label>
-                                <input type="tel" name="phone-no" id="phone" placeholder="+91 12345 67890" class="mt-1 block w-full px-4 py-3 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-red-500 focus:border-red-500" value="{{ phone_no|default:"" }}">
-                            </div>
-                            <div>
-                                <label for="address" class="block text-sm font-semibold text-gray-700">Address</label>
-                                <input type="text" name="address" id="address" placeholder="Address" class="mt-1 block w-full px-4 py-3 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-red-500 focus:border-red-500" value="{{ address|default:"" }}">
+                                <input type="text" name="donor_name" id="full-name" placeholder="John Doe" class="mt-1 block w-full px-4 py-3 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-red-500 focus:border-red-500" value="{{ name|default:"" }}" required>
                             </div>
                             <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
                                 <div>
+                                    <label for="age" class="block text-sm font-semibold text-gray-700">Age</label>
+                                    <input type="number" name="age" id="age" placeholder="25" class="mt-1 block w-full px-4 py-3 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-red-500 focus:border-red-500" value="{{ age|default:"" }}" required>
+                                </div>
+                                <div>
+                                    <label for="gender" class="block text-sm font-semibold text-gray-700">Gender</label>
+                                    <select id="gender" name="gender" class="mt-1 block w-full px-4 py-3 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-red-500 focus:border-red-500" required>
+                                        <option value="">Select</option>
+                                        <option {% if gender == "Male" %}selected{% endif %}>Male</option>
+                                        <option {% if gender == "Female" %}selected{% endif %} >Female</option>
+                                        <option {% if gender == "Other" %}selected{% endif %} >Other</option>
+                                    </select>
+                                </div>
+                            </div>
+                            
+                            <!-- Contact Information -->
+                            <div>
+                                <label for="email" class="block text-sm font-semibold text-gray-700">Email Address</label>
+                                <input type="email" name="email" id="email" placeholder="you@example.com" class="mt-1 block w-full px-4 py-3 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-red-500 focus:border-red-500" value="{{ email|default:"" }}" required>
+                            </div>
+                             <div>
+                                <label for="phone" class="block text-sm font-semibold text-gray-700">Phone Number</label>
+                                <input type="tel" name="phone_no" id="phone" placeholder="+91 12345 67890" class="mt-1 block w-full px-4 py-3 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-red-500 focus:border-red-500" value="{{ phone_no|default:"" }}" required>
+                            </div>
+
+                            <!-- Password Fields -->
+                            <div>
+                                <label for="password" class="block text-sm font-semibold text-gray-700">Password</label>
+                                <input type="password" name="password" id="password" placeholder="Enter a secure password" class="mt-1 block w-full px-4 py-3 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-red-500 focus:border-red-500" required>
+                            </div>
+                             <div>
+                                <label for="confirm-password" class="block text-sm font-semibold text-gray-700">Confirm Password</label>
+                                <input type="password" name="confirm_password" id="confirm-password" placeholder="Confirm your password" class="mt-1 block w-full px-4 py-3 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-red-500 focus:border-red-500" required>
+                            </div>
+
+                            <!-- Donation Specifics -->
+                             <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                                <div>
                                     <label for="blood-group" class="block text-sm font-semibold text-gray-700">Blood Group</label>
-                                    <select id="blood-group" name="blood-group" class="mt-1 block w-full px-4 py-3 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-red-500 focus:border-red-500">
-                                        <option>Select</option>
+                                    <select id="blood-group" name="blood_group" class="mt-1 block w-full px-4 py-3 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-red-500 focus:border-red-500" required>
+                                        <option value="">Select</option>
                                         <option {% if blood_group == "A+" %}selected{% endif %}>A+</option>
                                         <option {% if blood_group == "A-" %}selected{% endif %} >A-</option>
                                         <option {% if blood_group == "B+" %}selected{% endif %}>B+</option>
@@ -123,19 +136,17 @@
                                 </div>
                                 <div>
                                     <label for="location" class="block text-sm font-semibold text-gray-700">City / Location</label>
-                                    <input type="text" name="location" id="location" placeholder="e.g., Mumbai" class="mt-1 block w-full px-4 py-3 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-red-500 focus:border-red-500" value="{{ location|default:"" }}">
+                                    <input type="text" name="location" id="location" placeholder="e.g., Mumbai" class="mt-1 block w-full px-4 py-3 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-red-500 focus:border-red-500" value="{{ location|default:"" }}" required>
                                 </div>
                             </div>
                             <div>
-                                <label for="last_donation_date" class="block text-sm font-semibold text-gray-700">Last Donation Date</label>
-                                <input type="date" name="last_donation_date" id="last_donation_date"
-       class="mt-1 block w-full px-4 py-3 bg-white border border-gray-300 rounded-md shadow-sm 
-              focus:outline-none focus:ring-red-500 focus:border-red-500"/ value="{{ last_donation_date|default:"" }}">
- 
+                                <label for="last_donation_date" class="block text-sm font-semibold text-gray-700">Last Donation Date (Optional)</label>
+                                <input type="date" name="last_donation_date" id="last_donation_date" class="mt-1 block w-full px-4 py-3 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-red-500 focus:border-red-500" value="{{ last_donation_date|default:"" }}">
                             </div>
+
+                            <!-- Submit Button -->
                             <div>
-                     
-                                <button type="submit" class="w-full bg-red-500 text-white font-bold py-3 px-8 rounded-lg hover:bg-red-600 transition-transform transform hover:scale-105 shadow-lg">Submit Registration</button>
+                                <button type="submit" class="w-full bg-red-500 text-white font-bold py-3 px-8 rounded-lg hover:bg-red-600 transition-transform transform hover:scale-105 shadow-lg">Create Account & Register</button>
                             </div>
                         </form>
                     </div>
