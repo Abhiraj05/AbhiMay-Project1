@@ -2,121 +2,75 @@
 {% block start %}
 <div>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
     <style>
         body {
             font-family: 'Inter', sans-serif;
-            background-color: #FEF2F2; /* A very light red, consistent with the brand */
-        }
-        /* Custom focus style for inputs */
-        .focus-brand-red:focus {
-            border-color: #EF4444;
-            box-shadow: 0 0 0 2px rgba(239, 68, 68, 0.2);
+            background-color: #f9fafb; /* light neutral background */
         }
     </style>
 
-    <div class="min-h-screen flex items-center justify-center p-4">
-        <div class="bg-white rounded-2xl shadow-2xl flex w-full max-w-5xl overflow-hidden">
+    <div class="min-h-screen flex items-center justify-center px-4">
+        <div class="w-full max-w-md bg-white rounded-xl p-8 shadow-sm border border-gray-200">
             
-            <!-- Left Side - Visual/Brand Section (Hidden on Mobile) -->
-            <div class="hidden lg:flex w-1/2 flex-col items-center justify-center bg-gradient-to-br from-red-500 to-red-700 p-12 text-white">
-                <div class="flex items-center space-x-2 mb-6">
-                     <svg class="h-12 w-12" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12z" />
-                    </svg>
-                    <h1 class="text-4xl font-bold">Rakthdaan</h1>
-                </div>
-                <h2 class="text-3xl font-bold text-center mb-4">Welcome Back!</h2>
-                <p class="text-center text-red-100 max-w-sm">
-                    Thank you for being part of our lifesaving community. Your contribution makes a world of difference.
-                </p>
+            <!-- Logo / Title -->
+            <div class="flex flex-col items-center mb-6">
+                {% comment %} <svg class="h-12 w-12 text-red-500 mb-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"> {% endcomment %}
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12z" />
+                </svg>
+                <h1 class="text-2xl font-bold text-gray-800">Rakthdaan</h1>
+                <p class="text-sm text-gray-500 mt-1">Login to continue</p>
             </div>
 
-            <!-- Right Side - Form Section -->
-            <div class="w-full lg:w-1/2 p-8 md:p-12">
-                <!-- Header for mobile -->
-                 <div class="flex lg:hidden items-center space-x-2 mb-8 justify-center">
-                    <svg class="h-10 w-10 text-red-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12z" />
-                    </svg>
-                    <h1 class="text-3xl font-bold text-gray-800">Rakthdaan</h1>
+            <!-- Error messages -->
+            {% if messages %}
+                {% for message in messages %}
+                    {% if message.tags == 'error' %}
+                        <div class="mb-4 px-4 py-3 rounded-lg bg-red-100 border border-red-300 text-red-800 text-sm" role="alert">
+                            {{ message }}
+                        </div>
+                    {% endif %}
+                {% endfor %}
+            {% endif %}
+
+            <!-- Form -->
+            <form class="space-y-5" action="#" method="POST">
+                {% csrf_token %}
+                
+                <div>
+                    <label for="email" class="text-sm font-medium text-gray-700">Email</label>
+                    <input id="email" name="email" type="email" required
+                           class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-lg focus:border-red-500 focus:ring-1 focus:ring-red-500"
+                           placeholder="you@example.com">
                 </div>
 
-                <h2 class="text-2xl font-bold text-gray-800 text-center">Login to Your Account</h2>
-                <p class="text-gray-500 text-center mt-2 mb-6">Access your dashboard and continue saving lives.</p>
-                
-                {% if messages %}
-                    {% for message in messages %}
-                        {% if message.tags == 'error' %}
-                            <div class="mb-4 px-4 py-3 rounded-lg bg-red-100 border border-red-300 text-red-800 text-sm" role="alert">
-                                <span class="block sm:inline">{{ message }}</span>
-                            </div>
-                        {% endif %}
-                    {% endfor %}
-                {% endif %}
-
-                <form class="space-y-6" action="#" method="POST">
-                    {% csrf_token %}
-                    
-                    <div>
-                        <label for="email-address" class="text-sm font-medium text-gray-700">Email address</label>
-                        <div class="mt-1 relative">
-                             <span class="absolute inset-y-0 left-0 flex items-center pl-3">
-                                <svg class="h-5 w-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"><path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z" /><path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z" /></svg>
-                            </span>
-                            <input id="email-address" name="email" type="email" autocomplete="email" required 
-                                   class="w-full pl-10 pr-3 py-3 border border-gray-300 rounded-lg text-gray-900 placeholder-gray-500 focus:outline-none focus-brand-red transition-all" 
-                                   placeholder="you@example.com">
-                        </div>
-                    </div>
-
-                    <div>
-                        <label for="password" class="text-sm font-medium text-gray-700">Password</label>
-                        <div class="mt-1 relative">
-                             <span class="absolute inset-y-0 left-0 flex items-center pl-3">
-                                <svg class="h-5 w-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 1a4.5 4.5 0 00-4.5 4.5V9H5a2 2 0 00-2 2v6a2 2 0 002 2h10a2 2 0 002-2v-6a2 2 0 00-2-2h-.5V5.5A4.5 4.5 0 0010 1zm3 8V5.5a3 3_0 10-6 0V9h6z" clip-rule="evenodd" /></svg>
-                            </span>
-                            <input id="password" name="password" type="password" autocomplete="current-password" required 
-                                   class="w-full pl-10 pr-3 py-3 border border-gray-300 rounded-lg text-gray-900 placeholder-gray-500 focus:outline-none focus-brand-red transition-all" 
-                                   placeholder="••••••••">
-                        </div>
-                    </div>
-
-                    <div class="flex items-center justify-between">
-                        <div class="flex items-center">
-                            <input id="remember-me" name="remember-me" type="checkbox" class="h-4 w-4 text-red-600 focus:ring-red-500 border-gray-300 rounded">
-                            <label for="remember-me" class="ml-2 block text-sm text-gray-900">
-                                Remember me
-                            </label>
-                        </div>
-                        <div class="text-sm">
-                            <a href="#" class="font-medium text-red-600 hover:text-red-500">
-                                Forgot password?
-                            </a>
-                        </div>
-                    </div>
-                    
-                    <div class="pt-2">
-                        <button type="submit" 
-                                class="w-full flex justify-center py-3 px-4 border border-transparent font-bold rounded-lg text-white bg-red-500 hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 transition-all transform hover:scale-105 shadow-md hover:shadow-lg">
-                            Sign In
-                        </button>
-                    </div>
-                </form>
-                
-                <div class="text-center mt-8">
-                     <p class="text-sm text-gray-600">
-                        Don't have an account?
-                        <a href="/signup" class="font-bold text-red-600 hover:text-red-500 transition-colors">
-                            Sign up here
-                        </a>
-                    </p>
+                <div>
+                    <label for="password" class="text-sm font-medium text-gray-700">Password</label>
+                    <input id="password" name="password" type="password" required
+                           class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-lg focus:border-red-500 focus:ring-1 focus:ring-red-500"
+                           placeholder="••••••••">
                 </div>
-            </div>
+
+                <div class="flex items-center justify-between text-sm">
+                    <label class="flex items-center">
+                        <input type="checkbox" class="h-4 w-4 text-red-600 border-gray-300 rounded">
+                        <span class="ml-2 text-gray-700">Remember me</span>
+                    </label>
+                    <a href="#" class="text-red-600 hover:underline">Forgot password?</a>
+                </div>
+
+                <button type="submit"
+                        class="w-full py-2 px-4 bg-red-500 text-white font-semibold rounded-lg hover:bg-red-600 transition">
+                    Sign In
+                </button>
+            </form>
+
+            <!-- Signup link -->
+            <p class="text-center text-sm text-gray-600 mt-6">
+                Don’t have an account?
+                <a href="/signup" class="text-red-600 font-semibold hover:underline">Sign up</a>
+            </p>
         </div>
     </div>
 </div>
 {% endblock %}
-
