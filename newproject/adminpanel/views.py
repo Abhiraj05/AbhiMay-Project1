@@ -6,58 +6,66 @@ from adminpanel.models import *
 def main(request):
     return render(request,"main.html")
 
-def value_check(value):
-    return value == "" or value is None
-
 def user_exist(username,password):
-    user=User_Registration.objects.filter(username=username,password=password).first()
-    return user
-
+    return User_Registration.objects.filter(username=username,password=password).first()
 
 def sign_up(request):
+    error=None
+    message=None
     if request.method  == "POST":
         username=request.POST.get("username")
         email=request.POST.get("email")
         password=request.POST.get("password")
         confirm_password=request.POST.get("confirm_password")
         
-        if value_check(username):
-            messages.warning("please the enter the username")
+        if not username:
+            error="please the enter the username."
             
-        if value_check(password):
-            messages.warning("please the enter the password")
+        elif not password:
+            error="please the enter the password."
             
-        if password!=confirm_password:
-            messages.warning("password is not matching")
+        elif len(password)>=6:
+            error="Password length should be a minimum of 6 characters."
+            
+        elif password!=confirm_password:
+             error="password is not matching"
+             
+             if error:
+                 return render(request,"sign_up.html",{"error":error})
 
         if not user_exist(username,password):
             User_Registration.objects.create(username=username,email=email,password=password)
-            messages.success(request, "user register successfully")
-            return redirect("login/")
+            message="user register successfully."
+            if message:
+                 return render(request,"sign_up.html",{"message":message})
         else:
-            messages.success(request, "user already exist")
-            return redirect("signup/")
+            message="user already exist."
+            if message:
+                 return render(request,"sign_up.html",{"message":message})
     return render(request,"sign_up.html")
 
 
 def login(request): 
+    message=None
     if request.method  == "POST":
         username=request.POST.get("username")
         password=request.POST.get("password")
         
-        if value_check(username):
-            messages.warning("please the enter the username")
+        if not username:
+            error="please the enter the username."
             
-        if value_check(password):
-            messages.warning("please the enter the password")
-        
+        elif not password:
+            error="please the enter the password."
+            
+        elif len(password)>=6:
+            error="Password length should be a minimum of 6 characters."
+            
         if user_exist(username,password):
-            messages.warning("user not register")
-            return redirect("login/")
+            message="user not register."
+            if message:
+                return redirect(request,"login.html",{"message":message})
         else:
-            messages.warning("login successful")
-            return redirect("finddonors/")
-    
-            
-           
+            message="login successful."
+            if message:
+                return redirect(request,"login.html",{"message":message})
     return render(request,"login.html")
