@@ -24,3 +24,9 @@ def blood_request(request):
                 return render(request, "request_blood.html", {"error": error})
 
     return render(request, "request_blood.html")
+
+def about(request):
+    return render(request, "about.html")
+
+def contact_us(request):
+    return render(request, "contact_us.html")
