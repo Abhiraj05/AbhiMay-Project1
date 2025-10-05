@@ -1,10 +1,11 @@
 from django.shortcuts import render
-
+from home.models import Request_Blood
 # Create your views here.
 
 
 def blood_request(request):
     error = None
+    message = False
     if request.method == "POST":
         patient_name = request.POST.get("patient_name")
         blood_group = request.POST.get("blood_group")
@@ -20,13 +21,23 @@ def blood_request(request):
         elif not hospital_name:
             error = "Please enter your hospital name."
 
-            if error:
-                return render(request, "request_blood.html", {"error": error})
+        if error:
+            return render(request, "request_blood.html", {"error": error})
+        else:
+            request_blood=Request_Blood.objects.create(patient_name=patient_name,
+                                         blood_group=blood_group,
+                                         contact_number=contact_number,
+                                         hospital_name=hospital_name)
+            # request_blood.save()
+            message = True
+            return render(request, "request_blood.html", {"message": message})
 
     return render(request, "request_blood.html")
 
+
 def about(request):
     return render(request, "about.html")
+
 
 def contact_us(request):
     return render(request, "contact_us.html")
