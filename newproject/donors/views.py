@@ -101,3 +101,5 @@ def donor_eligibility(request):
 
     return render(request, "eligibility_form.html")
 
+# def find_donor(request):
+#     return render(request, "find_donor.html")   
