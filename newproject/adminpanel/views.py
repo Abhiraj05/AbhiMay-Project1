@@ -30,7 +30,7 @@ def login_view(request):
 
 def logout_view(request):
     logout(request)
-    return redirect("/")
+    return redirect(request.META.get("HTTP_REFERER", "/"))
 # def sign_up(request):
 #     if request.method  == "POST":
 #         username=request.POST.get("username")
