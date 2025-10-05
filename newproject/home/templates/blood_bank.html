@@ -1,346 +1,593 @@
-{% extends "base.html" %}
-{% block start %}
+{% extends "base.html" %} {% block start %}
 <div>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-    <style>
-        body {
-            font-family: 'Inter', sans-serif;
-            background-color: #f9fafb;
-        }
-    </style>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+    rel="stylesheet"
+  />
+  <style>
+    body {
+      font-family: "Inter", sans-serif;
+      background-color: #f9fafb;
+    }
+  </style>
 
-    <!-- Header -->
-    <header class="bg-white/80 backdrop-blur-lg sticky top-0 z-50 shadow-sm">
-        <div class="container mx-auto px-6 py-4">
-            <nav class="flex items-center justify-between">
-                <!-- Logo -->
-                <a href="/" class="flex items-center space-x-2">
-                    <svg class="h-8 w-8 text-red-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12z" />
-                    </svg>
-                    <h1 class="text-2xl font-bold text-gray-800">Rakthdaan</h1>
-                </a>
-                
-                <!-- Desktop Navigation Links -->
-                <div class="hidden md:flex items-center space-x-2">
-                    {% comment %} <a href="/blood_request/" class="text-gray-600 font-semibold hover:bg-gray-100 px-3 py-2 rounded-lg transition-colors">Request Blood</a> {% endcomment %}
-                    <a href="/" class="text-gray-600 font-semibold hover:bg-gray-100 px-3 py-2 rounded-lg transition-colors">Home</a>
-                    <a href="" class="text-red-500 font-semibold bg-red-100 px-3 py-2 rounded-lg">Blood Banks</a>
-                    <a href="/about" class="text-gray-600 font-semibold hover:bg-gray-100 px-3 py-2 rounded-lg transition-colors">About</a>
-                    <a href="/contact_us" class="text-gray-600 font-semibold hover:bg-gray-100 px-3 py-2 rounded-lg transition-colors">Contact Us</a>
-                </div>
+  <!-- Header -->
+  <header class="bg-white/80 backdrop-blur-lg sticky top-0 z-50 shadow-sm">
+    <div class="container mx-auto px-6 py-4">
+      <nav class="flex items-center justify-between">
+        <!-- Logo -->
+        <a href="/" class="flex items-center space-x-2">
+          <svg
+            class="h-8 w-8 text-red-500"
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke-width="1.5"
+            stroke="currentColor"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12z"
+            />
+          </svg>
+          <h1 class="text-2xl font-bold text-gray-800">Rakthdaan</h1>
+        </a>
 
-                <!-- CTA Buttons (Dynamic) -->
-                <div class="hidden md:flex items-center space-x-4">
-                    {% if user.is_authenticated %}
-                        {% if user.is_staff %}
-                            <a href="/admin-dashboard/" class="bg-blue-500 text-white font-semibold px-5 py-2 rounded-lg hover:bg-blue-600 shadow-md">Admin Dashboard</a>
-                            <a href="/logout/" class="text-gray-600 font-semibold px-4 py-2 hover:text-red-500">Logout</a>
-                        {% else %}
-                            <a href="/donor-profile/" class="bg-white text-red-500 font-semibold px-5 py-2 rounded-lg hover:bg-gray-100 shadow-sm border">My Profile</a>
-                            <a href="/logout/" class="text-gray-600 font-semibold px-4 py-2 hover:text-red-500">Logout</a>
-                        {% endif %}
-                    {% else %}
-                        <a href="/login/" class="bg-red-500 text-white font-semibold px-5 py-2 rounded-lg hover:bg-red-600 transition-transform transform hover:scale-105 shadow-md">Login</a>
-                    {% endif %}
-                </div>
-
-                <!-- Mobile Menu Button -->
-                <div class="md:hidden">
-                    <button id="menu-btn" class="focus:outline-none">
-                        <svg id="menu-open-icon" class="w-6 h-6 text-gray-800" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
-                        </svg>
-                        <svg id="menu-close-icon" class="w-6 h-6 text-gray-800 hidden" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
-                        </svg>
-                    </button>
-                </div>
-            </nav>
-        </div>
-        <!-- Mobile Menu Panel -->
-        <div id="mobile-menu" class="hidden md:hidden absolute top-full left-0 w-full bg-white z-40 shadow-md">
-            <div class="px-6 py-4 space-y-2">
-                <a href="/blood_request/" class="block text-gray-600 font-semibold py-2 px-3 rounded-lg hover:bg-gray-100">Request Blood</a>
-                <a href="/blood-banks/" class="block text-red-500 font-semibold bg-red-100 py-2 px-3 rounded-lg">Blood Banks</a>
-                <a href="#" class="block text-gray-600 font-semibold py-2 px-3 rounded-lg hover:bg-gray-100">About</a>
-                <div class="border-t border-gray-200 pt-4 mt-2 space-y-2">
-                     {% if user.is_authenticated %}
-                        {% if user.is_staff %}
-                            <a href="/admin-dashboard/" class="block w-full text-center bg-blue-500 text-white font-semibold px-5 py-2 rounded-lg hover:bg-blue-600">Admin Dashboard</a>
-                        {% else %}
-                           <a href="/donor-profile/" class="block w-full text-center bg-gray-100 text-gray-800 font-semibold px-5 py-2 rounded-lg">My Profile</a>
-                        {% endif %}
-                       <a href="/logout/" class="block w-full text-center bg-red-500 text-white font-semibold px-5 py-2 rounded-lg hover:bg-red-600">Logout</a>
-                   {% else %}
-                       <a href="/login/" class="block w-full text-center bg-red-500 text-white font-semibold px-5 py-2 rounded-lg hover:bg-red-600">Login</a>
-                   {% endif %}
-                </div>
-            </div>
-        </div>
-    </header>
-
-    <!-- Main Content -->
-    <main class="container mx-auto px-6 py-12">
-        <div class="text-center mb-12">
-            <h1 class="text-3xl md:text-4xl font-extrabold text-gray-800">Verified Blood Banks in Goa</h1>
-            <p class="mt-3 text-lg text-gray-500 max-w-2xl mx-auto">A directory of official medical facilities where you can donate or request blood.</p>
+        <!-- Desktop Navigation Links -->
+        <div class="hidden md:flex items-center space-x-2">
+          {% comment %}
+          <a
+            href="/blood_request/"
+            class="text-gray-600 font-semibold hover:bg-gray-100 px-3 py-2 rounded-lg transition-colors"
+            >Request Blood</a
+          >
+          {% endcomment %}
+          <a
+            href="/"
+            class="text-gray-600 font-semibold hover:bg-gray-100 px-3 py-2 rounded-lg transition-colors"
+            >Home</a
+          >
+          <a
+            href=""
+            class="text-red-500 font-semibold bg-red-100 px-3 py-2 rounded-lg"
+            >Blood Banks</a
+          >
+          <a
+            href="/about"
+            class="text-gray-600 font-semibold hover:bg-gray-100 px-3 py-2 rounded-lg transition-colors"
+            >About</a
+          >
+          <a
+            href="/contact_us"
+            class="text-gray-600 font-semibold hover:bg-gray-100 px-3 py-2 rounded-lg transition-colors"
+            >Contact Us</a
+          >
         </div>
 
-        <div class="p-4 mb-8 bg-yellow-100 border-l-4 border-yellow-500 text-yellow-800 rounded-lg">
-            <p><strong class="font-semibold">Important:</strong> Please call the blood bank in advance to confirm the availability of the required blood group and their operating hours.</p>
+        <!-- CTA Buttons (Dynamic) -->
+        <div class="hidden md:flex items-center space-x-4">
+          {% if user.is_authenticated %} {% if user.is_staff %}
+          <a
+            href="/admin-dashboard/"
+            class="bg-blue-500 text-white font-semibold px-5 py-2 rounded-lg hover:bg-blue-600 shadow-md"
+            >Admin Dashboard</a
+          >
+          <a
+            href="/logout/"
+            class="text-gray-600 font-semibold px-4 py-2 hover:text-red-500"
+            >Logout</a
+          >
+          {% else %}
+          <a
+            href="/donor-profile/"
+            class="bg-white text-red-500 font-semibold px-5 py-2 rounded-lg hover:bg-gray-100 shadow-sm border"
+            >My Profile</a
+          >
+          <a
+            href="/logout/"
+            class="text-gray-600 font-semibold px-4 py-2 hover:text-red-500"
+            >Logout</a
+          >
+          {% endif %} {% else %}
+          <a
+            href="/login/"
+            class="bg-red-500 text-white font-semibold px-5 py-2 rounded-lg hover:bg-red-600 transition-transform transform hover:scale-105 shadow-md"
+            >Login</a
+          >
+          {% endif %}
         </div>
-<!-- Blood Banks Grid -->
-<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-    
-    <!-- Card 1 -->
-    <div class="bg-white rounded-xl shadow-md border border-gray-200 p-6 flex flex-col">
-        <h2 class="text-xl font-bold text-gray-800 mb-2">Goa Medical College Blood Bank</h2>
+
+        <!-- Mobile Menu Button -->
+        <div class="md:hidden">
+          <button id="menu-btn" class="focus:outline-none">
+            <svg
+              id="menu-open-icon"
+              class="w-6 h-6 text-gray-800"
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke-width="1.5"
+              stroke="currentColor"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5"
+              />
+            </svg>
+            <svg
+              id="menu-close-icon"
+              class="w-6 h-6 text-gray-800 hidden"
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke-width="1.5"
+              stroke="currentColor"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="M6 18L18 6M6 6l12 12"
+              />
+            </svg>
+          </button>
+        </div>
+      </nav>
+    </div>
+    <!-- Mobile Menu Panel -->
+    <div
+      id="mobile-menu"
+      class="hidden md:hidden absolute top-full left-0 w-full bg-white z-40 shadow-md"
+    >
+      <div class="px-6 py-4 space-y-2">
+        <a
+          href="/blood_request/"
+          class="block text-gray-600 font-semibold py-2 px-3 rounded-lg hover:bg-gray-100"
+          >Request Blood</a
+        >
+        <a
+          href="/blood-banks/"
+          class="block text-red-500 font-semibold bg-red-100 py-2 px-3 rounded-lg"
+          >Blood Banks</a
+        >
+        <a
+          href="#"
+          class="block text-gray-600 font-semibold py-2 px-3 rounded-lg hover:bg-gray-100"
+          >About</a
+        >
+        <div class="border-t border-gray-200 pt-4 mt-2 space-y-2">
+          {% if user.is_authenticated %} {% if user.is_staff %}
+          <a
+            href="/admin-dashboard/"
+            class="block w-full text-center bg-blue-500 text-white font-semibold px-5 py-2 rounded-lg hover:bg-blue-600"
+            >Admin Dashboard</a
+          >
+          {% else %}
+          <a
+            href="/donor-profile/"
+            class="block w-full text-center bg-gray-100 text-gray-800 font-semibold px-5 py-2 rounded-lg"
+            >My Profile</a
+          >
+          {% endif %}
+          <a
+            href="/logout/"
+            class="block w-full text-center bg-red-500 text-white font-semibold px-5 py-2 rounded-lg hover:bg-red-600"
+            >Logout</a
+          >
+          {% else %}
+          <a
+            href="/login/"
+            class="block w-full text-center bg-red-500 text-white font-semibold px-5 py-2 rounded-lg hover:bg-red-600"
+            >Login</a
+          >
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main class="container mx-auto px-6 py-12">
+    <div class="text-center mb-12">
+      <h1 class="text-3xl md:text-4xl font-extrabold text-gray-800">
+        Verified Blood Banks in Goa
+      </h1>
+      <p class="mt-3 text-lg text-gray-500 max-w-2xl mx-auto">
+        A directory of official medical facilities where you can donate or
+        request blood.
+      </p>
+    </div>
+
+    <div
+      class="p-4 mb-8 bg-yellow-100 border-l-4 border-yellow-500 text-yellow-800 rounded-lg"
+    >
+      <p>
+        <strong class="font-semibold">Important:</strong> Please call the blood
+        bank in advance to confirm the availability of the required blood group
+        and their operating hours.
+      </p>
+    </div>
+    <!-- Blood Banks Grid -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+      <!-- Card 1 -->
+      <div
+        class="bg-white rounded-xl shadow-md border border-gray-200 p-6 flex flex-col"
+      >
+        <h2 class="text-xl font-bold text-gray-800 mb-2">
+          Goa Medical College Blood Bank
+        </h2>
         <p class="text-gray-600 flex-grow">Bambolim, Tiswadi, Goa - 403202</p>
         <div class="mt-4 space-y-3">
-            <p class="text-gray-700"><strong class="font-medium">Hours:</strong> <span class="text-green-600 font-semibold">Open 24/7</span></p>
-            <a href="tel:08322458724" class="block text-blue-600 hover:underline"><strong>Phone:</strong> 0832-2458724</a>
+          <p class="text-gray-700">
+            <strong class="font-medium">Hours:</strong>
+            <span class="text-green-600 font-semibold">Open 24/7</span>
+          </p>
+          <a href="tel:08322458724" class="block text-blue-600 hover:underline"
+            ><strong>Phone:</strong> 0832-2458724</a
+          >
         </div>
-        <a href="https://www.google.com/maps/search/?api=1&query=Goa+Medical+College+Blood+Bank" target="_blank" rel="noopener noreferrer" class="mt-5 w-full bg-red-500 text-white font-semibold py-2 px-4 rounded-lg text-center hover:bg-red-600 transition">
-            View on Map
+        <a
+          href="https://www.google.com/maps/search/?api=1&query=Goa+Medical+College+Blood+Bank"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="mt-5 w-full bg-red-500 text-white font-semibold py-2 px-4 rounded-lg text-center hover:bg-red-600 transition"
+        >
+          View on Map
         </a>
-    </div>
+      </div>
 
-    <!-- Card 2 -->
-    <div class="bg-white rounded-xl shadow-md border border-gray-200 p-6 flex flex-col">
-        <h2 class="text-xl font-bold text-gray-800 mb-2">Manipal Hospital Blood Bank</h2>
-        <p class="text-gray-600 flex-grow">Dr. E Borges Road, Dona Paula, Panaji, Goa - 403004</p>
+      <!-- Card 2 -->
+      <div
+        class="bg-white rounded-xl shadow-md border border-gray-200 p-6 flex flex-col"
+      >
+        <h2 class="text-xl font-bold text-gray-800 mb-2">
+          Manipal Hospital Blood Bank
+        </h2>
+        <p class="text-gray-600 flex-grow">
+          Dr. E Borges Road, Dona Paula, Panaji, Goa - 403004
+        </p>
         <div class="mt-4 space-y-3">
-            <p class="text-gray-700"><strong class="font-medium">Hours:</strong> <span class="text-green-600 font-semibold">Open 24/7</span></p>
-            <a href="tel:08323048800" class="block text-blue-600 hover:underline"><strong>Phone:</strong> 0832-3048800</a>
+          <p class="text-gray-700">
+            <strong class="font-medium">Hours:</strong>
+            <span class="text-green-600 font-semibold">Open 24/7</span>
+          </p>
+          <a href="tel:08323048800" class="block text-blue-600 hover:underline"
+            ><strong>Phone:</strong> 0832-3048800</a
+          >
         </div>
-        <a href="https://www.google.com/maps/search/?api=1&query=Manipal+Hospital+Goa" target="_blank" rel="noopener noreferrer" class="mt-5 w-full bg-red-500 text-white font-semibold py-2 px-4 rounded-lg text-center hover:bg-red-600 transition">
-            View on Map
+        <a
+          href="https://www.google.com/maps/search/?api=1&query=Manipal+Hospital+Goa"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="mt-5 w-full bg-red-500 text-white font-semibold py-2 px-4 rounded-lg text-center hover:bg-red-600 transition"
+        >
+          View on Map
         </a>
-    </div>
+      </div>
 
-    <!-- Card 3 -->
-    <div class="bg-white rounded-xl shadow-md border border-gray-200 p-6 flex flex-col">
-        <h2 class="text-xl font-bold text-gray-800 mb-2">Hospicio Hospital Blood Bank</h2>
-        <p class="text-gray-600 flex-grow">Near Hari Mandir, Margao, Salcete, Goa - 403601</p>
+      <!-- Card 3 -->
+      <div
+        class="bg-white rounded-xl shadow-md border border-gray-200 p-6 flex flex-col"
+      >
+        <h2 class="text-xl font-bold text-gray-800 mb-2">
+          Hospicio Hospital Blood Bank
+        </h2>
+        <p class="text-gray-600 flex-grow">
+          Near Hari Mandir, Margao, Salcete, Goa - 403601
+        </p>
         <div class="mt-4 space-y-3">
-            <p class="text-gray-700"><strong class="font-medium">Hours:</strong> 9:00 AM - 5:00 PM</p>
-            <a href="tel:08322705664" class="block text-blue-600 hover:underline"><strong>Phone:</strong> 0832-2705664</a>
+          <p class="text-gray-700">
+            <strong class="font-medium">Hours:</strong> 9:00 AM - 5:00 PM
+          </p>
+          <a href="tel:08322705664" class="block text-blue-600 hover:underline"
+            ><strong>Phone:</strong> 0832-2705664</a
+          >
         </div>
-        <a href="https://www.google.com/maps/search/?api=1&query=Hospicio+Hospital+Margao" target="_blank" rel="noopener noreferrer" class="mt-5 w-full bg-red-500 text-white font-semibold py-2 px-4 rounded-lg text-center hover:bg-red-600 transition">
-            View on Map
+        <a
+          href="https://www.google.com/maps/search/?api=1&query=Hospicio+Hospital+Margao"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="mt-5 w-full bg-red-500 text-white font-semibold py-2 px-4 rounded-lg text-center hover:bg-red-600 transition"
+        >
+          View on Map
         </a>
-    </div>
+      </div>
 
-    <!-- Card 4 -->
-    <div class="bg-white rounded-xl shadow-md border border-gray-200 p-6 flex flex-col">
-        <h2 class="text-xl font-bold text-gray-800 mb-2">Asilo Hospital Blood Bank</h2>
+      <!-- Card 4 -->
+      <div
+        class="bg-white rounded-xl shadow-md border border-gray-200 p-6 flex flex-col"
+      >
+        <h2 class="text-xl font-bold text-gray-800 mb-2">
+          Asilo Hospital Blood Bank
+        </h2>
         <p class="text-gray-600 flex-grow">Mapusa, Bardez, Goa - 403507</p>
         <div class="mt-4 space-y-3">
-            <p class="text-gray-700"><strong class="font-medium">Hours:</strong> 9:00 AM - 5:00 PM</p>
-            <a href="tel:08322260237" class="block text-blue-600 hover:underline"><strong>Phone:</strong> 0832-2260237</a>
+          <p class="text-gray-700">
+            <strong class="font-medium">Hours:</strong> 9:00 AM - 5:00 PM
+          </p>
+          <a href="tel:08322260237" class="block text-blue-600 hover:underline"
+            ><strong>Phone:</strong> 0832-2260237</a
+          >
         </div>
-        <a href="https://www.google.com/maps/search/?api=1&query=Asilo+Hospital+Mapusa+Blood+Bank" target="_blank" rel="noopener noreferrer" class="mt-5 w-full bg-red-500 text-white font-semibold py-2 px-4 rounded-lg text-center hover:bg-red-600 transition">
-            View on Map
+        <a
+          href="https://www.google.com/maps/search/?api=1&query=Asilo+Hospital+Mapusa+Blood+Bank"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="mt-5 w-full bg-red-500 text-white font-semibold py-2 px-4 rounded-lg text-center hover:bg-red-600 transition"
+        >
+          View on Map
         </a>
-    </div>
+      </div>
 
-    <!-- Card 5 -->
-    <div class="bg-white rounded-xl shadow-md border border-gray-200 p-6 flex flex-col">
-        <h2 class="text-xl font-bold text-gray-800 mb-2">District Hospital Blood Bank</h2>
+      <!-- Card 5 -->
+      <div
+        class="bg-white rounded-xl shadow-md border border-gray-200 p-6 flex flex-col"
+      >
+        <h2 class="text-xl font-bold text-gray-800 mb-2">
+          District Hospital Blood Bank
+        </h2>
         <p class="text-gray-600 flex-grow">Ponda, Goa - 403401</p>
         <div class="mt-4 space-y-3">
-            <p class="text-gray-700"><strong class="font-medium">Hours:</strong> 8:00 AM - 8:00 PM</p>
-            <a href="tel:08322311028" class="block text-blue-600 hover:underline"><strong>Phone:</strong> 0832-2311028</a>
+          <p class="text-gray-700">
+            <strong class="font-medium">Hours:</strong> 8:00 AM - 8:00 PM
+          </p>
+          <a href="tel:08322311028" class="block text-blue-600 hover:underline"
+            ><strong>Phone:</strong> 0832-2311028</a
+          >
         </div>
-        <a href="https://www.google.com/maps/search/?api=1&query=District+Hospital+Ponda+Blood+Bank" target="_blank" rel="noopener noreferrer" class="mt-5 w-full bg-red-500 text-white font-semibold py-2 px-4 rounded-lg text-center hover:bg-red-600 transition">
-            View on Map
+        <a
+          href="https://www.google.com/maps/search/?api=1&query=District+Hospital+Ponda+Blood+Bank"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="mt-5 w-full bg-red-500 text-white font-semibold py-2 px-4 rounded-lg text-center hover:bg-red-600 transition"
+        >
+          View on Map
         </a>
-    </div>
+      </div>
 
-    <!-- Card 6 -->
-    <div class="bg-white rounded-xl shadow-md border border-gray-200 p-6 flex flex-col">
-        <h2 class="text-xl font-bold text-gray-800 mb-2">Red Cross Blood Bank</h2>
+      <!-- Card 6 -->
+      <div
+        class="bg-white rounded-xl shadow-md border border-gray-200 p-6 flex flex-col"
+      >
+        <h2 class="text-xl font-bold text-gray-800 mb-2">
+          Red Cross Blood Bank
+        </h2>
         <p class="text-gray-600 flex-grow">Campal, Panaji, Goa - 403001</p>
         <div class="mt-4 space-y-3">
-            <p class="text-gray-700"><strong class="font-medium">Hours:</strong> 9:00 AM - 6:00 PM</p>
-            <a href="tel:08322220574" class="block text-blue-600 hover:underline"><strong>Phone:</strong> 0832-2220574</a>
+          <p class="text-gray-700">
+            <strong class="font-medium">Hours:</strong> 9:00 AM - 6:00 PM
+          </p>
+          <a href="tel:08322220574" class="block text-blue-600 hover:underline"
+            ><strong>Phone:</strong> 0832-2220574</a
+          >
         </div>
-        <a href="https://www.google.com/maps/search/?api=1&query=Red+Cross+Blood+Bank+Goa" target="_blank" rel="noopener noreferrer" class="mt-5 w-full bg-red-500 text-white font-semibold py-2 px-4 rounded-lg text-center hover:bg-red-600 transition">
-            View on Map
+        <a
+          href="https://www.google.com/maps/search/?api=1&query=Red+Cross+Blood+Bank+Goa"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="mt-5 w-full bg-red-500 text-white font-semibold py-2 px-4 rounded-lg text-center hover:bg-red-600 transition"
+        >
+          View on Map
         </a>
-    </div>
+      </div>
 
-    <!-- Card 7 -->
-    <div class="bg-white rounded-xl shadow-md border border-gray-200 p-6 flex flex-col">
-        <h2 class="text-xl font-bold text-gray-800 mb-2">Sub District Hospital Blood Bank</h2>
-        <p class="text-gray-600 flex-grow">Chicalim, Vasco da Gama, Goa - 403711</p>
+      <!-- Card 7 -->
+      <div
+        class="bg-white rounded-xl shadow-md border border-gray-200 p-6 flex flex-col"
+      >
+        <h2 class="text-xl font-bold text-gray-800 mb-2">
+          Sub District Hospital Blood Bank
+        </h2>
+        <p class="text-gray-600 flex-grow">
+          Chicalim, Vasco da Gama, Goa - 403711
+        </p>
         <div class="mt-4 space-y-3">
-            <p class="text-gray-700"><strong class="font-medium">Hours:</strong> 8:00 AM - 8:00 PM</p>
-            <a href="tel:08322506544" class="block text-blue-600 hover:underline"><strong>Phone:</strong> 0832-2506544</a>
+          <p class="text-gray-700">
+            <strong class="font-medium">Hours:</strong> 8:00 AM - 8:00 PM
+          </p>
+          <a href="tel:08322506544" class="block text-blue-600 hover:underline"
+            ><strong>Phone:</strong> 0832-2506544</a
+          >
         </div>
-        <a href="https://www.google.com/maps/search/?api=1&query=Sub+District+Hospital+Chicalim+Blood+Bank" target="_blank" rel="noopener noreferrer" class="mt-5 w-full bg-red-500 text-white font-semibold py-2 px-4 rounded-lg text-center hover:bg-red-600 transition">
-            View on Map
+        <a
+          href="https://www.google.com/maps/search/?api=1&query=Sub+District+Hospital+Chicalim+Blood+Bank"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="mt-5 w-full bg-red-500 text-white font-semibold py-2 px-4 rounded-lg text-center hover:bg-red-600 transition"
+        >
+          View on Map
         </a>
-    </div>
+      </div>
 
-    <!-- Card 8 -->
-    <div class="bg-white rounded-xl shadow-md border border-gray-200 p-6 flex flex-col">
-        <h2 class="text-xl font-bold text-gray-800 mb-2">Vrundavan Hospital Blood Bank</h2>
-        <p class="text-gray-600 flex-grow">La Campala Colony, Miramar, Panaji, Goa - 403001</p>
+      <!-- Card 8 -->
+      <div
+        class="bg-white rounded-xl shadow-md border border-gray-200 p-6 flex flex-col"
+      >
+        <h2 class="text-xl font-bold text-gray-800 mb-2">
+          Vrundavan Hospital Blood Bank
+        </h2>
+        <p class="text-gray-600 flex-grow">
+          La Campala Colony, Miramar, Panaji, Goa - 403001
+        </p>
         <div class="mt-4 space-y-3">
-            <p class="text-gray-700"><strong class="font-medium">Hours:</strong> 9:00 AM - 5:00 PM</p>
-            <a href="tel:08322231069" class="block text-blue-600 hover:underline"><strong>Phone:</strong> 0832-2231069</a>
+          <p class="text-gray-700">
+            <strong class="font-medium">Hours:</strong> 9:00 AM - 5:00 PM
+          </p>
+          <a href="tel:08322231069" class="block text-blue-600 hover:underline"
+            ><strong>Phone:</strong> 0832-2231069</a
+          >
         </div>
-        <a href="https://www.google.com/maps/search/?api=1&query=Vrundavan+Hospital+Panaji+Blood+Bank" target="_blank" rel="noopener noreferrer" class="mt-5 w-full bg-red-500 text-white font-semibold py-2 px-4 rounded-lg text-center hover:bg-red-600 transition">
-            View on Map
+        <a
+          href="https://www.google.com/maps/search/?api=1&query=Vrundavan+Hospital+Panaji+Blood+Bank"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="mt-5 w-full bg-red-500 text-white font-semibold py-2 px-4 rounded-lg text-center hover:bg-red-600 transition"
+        >
+          View on Map
         </a>
-    </div>
-    <!-- Card 9 -->
-    <div class="bg-white rounded-xl shadow-md border border-gray-200 p-6 flex flex-col">
-        <h2 class="text-xl font-bold text-gray-800 mb-2">Apollo Victor Hospital Blood Bank</h2>
+      </div>
+      <!-- Card 9 -->
+      <div
+        class="bg-white rounded-xl shadow-md border border-gray-200 p-6 flex flex-col"
+      >
+        <h2 class="text-xl font-bold text-gray-800 mb-2">
+          Apollo Victor Hospital Blood Bank
+        </h2>
         <p class="text-gray-600 flex-grow">Malbhat, Margao, Goa - 403601</p>
         <div class="mt-4 space-y-3">
-            <p class="text-gray-700"><strong class="font-medium">Hours:</strong> 9:00 AM – 5:00 PM (verify)</p>
-            <a href="tel:0832270XXXX" class="block text-blue-600 hover:underline"><strong>Phone:</strong> 08322-70XXXX</a>
+          <p class="text-gray-700">
+            <strong class="font-medium">Hours:</strong> 9:00 AM – 5:00 PM
+            (verify)
+          </p>
+          <a href="tel:0832270XXXX" class="block text-blue-600 hover:underline"
+            ><strong>Phone:</strong> 08322-70XXXX</a
+          >
         </div>
-        <a href="https://www.google.com/maps/search/?api=1&query=Apollo+Victor+Hospital+Margao" target="_blank" rel="noopener noreferrer" class="mt-5 w-full bg-red-500 text-white font-semibold py-2 px-4 rounded-lg text-center hover:bg-red-600 transition">
-            View on Map
+        <a
+          href="https://www.google.com/maps/search/?api=1&query=Apollo+Victor+Hospital+Margao"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="mt-5 w-full bg-red-500 text-white font-semibold py-2 px-4 rounded-lg text-center hover:bg-red-600 transition"
+        >
+          View on Map
         </a>
-    </div>
+      </div>
 
-    <!-- Card 10 -->
-    <div class="bg-white rounded-xl shadow-md border border-gray-200 p-6 flex flex-col">
-        <h2 class="text-xl font-bold text-gray-800 mb-2">Shri Sai Central Blood Bank & Lab</h2>
+      <!-- Card 10 -->
+      <div
+        class="bg-white rounded-xl shadow-md border border-gray-200 p-6 flex flex-col"
+      >
+        <h2 class="text-xl font-bold text-gray-800 mb-2">
+          Shri Sai Central Blood Bank & Lab
+        </h2>
         <p class="text-gray-600 flex-grow">Porvorim, Bardez, Goa</p>
         <div class="mt-4 space-y-3">
-            <p class="text-gray-700"><strong class="font-medium">Hours:</strong> 9:00 AM – 6:00 PM (verify)</p>
-            <a href="tel:08322412083" class="block text-blue-600 hover:underline"><strong>Phone:</strong> 08322-412083</a>
+          <p class="text-gray-700">
+            <strong class="font-medium">Hours:</strong> 9:00 AM – 6:00 PM
+            (verify)
+          </p>
+          <a href="tel:08322412083" class="block text-blue-600 hover:underline"
+            ><strong>Phone:</strong> 08322-412083</a
+          >
         </div>
-        <a href="https://www.google.com/maps/search/?api=1&query=Shri+Sai+Central+Blood+Bank+Porvorim" target="_blank" rel="noopener noreferrer" class="mt-5 w-full bg-red-500 text-white font-semibold py-2 px-4 rounded-lg text-center hover:bg-red-600 transition">
-            View on Map
+        <a
+          href="https://www.google.com/maps/search/?api=1&query=Shri+Sai+Central+Blood+Bank+Porvorim"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="mt-5 w-full bg-red-500 text-white font-semibold py-2 px-4 rounded-lg text-center hover:bg-red-600 transition"
+        >
+          View on Map
         </a>
-    </div>
+      </div>
 
-    <!-- Card 11 -->
-    <div class="bg-white rounded-xl shadow-md border border-gray-200 p-6 flex flex-col">
-        <h2 class="text-xl font-bold text-gray-800 mb-2">Fonsecas Pathology Laboratory / Blood Bank</h2>
+      <!-- Card 11 -->
+      <div
+        class="bg-white rounded-xl shadow-md border border-gray-200 p-6 flex flex-col"
+      >
+        <h2 class="text-xl font-bold text-gray-800 mb-2">
+          Fonsecas Pathology Laboratory / Blood Bank
+        </h2>
         <p class="text-gray-600 flex-grow">Panaji, Tiswadi, Goa</p>
         <div class="mt-4 space-y-3">
-            <p class="text-gray-700"><strong class="font-medium">Hours:</strong> 9:00 AM – 6:00 PM (verify)</p>
-            <a href="tel:08322427735" class="block text-blue-600 hover:underline"><strong>Phone:</strong> 0832-2427735</a>
+          <p class="text-gray-700">
+            <strong class="font-medium">Hours:</strong> 9:00 AM – 6:00 PM
+            (verify)
+          </p>
+          <a href="tel:08322427735" class="block text-blue-600 hover:underline"
+            ><strong>Phone:</strong> 0832-2427735</a
+          >
         </div>
-        <a href="https://www.google.com/maps/search/?api=1&query=Fonsecas+Pathology+Laboratory+Panaji" target="_blank" rel="noopener noreferrer" class="mt-5 w-full bg-red-500 text-white font-semibold py-2 px-4 rounded-lg text-center hover:bg-red-600 transition">
-            View on Map
+        <a
+          href="https://www.google.com/maps/search/?api=1&query=Fonsecas+Pathology+Laboratory+Panaji"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="mt-5 w-full bg-red-500 text-white font-semibold py-2 px-4 rounded-lg text-center hover:bg-red-600 transition"
+        >
+          View on Map
         </a>
-    </div>
+      </div>
 
-    <!-- Card 12 -->
-    <div class="bg-white rounded-xl shadow-md border border-gray-200 p-6 flex flex-col">
-        <h2 class="text-xl font-bold text-gray-800 mb-2">Jeevandhara Blood Bank</h2>
-        <p class="text-gray-600 flex-grow">Goa (exact address to be verified)</p>
+      <!-- Card 12 -->
+      <div
+        class="bg-white rounded-xl shadow-md border border-gray-200 p-6 flex flex-col"
+      >
+        <h2 class="text-xl font-bold text-gray-800 mb-2">
+          Jeevandhara Blood Bank
+        </h2>
+        <p class="text-gray-600 flex-grow">
+          Goa (exact address to be verified)
+        </p>
         <div class="mt-4 space-y-3">
-            <p class="text-gray-700"><strong class="font-medium">Hours:</strong> 9:00 AM – 6:00 PM (verify)</p>
-            <a href="tel:083224XXXX" class="block text-blue-600 hover:underline"><strong>Phone:</strong> 08322-4XXXX</a>
+          <p class="text-gray-700">
+            <strong class="font-medium">Hours:</strong> 9:00 AM – 6:00 PM
+            (verify)
+          </p>
+          <a href="tel:083224XXXX" class="block text-blue-600 hover:underline"
+            ><strong>Phone:</strong> 08322-4XXXX</a
+          >
         </div>
-        <a href="https://www.google.com/maps/search/?api=1&query=Jeevandhara+Blood+Bank+Goa" target="_blank" rel="noopener noreferrer" class="mt-5 w-full bg-red-500 text-white font-semibold py-2 px-4 rounded-lg text-center hover:bg-red-600 transition">
-            View on Map
+        <a
+          href="https://www.google.com/maps/search/?api=1&query=Jeevandhara+Blood+Bank+Goa"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="mt-5 w-full bg-red-500 text-white font-semibold py-2 px-4 rounded-lg text-center hover:bg-red-600 transition"
+        >
+          View on Map
         </a>
+      </div>
     </div>
+  </main>
 
-</div>
-
-        {% comment %} <!-- Blood Banks Grid -->
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            
-            <!-- Card 1 -->
-            <div class="bg-white rounded-xl shadow-md border border-gray-200 p-6 flex flex-col">
-                <h2 class="text-xl font-bold text-gray-800 mb-2">Goa Medical College Blood Bank</h2>
-                <p class="text-gray-600 flex-grow">Bambolim, Tiswadi, Goa - 403202</p>
-                <div class="mt-4 space-y-3">
-                    <p class="text-gray-700"><strong class="font-medium">Hours:</strong> <span class="text-green-600 font-semibold">Open 24/7</span></p>
-                    <a href="tel:08322458724" class="block text-blue-600 hover:underline"><strong>Phone:</strong> 0832-2458724</a>
-                </div>
-                <a href="https://www.google.com/maps/search/?api=1&query=Goa+Medical+College+Blood+Bank" target="_blank" rel="noopener noreferrer" class="mt-5 w-full bg-red-500 text-white font-semibold py-2 px-4 rounded-lg text-center hover:bg-red-600 transition">
-                    View on Map
-                </a>
-            </div>
-
-            <!-- Card 2 -->
-            <div class="bg-white rounded-xl shadow-md border border-gray-200 p-6 flex flex-col">
-                <h2 class="text-xl font-bold text-gray-800 mb-2">Manipal Hospital Blood Bank</h2>
-                <p class="text-gray-600 flex-grow">Dr. E Borges Road, Dona Paula, Panaji, Goa - 403004</p>
-                <div class="mt-4 space-y-3">
-                    <p class="text-gray-700"><strong class="font-medium">Hours:</strong> <span class="text-green-600 font-semibold">Open 24/7</span></p>
-                    <a href="tel:08323048800" class="block text-blue-600 hover:underline"><strong>Phone:</strong> 0832-3048800</a>
-                </div>
-                <a href="https://www.google.com/maps/search/?api=1&query=Manipal+Hospital+Goa" target="_blank" rel="noopener noreferrer" class="mt-5 w-full bg-red-500 text-white font-semibold py-2 px-4 rounded-lg text-center hover:bg-red-600 transition">
-                    View on Map
-                </a>
-            </div>
-
-            <!-- Card 3 -->
-            <div class="bg-white rounded-xl shadow-md border border-gray-200 p-6 flex flex-col">
-                <h2 class="text-xl font-bold text-gray-800 mb-2">Hospicio Hospital Blood Bank</h2>
-                <p class="text-gray-600 flex-grow">Near Hari Mandir, Margao, Salcete, Goa - 403601</p>
-                <div class="mt-4 space-y-3">
-                    <p class="text-gray-700"><strong class="font-medium">Hours:</strong> 9:00 AM - 5:00 PM</p>
-                    <a href="tel:08322705664" class="block text-blue-600 hover:underline"><strong>Phone:</strong> 0832-2705664</a>
-                </div>
-                <a href="https://www.google.com/maps/search/?api=1&query=Hospicio+Hospital+Margao" target="_blank" rel="noopener noreferrer" class="mt-5 w-full bg-red-500 text-white font-semibold py-2 px-4 rounded-lg text-center hover:bg-red-600 transition">
-                    View on Map
-                </a>
-            </div>
-
-        </div> {% endcomment %}
-    </main>
-    
-    <!-- Footer -->
-    <footer class="bg-gray-800 text-white mt-12">
-        <div class="container mx-auto py-10 px-6">
-            <div class="grid md:grid-cols-3 gap-8">
-                <div>
-                    <h3 class="font-bold text-xl mb-2">Rakthdaan</h3>
-                    <p class="text-gray-400">Connecting blood donors with recipients to save lives.</p>
-                </div>
-                <div>
-                    <h3 class="font-bold text-xl mb-2">Quick Links</h3>
-                    <ul class="text-gray-400 space-y-2">
-                        <li><a href="/" class="hover:text-white">Home</a></li>
-                        <li><a href="#" class="hover:text-white">About Us</a></li>
-                        <li><a href="#" class="hover:text-white">FAQs</a></li>
-                    </ul>
-                </div>
-                <div>
-                    <h3 class="font-bold text-xl mb-2">Contact</h3>
-                    <ul class="text-gray-400 space-y-2">
-                        <li><a href="#" class="hover:text-white">contact@rakthadaan.org</a></li>
-                        <li><a href="#" class="hover:text-white">+91-1234567890</a></li>
-                    </ul>
-                </div>
-            </div>
-            <div class="mt-8 border-t border-gray-700 pt-6 text-center text-gray-500">
-                &copy; 2024 Rakthdaan. All Rights Reserved.
-            </div>
+  <!-- Footer -->
+  <footer class="bg-gray-800 text-white mt-12">
+    <div class="container mx-auto py-10 px-6">
+      <div class="grid md:grid-cols-3 gap-8">
+        <div>
+          <h3 class="font-bold text-xl mb-2">Rakthdaan</h3>
+          <p class="text-gray-400">
+            Connecting blood donors with recipients to save lives.
+          </p>
         </div>
-    </footer>
+        <div>
+          <h3 class="font-bold text-xl mb-2">Quick Links</h3>
+          <ul class="text-gray-400 space-y-2">
+            <li><a href="/" class="hover:text-white">Home</a></li>
+            <li><a href="#" class="hover:text-white">About Us</a></li>
+            <li><a href="#" class="hover:text-white">FAQs</a></li>
+          </ul>
+        </div>
+        <div>
+          <h3 class="font-bold text-xl mb-2">Contact</h3>
+          <ul class="text-gray-400 space-y-2">
+            <li>
+              <a href="#" class="hover:text-white">contact@rakthadaan.org</a>
+            </li>
+            <li><a href="#" class="hover:text-white">+91-1234567890</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="mt-8 border-t border-gray-700 pt-6 text-center text-gray-500">
+        &copy; 2024 Rakthdaan. All Rights Reserved.
+      </div>
+    </div>
+  </footer>
 
-    <script>
-        // --- Mobile Menu Logic ---
-        const menuBtn = document.getElementById('menu-btn');
-        const mobileMenu = document.getElementById('mobile-menu');
-        const openIcon = document.getElementById('menu-open-icon');
-        const closeIcon = document.getElementById('menu-close-icon');
+  <script>
+    // --- Mobile Menu Logic ---
+    const menuBtn = document.getElementById("menu-btn");
+    const mobileMenu = document.getElementById("mobile-menu");
+    const openIcon = document.getElementById("menu-open-icon");
+    const closeIcon = document.getElementById("menu-close-icon");
 
-        menuBtn.addEventListener('click', () => {
-            mobileMenu.classList.toggle('hidden');
-            openIcon.classList.toggle('hidden');
-            closeIcon.classList.toggle('hidden');
-        });
-    </script>
+    menuBtn.addEventListener("click", () => {
+      mobileMenu.classList.toggle("hidden");
+      openIcon.classList.toggle("hidden");
+      closeIcon.classList.toggle("hidden");
+    });
+  </script>
 </div>
 {% endblock %}
-
