@@ -17,7 +17,7 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 from adminpanel.views import main,login_view, logout_view
-from donors.views import donor_data , donor_eligibility , blood_bank
+from donors.views import donor_data , donor_eligibility , blood_bank, my_profile
 from home.views import blood_request , about ,contact_us
 
 
@@ -34,5 +34,6 @@ urlpatterns = [
     path('blood_bank/', blood_bank, name='blood_bank'),
     path('about/', about, name='about'),
     path('contact_us/', contact_us, name='contact_us'),
+    path('profile/', my_profile, name='profile'),
 ]
 
