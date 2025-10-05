@@ -28,7 +28,7 @@ def blood_request(request):
                                          blood_group=blood_group,
                                          contact_number=contact_number,
                                          hospital_name=hospital_name)
-            # request_blood.save()
+            request_blood.save()
             message = True
             return render(request, "request_blood.html", {"message": message})
 
