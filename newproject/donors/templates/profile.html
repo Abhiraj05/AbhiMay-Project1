@@ -34,7 +34,7 @@
                 
                 <!-- Desktop Navigation Links -->
                 <div class="hidden md:flex items-center space-x-2">
-                    <a href="/blood_request" class="text-gray-600 font-semibold hover:bg-gray-100 px-3 py-2 rounded-lg transition-colors">Request Blood</a>
+                    <a href="/" class="text-gray-600 font-semibold hover:bg-gray-100 px-3 py-2 rounded-lg transition-colors">Home</a>
                     <a href="/blood_bank" class="text-gray-600 font-semibold hover:bg-gray-100 px-3 py-2 rounded-lg transition-colors">Blood Banks</a>
                     <a href="/about" class="text-gray-600 font-semibold hover:bg-gray-100 px-3 py-2 rounded-lg transition-colors">About</a>
                     <a href="/contact_us" class="text-gray-600 font-semibold hover:bg-gray-100 px-3 py-2 rounded-lg transition-colors">Contact Us</a>
@@ -46,7 +46,7 @@
                         {% if user.is_staff %}
                             <a href="/admin-dashboard/" class="bg-blue-500 text-white font-semibold px-5 py-2 rounded-lg hover:bg-blue-600 shadow-md">Admin Dashboard</a>
                         {% else %}
-                            <a href="" class="bg-red-500 text-white font-semibold px-5 py-2 rounded-lg hover:bg-red-600 shadow-sm">My Profile</a>
+                            <a href="/profile/" class="bg-red-500 text-white font-semibold px-5 py-2 rounded-lg shadow-sm">My Profile</a>
                         {% endif %}
                         <a href="/logout/" class="text-gray-600 font-semibold px-4 py-2 hover:text-red-500">Logout</a>
                     {% else %}
@@ -70,16 +70,16 @@
         <!-- Mobile Menu Panel -->
         <div id="mobile-menu" class="hidden md:hidden absolute top-full left-0 w-full bg-white z-40 shadow-md">
             <div class="px-6 py-4 space-y-2">
-                <a href="/blood_request/" class="block text-gray-600 font-semibold py-2 px-3 rounded-lg hover:bg-gray-100">Request Blood</a>
-                <a href="/blood-banks/" class="block text-gray-600 font-semibold py-2 px-3 rounded-lg hover:bg-gray-100">Blood Banks</a>
-                <a href="/about/" class="block text-gray-600 font-semibold py-2 px-3 rounded-lg hover:bg-gray-100">About</a>
-                <a href="/contact/" class="block text-gray-600 font-semibold py-2 px-3 rounded-lg hover:bg-gray-100">Contact Us</a>
+                <a href="/" class="block text-gray-600 font-semibold py-2 px-3 rounded-lg hover:bg-gray-100">Home</a>
+                <a href="/blood_bank" class="block text-gray-600 font-semibold py-2 px-3 rounded-lg hover:bg-gray-100">Blood Banks</a>
+                <a href="/about" class="block text-gray-600 font-semibold py-2 px-3 rounded-lg hover:bg-gray-100">About</a>
+                <a href="/contact_us" class="block text-gray-600 font-semibold py-2 px-3 rounded-lg hover:bg-gray-100">Contact Us</a>
                 <div class="border-t border-gray-200 pt-4 mt-2 space-y-2">
                      {% if user.is_authenticated %}
                         {% if user.is_staff %}
                             <a href="/admin-dashboard/" class="block w-full text-center bg-blue-500 text-white font-semibold px-5 py-2 rounded-lg hover:bg-blue-600">Admin Dashboard</a>
                         {% else %}
-                           <a href="/donor-profile/" class="block w-full text-center bg-red-500 text-white font-semibold px-5 py-2 rounded-lg">My Profile</a>
+                           <a href="/profile/" class="block w-full text-center bg-red-500 text-white font-semibold px-5 py-2 rounded-lg">My Profile</a>
                         {% endif %}
                        <a href="/logout/" class="block w-full text-center bg-gray-200 text-gray-800 font-semibold px-5 py-2 rounded-lg hover:bg-gray-300">Logout</a>
                    {% else %}
@@ -208,3 +208,4 @@
     </script>
 </div>
 {% endblock %}
+
