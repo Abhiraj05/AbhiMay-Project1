@@ -7,6 +7,9 @@ from django.contrib.auth.forms import AuthenticationForm
 def main(request):
     return render(request,"main.html")
 
+def hospital_admin(request):    
+    return render(request,"hospital_admin.html")
+
 def user_exist(username,password):
     user=User_Registration.objects.filter(username=username,password=password).first()
     return user
