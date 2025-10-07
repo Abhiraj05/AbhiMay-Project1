@@ -8,6 +8,7 @@
     <style>
         body {
             font-family: 'Inter', sans-serif;
+            background-color: #f9fafb;
         }
         .brand-red {
             color: #ef4444; /* red-500 */
@@ -17,42 +18,71 @@
 <body class="bg-gray-50">
 
     <!-- Header -->
-    <header class="bg-white/80 backdrop-blur-lg sticky top-0 left-0 right-0 z-50 shadow-sm">
+    <header class="bg-white/80 backdrop-blur-lg sticky top-0 z-50 shadow-sm">
         <div class="container mx-auto px-6 py-4">
             <nav class="flex items-center justify-between">
                 <!-- Logo -->
-                <div class="flex items-center space-x-2">
-                    <a href="/" class="flex items-center space-x-2">
-                        <svg class="h-8 w-8 text-red-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12z" />
-                        </svg>
-                        <h1 class="text-2xl font-bold text-gray-800">Rakthdaan</h1>
-                    </a>
-                </div>
-
+                <a href="/" class="flex items-center space-x-2">
+                    <svg class="h-8 w-8 text-red-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12z" />
+                    </svg>
+                    <h1 class="text-2xl font-bold text-gray-800">Rakthdaan</h1>
+                </a>
+                
                 <!-- Desktop Navigation Links -->
-                <div class="hidden md:flex items-center space-x-8">
-                    <a href="/finddonors/" class="text-gray-600 hover:text-red-500 transition-colors">Find Donors</a>
-                    <a href="#" class="text-gray-600 hover:text-red-500 transition-colors">Blood Banks</a>
-                    <a href="#" class="text-gray-600 hover:text-red-500 transition-colors">About</a>
+                <div class="hidden md:flex items-center space-x-2">
+                    <a href="/" class="text-gray-600 font-semibold hover:bg-gray-100 px-3 py-2 rounded-lg transition-colors">Home</a>
+                    <a href="/blood_bank" class="text-gray-600 font-semibold hover:bg-gray-100 px-3 py-2 rounded-lg transition-colors">Blood Banks</a>
+                    <a href="/about" class="text-gray-600 font-semibold hover:bg-gray-100 px-3 py-2 rounded-lg transition-colors">About</a>
+                    <a href="/contact_us" class="text-gray-600 font-semibold hover:bg-gray-100 px-3 py-2 rounded-lg transition-colors">Contact Us</a>
                 </div>
 
-                <!-- CTA Button -->
-                <div>
-                    <a href="/login/" class="hidden md:inline-block bg-red-500 text-white font-semibold px-5 py-2 rounded-lg hover:bg-red-600 transition-transform transform hover:scale-105 shadow-md">Login</a>
-                    <button id="menu-btn" class="md:hidden focus:outline-none">
-                        <svg class="w-6 h-6 text-gray-800" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                <!-- CTA Buttons (Dynamic) -->
+                <div class="hidden md:flex items-center space-x-4">
+                    {% if user.is_authenticated %}
+                        {% if user.is_staff %}
+                            <a href="/admin-dashboard/" class="bg-blue-500 text-white font-semibold px-5 py-2 rounded-lg hover:bg-blue-600 shadow-md">Admin Dashboard</a>
+                        {% else %}
+                            <a href="/profile/" class="bg-white text-red-500 font-semibold px-5 py-2 rounded-lg hover:bg-gray-100 shadow-sm border">My Profile</a>
+                        {% endif %}
+                        <a href="/logout/" class="text-gray-600 font-semibold px-4 py-2 hover:text-red-500">Logout</a>
+                    {% else %}
+                        <a href="/login/" class="bg-red-500 text-white font-semibold px-5 py-2 rounded-lg hover:bg-red-600 transition-transform transform hover:scale-105 shadow-md">Login</a>
+                    {% endif %}
+                </div>
+
+                <!-- Mobile Menu Button -->
+                <div class="md:hidden">
+                    <button id="menu-btn" class="focus:outline-none">
+                        <svg id="menu-open-icon" class="w-6 h-6 text-gray-800" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
+                        </svg>
+                        <svg id="menu-close-icon" class="w-6 h-6 text-gray-800 hidden" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
                         </svg>
                     </button>
                 </div>
             </nav>
-             <!-- Mobile Menu -->
-            <div id="mobile-menu" class="hidden md:hidden mt-4">
-                <a href="/finddonors/" class="block text-gray-600 py-2">Find Donors</a>
-                <a href="#" class="block text-gray-600 py-2">Blood Banks</a>
-                <a href="#" class="block text-gray-600 py-2">About</a>
-                <a href="/login/" class="block bg-red-500 text-white font-semibold text-center mt-2 px-5 py-2 rounded-lg hover:bg-red-600">Login</a>
+        </div>
+        <!-- Mobile Menu Panel -->
+        <div id="mobile-menu" class="hidden md:hidden absolute top-full left-0 w-full bg-white z-40 shadow-md">
+            <div class="px-6 py-4 space-y-2">
+                <a href="/" class="block text-gray-600 font-semibold py-2 px-3 rounded-lg hover:bg-gray-100">Home</a>
+                <a href="/blood_bank" class="block text-gray-600 font-semibold py-2 px-3 rounded-lg hover:bg-gray-100">Blood Banks</a>
+                <a href="/about" class="block text-gray-600 font-semibold py-2 px-3 rounded-lg hover:bg-gray-100">About</a>
+                <a href="/contact_us" class="block text-gray-600 font-semibold py-2 px-3 rounded-lg hover:bg-gray-100">Contact Us</a>
+                <div class="border-t border-gray-200 pt-4 mt-2 space-y-2">
+                     {% if user.is_authenticated %}
+                        {% if user.is_staff %}
+                            <a href="/admin-dashboard/" class="block w-full text-center bg-blue-500 text-white font-semibold px-5 py-2 rounded-lg hover:bg-blue-600">Admin Dashboard</a>
+                        {% else %}
+                           <a href="/profile/" class="block w-full text-center bg-gray-100 text-gray-800 font-semibold px-5 py-2 rounded-lg">My Profile</a>
+                        {% endif %}
+                       <a href="/logout/" class="block w-full text-center bg-red-500 text-white font-semibold px-5 py-2 rounded-lg hover:bg-red-600">Logout</a>
+                   {% else %}
+                       <a href="/login/" class="block w-full text-center bg-red-500 text-white font-semibold px-5 py-2 rounded-lg hover:bg-red-600">Login</a>
+                   {% endif %}
+                </div>
             </div>
         </div>
     </header>
@@ -156,12 +186,18 @@
     </main>
     
     <script>
+        // --- Mobile Menu Logic ---
         const menuBtn = document.getElementById('menu-btn');
         const mobileMenu = document.getElementById('mobile-menu');
+        const openIcon = document.getElementById('menu-open-icon');
+        const closeIcon = document.getElementById('menu-close-icon');
 
         menuBtn.addEventListener('click', () => {
             mobileMenu.classList.toggle('hidden');
+            openIcon.classList.toggle('hidden');
+            closeIcon.classList.toggle('hidden');
         });
     </script>
 </div>
 {% endblock %}
+

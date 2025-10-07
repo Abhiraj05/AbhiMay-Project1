@@ -101,3 +101,8 @@ def donor_eligibility(request):
 
     return render(request, "eligibility_form.html")
 
+def blood_bank(request):
+    return render(request, "blood_bank.html")   
+
+def my_profile(request):
+    return render(request, "profile.html")

@@ -17,8 +17,8 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 from adminpanel.views import main,login_view, logout_view
-from donors.views import donor_data , donor_eligibility
-from home.views import find_donor
+from donors.views import donor_data , donor_eligibility , blood_bank, my_profile
+from home.views import blood_request , about ,contact_us
 
 
 urlpatterns = [
@@ -26,9 +26,14 @@ urlpatterns = [
     path('', main, name='home'),
     path('form/', donor_data, name='form'),
     path('eligibility/', donor_eligibility, name='eligibility'),
-    path('finddonors/', find_donor, name='finddonors'),
+    # path('finddonors/', find_donor, name='finddonors'),
     # path('signup/', sign_up, name='signup'),
     path('login/', login_view, name='login'),
     path('logout/', logout_view, name='logout'),
+    path('blood_request/', blood_request, name='blood_request'),
+    path('blood_bank/', blood_bank, name='blood_bank'),
+    path('about/', about, name='about'),
+    path('contact_us/', contact_us, name='contact_us'),
+    path('profile/', my_profile, name='profile'),
 ]
 
