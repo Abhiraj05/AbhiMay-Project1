@@ -1,5 +1,12 @@
 {% extends "base.html" %}
 {% block start %}
+<!-- 🔄 Loading Spinner -->
+<div id="loader" class="fixed inset-0 flex items-center justify-center bg-white z-[9999] hidden">
+  <div class="flex flex-col items-center space-y-3">
+    <div class="w-14 h-14 border-4 border-red-500 border-t-transparent rounded-full animate-spin"></div>
+    <p class="text-gray-600 font-medium">Loading...</p>
+  </div>
+</div>
 <div>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -49,7 +56,7 @@
                         {% endif %}
                         <a href="/logout/" class="text-gray-600 font-semibold px-4 py-2 hover:text-red-500">Logout</a>
                     {% else %}
-                        <a href="/login/" class="bg-red-500 text-white font-semibold px-5 py-2 rounded-lg hover:bg-red-600 transition-transform transform hover:scale-105 shadow-md">Login</a>
+                        <a href="/login" class="bg-red-500 text-white font-semibold px-5 py-2 rounded-lg hover:bg-red-600 transition-transform transform hover:scale-105 shadow-md">Login</a>
                     {% endif %}
                 </div>
 
@@ -130,7 +137,7 @@
                     </div>
                     <div>
                         <label for="message" class="block text-sm font-semibold text-gray-700">Message</label>
-                        <textarea name="message" id="message" rows="4" required class="mt-1 block w-full px-4 py-3 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-red-500 focus:border-red-500"></textarea>
+                        <textarea name="message" id="message" rows="4" required class="resize-none mt-1 block w-full px-4 py-3 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-red-500 focus:border-red-500"></textarea>
                     </div>
                     <div>
                         <button type="submit" class="w-full bg-red-500 text-white font-bold py-3 px-6 rounded-lg hover:bg-red-600 transition-transform transform hover:scale-105 shadow-lg">
@@ -168,8 +175,8 @@
                     <h3 class="font-bold text-xl mb-2">Quick Links</h3>
                     <ul class="text-gray-400 space-y-2">
                         <li><a href="/" class="hover:text-white">Home</a></li>
-                        <li><a href="/about/" class="hover:text-white">About Us</a></li>
-                        <li><a href="/contact/" class="hover:text-white">Contact Us</a></li>
+                        <li><a href="/about" class="hover:text-white">About Us</a></li>
+                        <li><a href="/contact" class="hover:text-white">Contact Us</a></li>
                     </ul>
                 </div>
                 <div>
@@ -239,6 +246,66 @@
                  successModal.classList.add('opacity-0');
             }
         });
+
+        
+    document.addEventListener("DOMContentLoaded", function() {
+    const loader = document.getElementById("loader");
+
+    function showLoaderAndNavigate(target) {
+      loader.classList.remove("hidden");
+      loader.style.opacity = "1";
+
+      // Save a flag to detect if we are navigating
+      sessionStorage.setItem("navigating", "true");
+
+      setTimeout(() => {
+        window.location = target.getAttribute("href");
+      }, 1000); // 1 second delay
+    }
+
+       const internalLinks = document.querySelectorAll(
+
+      'a[href="/blood_bank"], ' +
+      'a[href="/about"], ' +
+      'a[href="/contact_us"], ' +
+      'a[href="/login"]'
+    );
+
+    internalLinks.forEach(link => {
+      link.addEventListener("click", function(e) {
+        e.preventDefault();
+        showLoaderAndNavigate(this);
+      });
+    });
+
+
+
+  });
+
+  // Hide loader when page loads
+  window.addEventListener("load", function() {
+    const loader = document.getElementById("loader");
+
+    // Only hide if it exists
+    if (loader) {
+      loader.style.opacity = "0";
+      loader.style.transition = "opacity 0.5s ease";
+      setTimeout(() => loader.classList.add("hidden"), 500);
+    }
+
+    // Remove the navigation flag
+    sessionStorage.removeItem("navigating");
+  });
+
+  // Prevent infinite spinner when coming from back button
+  window.addEventListener("pageshow", function(event) {
+    const loader = document.getElementById("loader");
+
+    // If this is a back/forward navigation, ensure loader is hidden
+    if (event.persisted || sessionStorage.getItem("navigating") !== "true") {
+      if (loader) loader.classList.add("hidden");
+    }
+  });
     </script>
 </div>
 {% endblock %}
