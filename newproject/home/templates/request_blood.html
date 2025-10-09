@@ -8,6 +8,11 @@
     <p class="text-gray-600 font-medium">Loading...</p>
   </div>
 </div>
+<div id="spinnerOverlay" 
+       class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center gap-10 justify-center z-50">
+    <div class="w-16 h-16 border-4 border-red-500 border-t-transparent rounded-full animate-spin"></div>
+    <p class="text-white font-medium">Sending The Data...</p>
+</div>
 <div>
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -392,7 +397,8 @@
           </div>
           <div class="pt-4">
             <button
-              type="submit"
+              type="button"
+              id="urgentRequestBtn"
               class="w-full bg-red-500 text-white font-bold py-4 px-6 rounded-lg hover:bg-red-600 transition-transform transform hover:scale-105 shadow-lg flex items-center justify-center space-x-2"
             >
               <svg
@@ -575,6 +581,18 @@
       if (loader) loader.classList.add("hidden");
     }
   });
+const urgentBtn = document.getElementById('urgentRequestBtn');
+const spinnerOverlay = document.getElementById('spinnerOverlay');
+const form = document.getElementById('requestForm');
+
+urgentBtn.addEventListener('click', () => {
+  spinnerOverlay.classList.remove('hidden'); // show spinner
+
+  // optional delay for spinner effect
+  setTimeout(() => {
+    form.submit(); // now submit the form after showing spinner
+  }, 500); // 0.5s delay
+});
   </script>
 </div>
 {% endblock %}
