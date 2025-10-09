@@ -222,39 +222,21 @@
     }
 
 
-   
-    const bloodbankBtn = document.querySelector('a[href="/blood_bank"]');
-    const aboutBtn = document.querySelector('a[href="/about"]');
-    const contactBtn = document.querySelector('a[href="/contact_us"]');
-    const loginBtn = document.querySelector('a[href="/login"]');
+      const internalLinks = document.querySelectorAll(
+ 
+      'a[href="/blood_bank"], ' +
+      'a[href="/about"], ' +
+      'a[href="/contact_us"], ' +
+      'a[href="/login/"]'
+    );
 
+    internalLinks.forEach(link => {
+      link.addEventListener("click", function(e) {
+        e.preventDefault();
+        showLoaderAndNavigate(this);
+      });
+    });
   
-    if (bloodbankBtn) {
-        bloodbankBtn.addEventListener("click", function (e) {
-          e.preventDefault();
-          showLoaderAndNavigate(this);
-        });
-      }
-      if (aboutBtn) {
-        aboutBtn.addEventListener("click", function (e) {
-          e.preventDefault();
-          showLoaderAndNavigate(this);
-        });
-      }
-
-      if (contactBtn) {
-        contactBtn.addEventListener("click", function (e) {
-          e.preventDefault();
-          showLoaderAndNavigate(this);
-        });
-      }
-      if (loginBtn) {
-        loginBtn.addEventListener("click", function (e) {
-          e.preventDefault();
-          showLoaderAndNavigate(this);
-        });
-      }
-
   });
 
   // Hide loader when page loads
