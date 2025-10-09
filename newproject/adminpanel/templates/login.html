@@ -6,7 +6,7 @@
     <style>
         body {
             font-family: 'Inter', sans-serif;
-            background-color: #f9fafb;
+            background-color: #f9fafb; /* light background */
         }
     </style>
 
@@ -35,16 +35,19 @@
                 {% csrf_token %}
                 
                 <div>
-                    <label for="username" class="text-sm font-medium text-gray-700">Email</label>
-                    <input id="username" name="username" type="email" required
-                           class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-lg focus:border-red-500 focus:ring-1 focus:ring-red-500"
-                           placeholder="you@example.com">
+                    <!-- CHANGED LABEL AND PLACEHOLDER -->
+                    <label for="username" class="text-sm font-medium text-gray-700">Username</label>
+                    <input id="username" name="username" type="text" required
+                           class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-lg 
+                                  focus:border-red-500 focus:ring-1 focus:ring-red-500"
+                           placeholder="Enter your username">
                 </div>
 
                 <div>
                     <label for="password" class="text-sm font-medium text-gray-700">Password</label>
                     <input id="password" name="password" type="password" required
-                           class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-lg focus:border-red-500 focus:ring-1 focus:ring-red-500"
+                           class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-lg 
+                                  focus:border-red-500 focus:ring-1 focus:ring-red-500"
                            placeholder="••••••••">
                 </div>
 
@@ -57,7 +60,8 @@
                 </div>
 
                 <button type="submit"
-                        class="w-full py-2 px-4 bg-red-500 text-white font-semibold rounded-lg hover:bg-red-600 transition">
+                        class="w-full py-2 px-4 bg-red-500 text-white font-semibold rounded-lg 
+                               hover:bg-red-600 transition">
                     Sign In
                 </button>
             </form>
@@ -70,4 +74,3 @@
     </div>
 </div>
 {% endblock %}
-

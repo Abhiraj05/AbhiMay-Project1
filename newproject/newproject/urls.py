@@ -16,7 +16,7 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-from adminpanel.views import main,login_view, logout_view , hospital_admin
+from adminpanel.views import main,login_view, logout_view , admin_dashboard_view , admin_settings_view
 from donors.views import donor_data , donor_eligibility , blood_bank, my_profile
 from home.views import blood_request , about ,contact_us
 
@@ -35,6 +35,7 @@ urlpatterns = [
     path('about/', about, name='about'),
     path('contact_us/', contact_us, name='contact_us'),
     path('profile/', my_profile, name='profile'),
-    path('hospital_admin/', hospital_admin, name='hospital_admin'),
+    path('admin-dashboard/', admin_dashboard_view, name='admin_dashboard'),
+    path('admin-dashboard/<int:donor_id>/<str:action>/', admin_dashboard_view, name='admin_dashboard_action'),
+    path('admin-settings/', admin_settings_view, name='admin_settings'),
 ]
-

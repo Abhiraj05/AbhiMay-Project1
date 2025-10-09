@@ -1,14 +1,82 @@
-from django.shortcuts import render,redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
 from adminpanel.models import User_Registration
 from django.contrib.auth import login, authenticate, logout
 from django.contrib.auth.forms import AuthenticationForm
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.forms import PasswordChangeForm
+from django.contrib.auth import update_session_auth_hash
+from donors.models import Donor
+from home.models import Request_Blood
+import datetime
+from django.utils import timezone
 # Create your views here.
 def main(request):
     return render(request,"main.html")
 
-def hospital_admin(request):    
-    return render(request,"hospital_admin.html")
+@login_required
+def admin_dashboard_view(request, donor_id=None, action=None):
+    # Check if the user is staff/hospital admin
+    if not request.user.is_staff:
+        messages.error(request, "You Do not have access to this page. Plz Contact Admin.")
+        return redirect('/')
+    
+    # approve donor logic
+    if donor_id and action == "approve":
+        donor = get_object_or_404(Donor, id=donor_id)
+        donor.is_verified=True
+        donor.save()
+        messages.success(request, f"Donor '{donor.name}' has been successfully approved.")
+        return redirect('admin_dashboard')
+    # decline donor logic
+    if donor_id and action =="decline":
+        donor = get_object_or_404(Donor, id=donor_id)
+        donor_name=donor.name
+        if hasattr(donor,'user') and donor.user is not None:
+            donor.user.delete()
+        else:
+            donor.delete()
+        messages.info(request, f"The application for '{donor_name}' has been declined and removed.")
+        return redirect('admin_dashboard')
+    # Data for stats showing cards
+    pending_donors = Donor.objects.filter(is_verified=False)
+    pending_donors_count = pending_donors.count()
+    verified_donors_count = Donor.objects.filter(is_verified=True).count()
+    #logic for request this month card
+    day_30_days_ago = timezone.now()-datetime.timedelta(days=30)
+    this_month_req_count = Request_Blood.objects.filter(created_at__gte=day_30_days_ago).count()
+
+
+
+    context = {
+        'pending_donors': pending_donors,
+        'pending_donors_count': pending_donors_count,
+        'verified_donors_count': verified_donors_count,
+        'this_month_req_count': this_month_req_count,
+    }
+    return render(request, "hospital_admin.html" , context)
+
+
+@login_required
+def admin_settings_view(request):
+    if not request.user.is_staff:
+        return redirect('/')
+
+    if request.method == 'POST':
+        form = PasswordChangeForm(request.user, request.POST)
+        if form.is_valid():
+            user = form.save()
+            # This is important to keep the user logged in after a password change.
+            update_session_auth_hash(request, user)  
+            messages.success(request, 'Your password was successfully updated!')
+            return redirect('admin_settings')
+        else:
+            messages.error(request, 'Please correct the error(s) below.')
+    else:
+        form = PasswordChangeForm(request.user)
+        
+    return render(request, 'admin_settings.html', {'form': form})
+
 
 def user_exist(username,password):
     user=User_Registration.objects.filter(username=username,password=password).first()
@@ -23,6 +91,9 @@ def login_view(request):
             user = authenticate(username=username, password=password)
             if user is not None:
                 login(request, user)
+                if user.is_staff:
+                    return redirect('admin_dashboard')
+                
                 return redirect("/")
             else:
                 messages.error(request, "Invalid username or password1.")
