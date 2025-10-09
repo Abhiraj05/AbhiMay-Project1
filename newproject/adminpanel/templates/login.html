@@ -94,18 +94,18 @@
       }, 1000); // 1 second delay
     }
 
+   const internalLinks = document.querySelectorAll(
+      'a[href="/form"], ' +
+   
+    );
 
-   
-    const formBtn = document.querySelector('a[href="/form"]');
- 
-  
-    if (formBtn) {
-        formBtn.addEventListener("click", function (e) {
-          e.preventDefault();
-          showLoaderAndNavigate(this);
-        });
-      }
-     
+    internalLinks.forEach(link => {
+      link.addEventListener("click", function(e) {
+        e.preventDefault();
+        showLoaderAndNavigate(this);
+      });
+    });
+
 
   });
 
