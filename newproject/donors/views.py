@@ -2,7 +2,24 @@ from django.shortcuts import render, redirect
 from donors.models import Donor
 from django.contrib import messages
 from django.contrib.auth.models import User # Import the User model
+from django.core.mail import send_mail
 
+def send_email(name,hospital_email,donor_email):
+    try:
+        send_mail(
+           "Request Is Under Review",
+        f"""Hello! {name}, 
+        your donor registration request is pending. 
+        Once the verication is done, we will contact you.
+        Thank you!.
+        """,
+        hospital_email,
+        [donor_email],
+        fail_silently=False,
+        )
+    except:
+        messages.error("email not sent!")
+    
 def donor_data(request):
     error = None 
     if request.method == "POST":
@@ -52,7 +69,7 @@ def donor_data(request):
        
         user.first_name = name.split(' ')[0]
         user.save()
-
+        
         
         Donor.objects.create(
             user=user,
@@ -65,7 +82,8 @@ def donor_data(request):
             address=address,
             last_donation_date=last_donation_date if last_donation_date else None
         )
-
+        hospital_email="xyzhospital@gmail.com"
+        send_email(name,hospital_email,email)
         return redirect("/eligibility")
 
     return render(request, "form.html")
