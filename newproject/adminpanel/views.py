@@ -10,9 +10,36 @@ from donors.models import Donor
 from home.models import Request_Blood
 import datetime
 from django.utils import timezone
+from django.core.paginator import Paginator
 # Create your views here.
 def main(request):
     return render(request,"main.html")
+
+@login_required
+def all_donors_view(request):
+    if not request.user.is_staff:
+        messages.error(request,"You do not have access to this page.")
+        return redirect('/')
+    donor_list=Donor.objects.all().order_by('-created_at')
+    paginator=Paginator(donor_list,10)
+    page_number=request.GET.get('page')
+    display_page=paginator.get_page(page_number)
+    context={'display_page':display_page}
+    return render(request,"all_donors.html",context)
+
+
+@login_required
+def show_blood_requests_view(request):
+    if not request.user.is_staff:
+        messages.error(request,"You do not have access to this page.")
+        return redirect("/")
+    request_list=Request_Blood.objects.all().order_by('-created_at')
+    paginator = Paginator(request_list, 10)
+    page_number =request.GET.get('page')
+    display_page=paginator.get_page(page_number)
+    context={'display_page':display_page}
+    return render(request,"show_blood_requests.html",context)
+
 
 @login_required
 def admin_dashboard_view(request, donor_id=None, action=None):

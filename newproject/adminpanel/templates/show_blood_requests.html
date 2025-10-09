@@ -8,19 +8,18 @@
     <style>
         body {
             font-family: 'Inter', sans-serif;
-            background-color: #f3f4f6; /* A neutral gray for admin panels */
+            background-color: #f3f4f6;
         }
         .sidebar-link {
             transition: all 0.2s ease;
         }
         .sidebar-link:hover, .sidebar-link.active {
-            background-color: #fee2e2; /* light red */
-            color: #ef4444; /* red-500 */
+            background-color: #fee2e2;
+            color: #ef4444;
         }
     </style>
 
     <div class="min-h-screen flex">
-        <!-- Sidebar -->
         <aside class="w-64 bg-white shadow-md hidden md:flex flex-col">
             <div class="p-6 flex items-center space-x-2 border-b">
                 <svg class="h-8 w-8 text-red-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
@@ -29,7 +28,7 @@
                 <h1 class="text-2xl font-bold text-gray-800">Rakthdaan</h1>
             </div>
             <nav class="mt-6 flex-1">
-                <a href="{% url 'admin_dashboard' %}" class="sidebar-link active flex items-center px-6 py-3 text-base font-semibold">
+                <a href="{% url 'admin_dashboard' %}" class="sidebar-link flex items-center px-6 py-3 text-gray-600 text-base font-semibold">
                     <svg class="w-6 h-6 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
                     Dashboard
                 </a>
@@ -37,7 +36,7 @@
                      <svg class="w-6 h-6 mr-3" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M18 18.72a9.094 9.094 0 003.741-.479 3 3 0 00-4.682-2.72m-7.5-2.962A3.75 3.75 0 0115 12a3.75 3.75 0 01-2.25 3.5m-3.75 0h-.008v.015A3.75 3.75 0 019 12a3.75 3.75 0 012.25-3.5m-3.75 0h.008v-.015A3.75 3.75 0 019 12a3.75 3.75 0 01-2.25 3.5M3 18.75a9.094 9.094 0 013.741-.479 3 3 0 014.682-2.72m-7.5-2.962A3.75 3.75 0 003 12a3.75 3.75 0 002.25-3.5m0 7a3.75 3.75 0 000-7M3 12a9.094 9.094 0 013.741.479 3 3 0 004.682 2.72m7.5 2.962a3.75 3.75 0 000-7m0 7a3.75 3.75 0 01-2.25-3.5m0 7a9.094 9.094 0 003.741.479 3 3 0 004.682 2.72m-7.5 2.962V18a3.75 3.75 0 00-3.75-3.75H9A3.75 3.75 0 005.25 18v.75m13.5-3.75V18a3.75 3.75 0 01-3.75-3.75H15A3.75 3.75 0 0118.75 18v.75" /></svg>
                     All Donors
                 </a>
-                 <a href="{% url 'show_blood_requests' %}" class="sidebar-link flex items-center px-6 py-3 text-gray-600 text-base font-semibold">
+                 <a href="{% url 'show_blood_requests' %}" class="sidebar-link active flex items-center px-6 py-3 text-base font-semibold">
                     <svg class="w-6 h-6 mr-3" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M3.75 12h16.5m-16.5 3.75h16.5M3.75 19.5h16.5M5.625 4.5h12.75a1.875 1.875 0 010 3.75H5.625a1.875 1.875 0 010-3.75z" /></svg>
                     Blood Requests
                 </a>
@@ -54,10 +53,9 @@
             </div>
         </aside>
 
-        <!-- Main Content -->
         <div class="flex-1 flex flex-col">
             <header class="bg-white shadow-sm p-4 flex justify-between items-center">
-                <h1 class="text-2xl font-bold text-gray-800">Hospital Dashboard</h1>
+                <h1 class="text-2xl font-bold text-gray-800">Blood Requests</h1>
                 <div class="flex items-center space-x-4">
                     <span class="text-sm font-semibold text-gray-700">Welcome, {{ user.first_name|default:user.username }}</span>
                     <button id="mobile-menu-btn" class="md:hidden focus:outline-none">
@@ -69,68 +67,83 @@
             </header>
 
             <main class="flex-1 p-6 md:p-8">
-                 {% if messages %}
-                    {% for message in messages %}
-                        <div class="mb-4 px-4 py-3 rounded-lg {% if message.tags == 'success' %}bg-green-100 text-green-800{% elif message.tags == 'info' %}bg-blue-100 text-blue-800{% else %}bg-red-100 text-red-800{% endif %}" role="alert">
-                            {{ message }}
-                        </div>
-                    {% endfor %}
-                {% endif %}
-                <!-- Stat Cards -->
-                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
-                    <div class="bg-white p-6 rounded-lg shadow border border-yellow-300">
-                        <h3 class="text-lg font-semibold text-gray-500">Pending Approvals</h3>
-                        <p class="text-4xl font-extrabold text-yellow-500 mt-2">{{ pending_donors_count }}</p>
-                    </div>
-                    <div class="bg-white p-6 rounded-lg shadow border border-green-300">
-                        <h3 class="text-lg font-semibold text-gray-500">Total Verified Donors</h3>
-                        <p class="text-4xl font-extrabold text-green-500 mt-2">{{ verified_donors_count }}</p>
-                    </div>
-                     <div class="bg-white p-6 rounded-lg shadow border border-blue-300">
-                        <h3 class="text-lg font-semibold text-gray-500">Requests This Month</h3>
-                        <p class="text-4xl font-extrabold text-blue-500 mt-2">{{ this_month_req_count }}</p>
-                    </div>
-                </div>
-
-                <!-- Donor Verification Table -->
                 <div class="bg-white rounded-lg shadow overflow-hidden">
                     <div class="p-6 border-b">
-                        <h2 class="text-xl font-bold text-gray-800">New Donor Verification</h2>
-                        <p class="text-gray-500 mt-1">Review and approve new donors to activate their profiles.</p>
+                        <h2 class="text-xl font-bold text-gray-800">All Blood Requests</h2>
+                        <p class="text-gray-500 mt-1">A log of all blood requests submitted through the platform.</p>
                     </div>
                     <div class="overflow-x-auto">
                         <table class="w-full">
                             <thead class="bg-gray-50">
                                 <tr>
-                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Name</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Patient Name</th>
                                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Blood Group</th>
-                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Contact</th>
-                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
-                                    <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Requester Contact</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Hospital</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Requested On</th>
                                 </tr>
                             </thead>
                             <tbody class="divide-y divide-gray-200">
-                                {% for donor in pending_donors %}
+                                {% for blood_request in display_page %}
                                 <tr>
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{{ donor.name }}</td>
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 font-bold">{{ donor.blood_group }}</td>
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ donor.phone_number }}</td>
-                                    <td class="px-6 py-4 whitespace-nowrap">
-                                        <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-yellow-100 text-yellow-800">Pending</span>
-                                    </td>
-                                    <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium space-x-2">
-                                        <a href="{% url 'admin_dashboard_action' donor_id=donor.id action='approve' %}" class="text-green-600 hover:text-green-900 font-semibold">Approve</a>
-                                        <a href="{% url 'admin_dashboard_action' donor_id=donor.id action='decline' %}" class="text-red-600 hover:text-red-900 font-semibold">Decline</a>
-                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{{ blood_request.patient_name }}</td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 font-bold">{{ blood_request.blood_group }}</td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ blood_request.contact_number }}</td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ blood_request.hospital_name }}</td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ blood_request.created_at|date:"d M, Y" }}</td>
                                 </tr>
                                 {% empty %}
                                 <tr>
-                                    <td colspan="5" class="px-6 py-12 text-center text-gray-500">No new donors are currently pending verification.</td>
+                                    <td colspan="5" class="px-6 py-12 text-center text-gray-500">There have been no blood requests yet.</td>
                                 </tr>
                                 {% endfor %}
                             </tbody>
                         </table>
                     </div>
+                       {% if display_page.has_other_pages %}
+                    <div class="bg-white px-4 py-3 flex items-center justify-between border-t border-gray-200 sm:px-6">
+                        <div class="flex-1 flex justify-between sm:hidden">
+                            {% if display_page.has_previous %}
+                            <a href="?page={{ display_page.previous_page_number }}" class="relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50"> Previous </a>
+                            {% endif %}
+                            {% if display_page.has_next %}
+                            <a href="?page={{ display_page.next_page_number }}" class="ml-3 relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50"> Next </a>
+                            {% endif %}
+                        </div>
+                        <div class="hidden sm:flex-1 sm:flex sm:items-center sm:justify-between">
+                            <div>
+                                <p class="text-sm text-gray-700">
+                                    Showing
+                                    <span class="font-medium">{{ display_page.start_index }}</span>
+                                    to
+                                    <span class="font-medium">{{ display_page.end_index }}</span>
+                                    of
+                                    <span class="font-medium">{{ display_page.paginator.count }}</span>
+                                    results
+                                </p>
+                            </div>
+                            <div>
+                                <nav class="relative z-0 inline-flex rounded-md shadow-sm -space-x-px" aria-label="Pagination">
+                                    {% if display_page.has_previous %}
+                                    <a href="?page={{ display_page.previous_page_number }}" class="relative inline-flex items-center px-2 py-2 rounded-l-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50">
+                                        <span class="sr-only">Previous</span>
+                                        <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z" clip-rule="evenodd" /></svg>
+                                    </a>
+                                    {% endif %}
+                                    
+                                    <a href="?page={{ display_page.number }}" aria-current="page" class="z-10 bg-red-50 border-red-500 text-red-600 relative inline-flex items-center px-4 py-2 border text-sm font-medium"> {{ display_page.number }} </a>
+
+                                    {% if display_page.has_next %}
+                                    <a href="?page={{ display_page.next_page_number }}" class="relative inline-flex items-center px-2 py-2 rounded-r-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50">
+                                        <span class="sr-only">Next</span>
+                                        <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd" /></svg>
+                                    </a>
+                                    {% endif %}
+                                </nav>
+                            </div>
+                        </div>
+                    </div>
+                    {% endif %}
                 </div>
             </main>
         </div>
@@ -145,4 +158,3 @@
     </script>
 </div>
 {% endblock %}
-

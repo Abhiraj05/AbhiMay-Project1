@@ -8,14 +8,14 @@
     <style>
         body {
             font-family: 'Inter', sans-serif;
-            background-color: #f3f4f6; /* A neutral gray for admin panels */
+            background-color: #f3f4f6;
         }
         .sidebar-link {
             transition: all 0.2s ease;
         }
         .sidebar-link:hover, .sidebar-link.active {
-            background-color: #fee2e2; /* light red */
-            color: #ef4444; /* red-500 */
+            background-color: #fee2e2;
+            color: #ef4444;
         }
     </style>
 
@@ -29,7 +29,7 @@
                 <h1 class="text-2xl font-bold text-gray-800">Rakthdaan</h1>
             </div>
             <nav class="mt-6 flex-1">
-                <a href="{% url 'admin_dashboard' %}" class="sidebar-link active flex items-center px-6 py-3 text-base font-semibold">
+                <a href="{% url 'admin_dashboard' %}" class="sidebar-link flex items-center px-6 py-3 text-gray-600 text-base font-semibold">
                     <svg class="w-6 h-6 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
                     Dashboard
                 </a>
@@ -41,7 +41,7 @@
                     <svg class="w-6 h-6 mr-3" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M3.75 12h16.5m-16.5 3.75h16.5M3.75 19.5h16.5M5.625 4.5h12.75a1.875 1.875 0 010 3.75H5.625a1.875 1.875 0 010-3.75z" /></svg>
                     Blood Requests
                 </a>
-                <a href="{% url 'admin_settings' %}" class="sidebar-link flex items-center px-6 py-3 text-gray-600 text-base font-semibold">
+                <a href="{% url 'admin_settings' %}" class="sidebar-link active flex items-center px-6 py-3 text-base font-semibold">
                     <svg class="w-6 h-6 mr-3" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M9.594 3.94c.09-.542.56-.94 1.11-.94h2.593c.55 0 1.02.398 1.11.94l.213 1.281c.063.374.313.686.645.87.074.04.147.083.22.127.324.196.72.257 1.075.124l1.217-.456a1.125 1.125 0 011.37.49l1.296 2.247a1.125 1.125 0 01-.26 1.431l-1.003.827c-.293.24-.438.613-.438.995s.145.755.438.995l1.003.827c.424.35.534.954.26 1.431l-1.296 2.247a1.125 1.125 0 01-1.37.49l-1.217-.456c-.355-.133-.75-.072-1.075.124a6.57 6.57 0 01-.22.127c-.331.184-.581.496-.645.87l-.213 1.281c-.09.543-.56.94-1.11.94h-2.593c-.55 0-1.02-.398-1.11-.94l-.213-1.281c-.063-.374-.313-.686-.645-.87a6.52 6.52 0 01-.22-.127c-.324-.196-.72-.257-1.075-.124l-1.217.456a1.125 1.125 0 01-1.37-.49l-1.296-2.247a1.125 1.125 0 01.26-1.431l1.003-.827c.293-.24.438-.613.438-.995s-.145-.755-.438-.995l-1.003-.827a1.125 1.125 0 01-.26-1.431l1.296-2.247a1.125 1.125 0 011.37-.49l1.217.456c.355.133.75.072 1.075-.124a6.553 6.553 0 01.22-.127c.332-.184.582-.496.646-.87l.212-1.281z" /><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /></svg>
                     Settings
                 </a>
@@ -57,7 +57,7 @@
         <!-- Main Content -->
         <div class="flex-1 flex flex-col">
             <header class="bg-white shadow-sm p-4 flex justify-between items-center">
-                <h1 class="text-2xl font-bold text-gray-800">Hospital Dashboard</h1>
+                <h1 class="text-2xl font-bold text-gray-800">Account Settings</h1>
                 <div class="flex items-center space-x-4">
                     <span class="text-sm font-semibold text-gray-700">Welcome, {{ user.first_name|default:user.username }}</span>
                     <button id="mobile-menu-btn" class="md:hidden focus:outline-none">
@@ -69,68 +69,54 @@
             </header>
 
             <main class="flex-1 p-6 md:p-8">
-                 {% if messages %}
-                    {% for message in messages %}
-                        <div class="mb-4 px-4 py-3 rounded-lg {% if message.tags == 'success' %}bg-green-100 text-green-800{% elif message.tags == 'info' %}bg-blue-100 text-blue-800{% else %}bg-red-100 text-red-800{% endif %}" role="alert">
-                            {{ message }}
-                        </div>
-                    {% endfor %}
-                {% endif %}
-                <!-- Stat Cards -->
-                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
-                    <div class="bg-white p-6 rounded-lg shadow border border-yellow-300">
-                        <h3 class="text-lg font-semibold text-gray-500">Pending Approvals</h3>
-                        <p class="text-4xl font-extrabold text-yellow-500 mt-2">{{ pending_donors_count }}</p>
-                    </div>
-                    <div class="bg-white p-6 rounded-lg shadow border border-green-300">
-                        <h3 class="text-lg font-semibold text-gray-500">Total Verified Donors</h3>
-                        <p class="text-4xl font-extrabold text-green-500 mt-2">{{ verified_donors_count }}</p>
-                    </div>
-                     <div class="bg-white p-6 rounded-lg shadow border border-blue-300">
-                        <h3 class="text-lg font-semibold text-gray-500">Requests This Month</h3>
-                        <p class="text-4xl font-extrabold text-blue-500 mt-2">{{ this_month_req_count }}</p>
-                    </div>
-                </div>
-
-                <!-- Donor Verification Table -->
-                <div class="bg-white rounded-lg shadow overflow-hidden">
+                <div class="max-w-xl mx-auto bg-white rounded-lg shadow-md overflow-hidden">
                     <div class="p-6 border-b">
-                        <h2 class="text-xl font-bold text-gray-800">New Donor Verification</h2>
-                        <p class="text-gray-500 mt-1">Review and approve new donors to activate their profiles.</p>
+                        <h2 class="text-xl font-bold text-gray-800">Change Password</h2>
+                        <p class="text-gray-500 mt-1">For your security, we recommend choosing a strong password that you don't use elsewhere.</p>
                     </div>
-                    <div class="overflow-x-auto">
-                        <table class="w-full">
-                            <thead class="bg-gray-50">
-                                <tr>
-                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Name</th>
-                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Blood Group</th>
-                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Contact</th>
-                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
-                                    <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
-                                </tr>
-                            </thead>
-                            <tbody class="divide-y divide-gray-200">
-                                {% for donor in pending_donors %}
-                                <tr>
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{{ donor.name }}</td>
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 font-bold">{{ donor.blood_group }}</td>
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ donor.phone_number }}</td>
-                                    <td class="px-6 py-4 whitespace-nowrap">
-                                        <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-yellow-100 text-yellow-800">Pending</span>
-                                    </td>
-                                    <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium space-x-2">
-                                        <a href="{% url 'admin_dashboard_action' donor_id=donor.id action='approve' %}" class="text-green-600 hover:text-green-900 font-semibold">Approve</a>
-                                        <a href="{% url 'admin_dashboard_action' donor_id=donor.id action='decline' %}" class="text-red-600 hover:text-red-900 font-semibold">Decline</a>
-                                    </td>
-                                </tr>
-                                {% empty %}
-                                <tr>
-                                    <td colspan="5" class="px-6 py-12 text-center text-gray-500">No new donors are currently pending verification.</td>
-                                </tr>
+
+                    <form method="post" class="p-6 space-y-6">
+                        {% csrf_token %}
+
+                        {% if messages %}
+                            {% for message in messages %}
+                                <div class="px-4 py-3 rounded-lg {% if message.tags == 'success' %}bg-green-100 text-green-800{% else %}bg-red-100 text-red-800{% endif %}" role="alert">
+                                    {{ message }}
+                                </div>
+                            {% endfor %}
+                        {% endif %}
+
+                        {% if form.errors %}
+                            <div class="p-4 bg-red-50 border-l-4 border-red-400 text-red-700">
+                                {% for field, errors in form.errors.items %}
+                                    {% for error in errors %}
+                                        <p>{{ error }}</p>
+                                    {% endfor %}
                                 {% endfor %}
-                            </tbody>
-                        </table>
-                    </div>
+                            </div>
+                        {% endif %}
+
+                        <div>
+                            <label for="{{ form.old_password.id_for_label }}" class="block text-sm font-medium text-gray-700">{{ form.old_password.label }}</label>
+                            <input type="password" name="{{ form.old_password.name }}" id="{{ form.old_password.id_for_label }}" class="mt-1 block w-full px-4 py-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-red-500 focus:border-red-500" required>
+                        </div>
+                        
+                        <div>
+                            <label for="{{ form.new_password1.id_for_label }}" class="block text-sm font-medium text-gray-700">{{ form.new_password1.label }}</label>
+                            <input type="password" name="{{ form.new_password1.name }}" id="{{ form.new_password1.id_for_label }}" class="mt-1 block w-full px-4 py-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-red-500 focus:border-red-500" required>
+                        </div>
+
+                        <div>
+                            <label for="{{ form.new_password2.id_for_label }}" class="block text-sm font-medium text-gray-700">{{ form.new_password2.label }}</label>
+                            <input type="password" name="{{ form.new_password2.name }}" id="{{ form.new_password2.id_for_label }}" class="mt-1 block w-full px-4 py-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-red-500 focus:border-red-500" required>
+                        </div>
+
+                        <div class="flex justify-end pt-4">
+                            <button type="submit" class="bg-red-500 text-white font-bold py-2 px-6 rounded-lg hover:bg-red-600 transition-transform transform hover:scale-105 shadow-lg">
+                                Update Password
+                            </button>
+                        </div>
+                    </form>
                 </div>
             </main>
         </div>
@@ -145,4 +131,3 @@
     </script>
 </div>
 {% endblock %}
-
