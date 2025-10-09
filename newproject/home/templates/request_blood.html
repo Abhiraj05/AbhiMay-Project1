@@ -1,6 +1,13 @@
 
 {% extends "base.html" %}
 {% block start %}
+<!-- 🔄 Loading Spinner -->
+<div id="loader" class="fixed inset-0 flex items-center justify-center bg-white z-[9999] hidden">
+  <div class="flex flex-col items-center space-y-3">
+    <div class="w-14 h-14 border-4 border-red-500 border-t-transparent rounded-full animate-spin"></div>
+    <p class="text-gray-600 font-medium">Loading...</p>
+  </div>
+</div>
 <div>
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -49,7 +56,7 @@
 
         <!-- Desktop Navigation Links -->
         <div class="hidden md:flex items-center space-x-2">
-          {% comment %}
+          {% comment %} 
           <a
             href="/blood_request/"
             class="text-red-500 font-semibold bg-red-100 px-3 py-2 rounded-lg"
@@ -104,7 +111,7 @@
           >
           {% endif %} {% else %}
           <a
-            href="/login/"
+            href="/login"
             class="bg-red-500 text-white font-semibold px-5 py-2 rounded-lg hover:bg-red-600 transition-transform transform hover:scale-105 shadow-md"
             >Login</a
           >
@@ -160,12 +167,12 @@
           >Request Blood</a
         >
         <a
-          href="/blood-banks/"
+          href="/blood_banks/"
           class="block text-gray-600 font-semibold py-2 px-3 rounded-lg hover:bg-gray-100"
           >Blood Banks</a
         >
         <a
-          href="#"
+          href="/about/"
           class="block text-gray-600 font-semibold py-2 px-3 rounded-lg hover:bg-gray-100"
           >About</a
         >
@@ -464,8 +471,8 @@
           <h3 class="font-bold text-xl mb-2">Quick Links</h3>
           <ul class="text-gray-400 space-y-2">
             <li><a href="/" class="hover:text-white">Home</a></li>
-            <li><a href="#" class="hover:text-white">About Us</a></li>
-            <li><a href="#" class="hover:text-white">FAQs</a></li>
+            <li><a href="/about" class="hover:text-white">About Us</a></li>
+            {% comment %} <li><a href="#" class="hover:text-white">FAQs</a></li> {% endcomment %}
           </ul>
         </div>
         <div>
@@ -509,6 +516,82 @@
         successModal.classList.add("hidden");
       }
     });
+
+    document.addEventListener("DOMContentLoaded", function() {
+    const loader = document.getElementById("loader");
+
+    function showLoaderAndNavigate(target) {
+      loader.classList.remove("hidden");
+      loader.style.opacity = "1";
+
+      // Save a flag to detect if we are navigating
+      sessionStorage.setItem("navigating", "true");
+
+      setTimeout(() => {
+        window.location = target.getAttribute("href");
+      }, 1000); // 1 second delay
+    }
+
+
+   
+    const bloodbankBtn = document.querySelector('a[href="/blood_bank"]');
+    const aboutBtn = document.querySelector('a[href="/about"]');
+    const contactBtn = document.querySelector('a[href="/contact_us"]');
+    const loginBtn = document.querySelector('a[href="/login"]');
+
+  
+    if (bloodbankBtn) {
+        bloodbankBtn.addEventListener("click", function (e) {
+          e.preventDefault();
+          showLoaderAndNavigate(this);
+        });
+      }
+      if (aboutBtn) {
+        aboutBtn.addEventListener("click", function (e) {
+          e.preventDefault();
+          showLoaderAndNavigate(this);
+        });
+      }
+
+      if (contactBtn) {
+        contactBtn.addEventListener("click", function (e) {
+          e.preventDefault();
+          showLoaderAndNavigate(this);
+        });
+      }
+      if (loginBtn) {
+        loginBtn.addEventListener("click", function (e) {
+          e.preventDefault();
+          showLoaderAndNavigate(this);
+        });
+      }
+
+  });
+
+  // Hide loader when page loads
+  window.addEventListener("load", function() {
+    const loader = document.getElementById("loader");
+
+    // Only hide if it exists
+    if (loader) {
+      loader.style.opacity = "0";
+      loader.style.transition = "opacity 0.5s ease";
+      setTimeout(() => loader.classList.add("hidden"), 500);
+    }
+
+    // Remove the navigation flag
+    sessionStorage.removeItem("navigating");
+  });
+
+  // Prevent infinite spinner when coming from back button
+  window.addEventListener("pageshow", function(event) {
+    const loader = document.getElementById("loader");
+
+    // If this is a back/forward navigation, ensure loader is hidden
+    if (event.persisted || sessionStorage.getItem("navigating") !== "true") {
+      if (loader) loader.classList.add("hidden");
+    }
+  });
   </script>
 </div>
 {% endblock %}
