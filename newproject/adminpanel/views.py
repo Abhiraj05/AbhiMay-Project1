@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
-from adminpanel.models import User_Registration
+# from adminpanel.models import User_Registration
 from django.contrib.auth import login, authenticate, logout
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.decorators import login_required
@@ -12,7 +12,25 @@ import datetime
 from django.utils import timezone
 from django.core.paginator import Paginator
 from django.contrib.auth.models import User
+from django.core.mail import send_mail
+
 # Create your views here.
+
+
+def send_email(hospital_email,donor_email,message,mail_subject):
+    try:
+        send_mail(
+        f"{mail_subject}",
+        f"""
+        {message}
+        """,
+        hospital_email,
+        [donor_email],
+        fail_silently=False,
+        )
+    except:
+        messages.error("email not sent!")
+        
 def main(request):
     return render(request,"main.html")
 
@@ -57,13 +75,50 @@ def admin_dashboard_view(request, donor_id=None, action=None):
         donor = get_object_or_404(Donor, id=donor_id)
         donor.is_verified=True
         donor.save()
+        donor_name=donor.name
+        donor_email=donor.email
+        hospital_email=request.user.profile.email
+        hospital_name=request.user.profile.hospital
+        mail_subject="Donor Registration Approved — Welcome Aboard!"
+        message= f"""
+        Hello {donor_name},
         
+        We’re happy to inform you that your donor registration has been successfully approved!
+
+        Thank you for choosing to be part of our mission to save lives through blood donation.  
+        You can now log in to your account to access your donor profile and stay updated on upcoming donation drives.
+
+        We truly appreciate your kindness and support.
+
+        Warm regards,  
+        {hospital_name} Team  
+        """
+        send_email(hospital_email,donor_email,message,mail_subject)
         messages.success(request, f"Donor '{donor.name}' has been successfully approved.")
         return redirect('admin_dashboard')
     # decline donor logic
     if donor_id and action =="decline":
         donor = get_object_or_404(Donor, id=donor_id)
         donor_name=donor.name
+        donor_email=donor.email
+        hospital_email=request.user.profile.email
+        hospital_name=request.user.profile.hospital
+        mail_subject="Donor Registration Status — Request Declined!"
+        message=f"""
+        Hello {donor_name},
+        
+        We appreciate your interest in registering as a blood donor. 
+        After reviewing your details, we regret to inform you that your registration request could not be approved at this time.
+        
+        This decision may be due to incomplete information or eligibility criteria not being met.  
+        You are welcome to reapply in the future once the necessary requirements are fulfilled.
+        
+        Thank you for your understanding and willingness to help others.
+        
+        Warm regards,
+        {hospital_name} Team   
+        """
+        send_email(hospital_email,donor_email,message,mail_subject)
         if hasattr(donor,'user') and donor.user is not None:
             donor.user.delete()
         else:
@@ -112,9 +167,9 @@ def admin_settings_view(request):
     return render(request, 'admin_settings.html', {'form': form})
 
 
-def user_exist(username,password):
-    user=User_Registration.objects.filter(username=username,password=password).first()
-    return user
+# def user_exist(username,password):
+#     user=User_Registration.objects.filter(username=username,password=password).first()
+#     return user
 
 def login_view(request):
     if request.method == "POST":
