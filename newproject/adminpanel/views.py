@@ -22,7 +22,7 @@ def all_donors_view(request):
         messages.error(request,"You do not have access to this page.")
         return redirect('/')
     hospital_name=request.user.profile.hospital
-    donor_list=Donor.objects.all().order_by(hospital_name)
+    donor_list=Donor.objects.filter(hospital=hospital_name).all()
     paginator=Paginator(donor_list,10)
     page_number=request.GET.get('page')
     display_page=paginator.get_page(page_number)
@@ -35,7 +35,9 @@ def show_blood_requests_view(request):
     if not request.user.is_staff:
         messages.error(request,"You do not have access to this page.")
         return redirect("/")
-    request_list=Request_Blood.objects.all().order_by('-created_at')
+    
+    hospital_name=request.user.profile.hospital
+    request_list=Request_Blood.objects.filter(hospital_name=hospital_name).all()
     paginator = Paginator(request_list, 10)
     page_number =request.GET.get('page')
     display_page=paginator.get_page(page_number)
@@ -68,14 +70,15 @@ def admin_dashboard_view(request, donor_id=None, action=None):
         messages.info(request, f"The application for '{donor_name}' has been declined and removed.")
         return redirect('admin_dashboard')
     # Data for stats showing cards
-    pending_donors = Donor.objects.filter(is_verified=False)
+    hospital_name=request.user.profile.hospital
+    pending_donors = Donor.objects.filter(is_verified=False,hospital=hospital_name)
     pending_donors_count = pending_donors.count()
-    verified_donors_count = Donor.objects.filter(is_verified=True).count()
+    verified_donors_count = Donor.objects.filter(is_verified=True,hospital=hospital_name).count()
     #logic for request this month card
     day_30_days_ago = timezone.now()-datetime.timedelta(days=30)
     this_month_req_count = Request_Blood.objects.filter(created_at__gte=day_30_days_ago).count()
 
-    latest_blood_requests = Request_Blood.objects.all().order_by('-created_at')[:5]
+    latest_blood_requests = Request_Blood.objects.filter(hospital_name=hospital_name).all()[:5]
 
     context = {
         'pending_donors': pending_donors,

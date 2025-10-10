@@ -1,9 +1,9 @@
 from django.shortcuts import render, redirect
 from donors.models import Donor
 from django.contrib import messages
-from django.contrib.auth.models import User # Import the User model
 from django.core.mail import send_mail
 from django.contrib.auth.models import User
+from adminpanel.models import Profile
 
 
 def send_email(name,hospital_email,donor_email):
@@ -34,7 +34,7 @@ def donor_data(request):
         confirm_password = request.POST.get("confirm_password")
         blood_group = request.POST.get("blood_group")
         address = request.POST.get("location")
-        hospital= request.POST.get("hospital")
+        hospital_name= request.POST.get("hospital")
         last_donation_date = request.POST.get("last_donation_date")
 
         if not name:
@@ -83,11 +83,11 @@ def donor_data(request):
             phone_number=phone_no,
             email=email,
             address=address,
-            hospital=hospital,
+            hospital=hospital_name,
             last_donation_date=last_donation_date if last_donation_date else None
         )
-        admin = User.objects.filter(hospital_name=hospital).first()
-        hospital_email=admin.profile.email
+        hospital=Profile.objects.filter(hospital=hospital_name).first()
+        hospital_email=hospital.email
         send_email(name,hospital_email,email)
         return redirect("/eligibility")
 

@@ -2,6 +2,7 @@ from django.shortcuts import render
 from django.contrib import messages
 from home.models import Request_Blood
 from django.core.mail import send_mail
+from adminpanel.models import Profile
 
 # Create your views here.
 def send_email(name,hospital_email,donor_email):
@@ -48,7 +49,8 @@ def blood_request(request):
                                          contact_number=contact_number,
                                          hospital_name=hospital_name)
             request_blood.save()
-            hospital_email="xyz@gmail.com"
+            hospital=Profile.objects.filter(hospital=hospital_name).first()
+            hospital_email=hospital.email
             send_email(patient_name,hospital_email,email_id)
             message = True
             return render(request, "request_blood.html", {"message": message})
