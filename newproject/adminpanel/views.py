@@ -57,6 +57,7 @@ def admin_dashboard_view(request, donor_id=None, action=None):
         donor = get_object_or_404(Donor, id=donor_id)
         donor.is_verified=True
         donor.save()
+        
         messages.success(request, f"Donor '{donor.name}' has been successfully approved.")
         return redirect('admin_dashboard')
     # decline donor logic
@@ -76,7 +77,7 @@ def admin_dashboard_view(request, donor_id=None, action=None):
     verified_donors_count = Donor.objects.filter(is_verified=True,hospital=hospital_name).count()
     #logic for request this month card
     day_30_days_ago = timezone.now()-datetime.timedelta(days=30)
-    this_month_req_count = Request_Blood.objects.filter(created_at__gte=day_30_days_ago).count()
+    this_month_req_count = Request_Blood.objects.filter(created_at__gte=day_30_days_ago,hospital_name=hospital_name).count()
 
     latest_blood_requests = Request_Blood.objects.filter(hospital_name=hospital_name).all()[:5]
 
