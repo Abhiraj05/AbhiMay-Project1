@@ -1,17 +1,17 @@
 from django.shortcuts import render, redirect
 from donors.models import Donor
 from django.contrib import messages
-from django.contrib.auth.models import User # Import the User model
 from django.core.mail import send_mail
+from django.contrib.auth.models import User
+from adminpanel.models import Profile
 
-def send_email(name,hospital_email,donor_email):
+
+def send_email(hospital_email,donor_email,message,mail_subject):
     try:
         send_mail(
-           "Request Is Under Review",
-        f"""Hello! {name}, 
-        your donor registration request is pending. 
-        Once the verication is done, we will contact you.
-        Thank you!.
+        f"{mail_subject}",
+        f"""
+        {message}
         """,
         hospital_email,
         [donor_email],
@@ -32,6 +32,7 @@ def donor_data(request):
         confirm_password = request.POST.get("confirm_password")
         blood_group = request.POST.get("blood_group")
         address = request.POST.get("location")
+        hospital_name= request.POST.get("hospital")
         last_donation_date = request.POST.get("last_donation_date")
 
         if not name:
@@ -80,10 +81,27 @@ def donor_data(request):
             phone_number=phone_no,
             email=email,
             address=address,
+            hospital=hospital_name,
             last_donation_date=last_donation_date if last_donation_date else None
         )
-        hospital_email="xyzhospital@gmail.com"
-        send_email(name,hospital_email,email)
+        hospital=Profile.objects.filter(hospital=hospital_name).first()
+        hospital_email=hospital.email
+        hospital_name=hospital.hospital
+        mail_subject="Donor Registration Pending — Verification in Progress"
+        message=f"""
+        Hello {name},
+
+        Thank you for registering as a blood donor!
+
+        Your registration request is currently pending verification.  
+        Once the verification process is completed, we will contact you with the next steps.
+
+        We appreciate your patience and your willingness to contribute to this noble cause.
+
+        Warm regards,
+        {hospital_name} Team
+        """
+        send_email(hospital_email,email,message,mail_subject)
         return redirect("/eligibility")
 
     return render(request, "form.html")

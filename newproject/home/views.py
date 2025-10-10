@@ -2,16 +2,15 @@ from django.shortcuts import render
 from django.contrib import messages
 from home.models import Request_Blood
 from django.core.mail import send_mail
+from adminpanel.models import Profile
 
 # Create your views here.
-def send_email(name,hospital_email,donor_email):
+def send_email(hospital_email,donor_email,message,mail_subject):
     try:
         send_mail(
-        "Blood Request Pending ",
-         f"""Hello! {name}, 
-        your blood request has been sent. 
-        Once it is approved, we will contact you. 
-        Thank you!
+        f"{mail_subject}",
+        f"""
+        {message}
         """,
         hospital_email,
         [donor_email],
@@ -48,8 +47,23 @@ def blood_request(request):
                                          contact_number=contact_number,
                                          hospital_name=hospital_name)
             request_blood.save()
-            hospital_email="xyz@gmail.com"
-            send_email(patient_name,hospital_email,email_id)
+            hospital=Profile.objects.filter(hospital=hospital_name).first()
+            hospital_email=hospital.email
+            hospital_name=hospital.hospital
+            mail_subject="Blood Request Pending — Awaiting Approval"
+            message=f"""
+            Hello {patient_name},
+
+            Your blood request has been successfully submitted.
+
+            It is currently pending approval, and once it is reviewed and approved, we will contact you with further details.
+
+            Thank you for your patience and for trusting our service.
+
+            Warm regards,
+            {hospital_name} Team
+            """
+            send_email(hospital_email,email_id,message,mail_subject)
             message = True
             return render(request, "request_blood.html", {"message": message})
 
