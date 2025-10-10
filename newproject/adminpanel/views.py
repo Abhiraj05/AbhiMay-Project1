@@ -21,7 +21,8 @@ def all_donors_view(request):
     if not request.user.is_staff:
         messages.error(request,"You do not have access to this page.")
         return redirect('/')
-    donor_list=Donor.objects.all().order_by('-created_at')
+    hospital_name=request.user.hospital_name
+    donor_list=Donor.objects.all().order_by(hospital_name)
     paginator=Paginator(donor_list,10)
     page_number=request.GET.get('page')
     display_page=paginator.get_page(page_number)

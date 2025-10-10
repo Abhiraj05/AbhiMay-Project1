@@ -11,6 +11,21 @@ class BloodGroup(models.TextChoices):
     O_POSITIVE = "O+", "O+"
     O_NEGATIVE = "O-", "O-"
 
+
+class HospitalChoices(models.TextChoices):
+    GOA_MEDICAL_COLLEGE = "Goa Medical College Blood Bank", "Goa Medical College Blood Bank"
+    MANIPAL_HOSPITAL = "Manipal Hospital Blood Bank", "Manipal Hospital Blood Bank"
+    HOSPICIO_HOSPITAL = "Hospicio Hospital Blood Bank", "Hospicio Hospital Blood Bank"
+    ASILO_HOSPITAL = "Asilo Hospital Blood Bank", "Asilo Hospital Blood Bank"
+    DISTRICT_HOSPITAL = "District Hospital Blood Bank", "District Hospital Blood Bank"
+    RED_CROSS = "Red Cross Blood Bank", "Red Cross Blood Bank"
+    SUB_DISTRICT_HOSPITAL = "Sub District Hospital Blood Bank", "Sub District Hospital Blood Bank"
+    VRUNDAVAN_HOSPITAL = "Vrundavan Hospital Blood Bank", "Vrundavan Hospital Blood Bank"
+    APOLLO_VICTOR_HOSPITAL = "Apollo Victor Hospital Blood Bank", "Apollo Victor Hospital Blood Bank"
+    SHRI_SAI_CENTRAL = "Shri Sai Central Blood Bank & Lab", "Shri Sai Central Blood Bank & Lab"
+    FONSECAS_PATHOLOGY = "Fonsecas Pathology Laboratory / Blood Bank", "Fonsecas Pathology Laboratory / Blood Bank"
+    JEEVANDHARA = "Jeevandhara Blood Bank", "Jeevandhara Blood Bank"
+
 class Donor(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, null=True, blank=True)
     name = models.CharField(max_length=100, blank=False)
@@ -20,6 +35,7 @@ class Donor(models.Model):
     phone_number = models.CharField(max_length=15, unique=True, blank=True, null=True)
     email = models.EmailField(unique=True, blank=True, null=True)
     address = models.TextField(blank=True, null=True)
+    hospital=models.CharField(max_length=100,choices=HospitalChoices.choices, blank=True,null=True)
     last_donation_date = models.DateField(blank=True, null=True)
     is_active = models.BooleanField(default=True)
     is_verified = models.BooleanField(default=False)
