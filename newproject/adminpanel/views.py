@@ -11,6 +11,7 @@ from home.models import Request_Blood
 import datetime
 from django.utils import timezone
 from django.core.paginator import Paginator
+from django.contrib.auth.models import User
 # Create your views here.
 def main(request):
     return render(request,"main.html")
@@ -112,20 +113,30 @@ def user_exist(username,password):
 def login_view(request):
     if request.method == "POST":
         form = AuthenticationForm(request, data=request.POST)
-        if form.is_valid():
-            username = form.cleaned_data.get('username')
-            password = form.cleaned_data.get('password')
-            user = authenticate(username=username, password=password)
-            if user is not None:
-                login(request, user)
-                if user.is_staff:
-                    return redirect('admin_dashboard')
-                
-                return redirect("/")
-            else:
-                messages.error(request, "Invalid username or password1.")
+        identifier = request.POST.get('username')
+        password = request.POST.get('password')
+        if not identifier or not password:
+            messages.error(request, "Please enter both username and password.")
+            return render(request, "login.html", {"form": form})
+        if '@' in identifier:
+            try:
+                user_obj = User.objects.get(email=identifier)
+                # getting name of that partcular email user bcz authenticate function only take username or email only one field
+                username = user_obj.username
+            except User.DoesNotExist:
+                messages.error(request, "Invalid email or password.")
+                return render(request, "login.html", {"form": form})
         else:
-            messages.error(request, "Invalid username or password2.")
+            username = identifier
+        user = authenticate(username=username, password=password)
+        if user is not None:
+            login(request, user)
+            if user.is_staff:
+                return redirect('admin_dashboard')
+            
+            return redirect("/")
+        else:
+            messages.error(request, "Invalid username or password1.")
     form = AuthenticationForm()
     return render(request, "login.html", {"form": form})
 
