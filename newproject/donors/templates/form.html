@@ -181,6 +181,25 @@
                                     </select>
                                 </div>
                                 <div>
+  <label for="hospital" class="block text-sm font-semibold text-gray-700">Select Hospital</label>
+  <select id="hospital" name="hospital" class="mt-1 block w-full px-4 py-3 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-red-500 focus:border-red-500" required>
+    <option value="">Select</option>
+    <option {% if hospital == "Goa Medical College Blood Bank" %}selected{% endif %}>Goa Medical College Blood Bank</option>
+    <option {% if hospital == "Manipal Hospital Blood Bank" %}selected{% endif %}>Manipal Hospital Blood Bank</option>
+    <option {% if hospital == "Hospicio Hospital Blood Bank" %}selected{% endif %}>Hospicio Hospital Blood Bank</option>
+    <option {% if hospital == "Asilo Hospital Blood Bank" %}selected{% endif %}>Asilo Hospital Blood Bank</option>
+    <option {% if hospital == "District Hospital Blood Bank" %}selected{% endif %}>District Hospital Blood Bank</option>
+    <option {% if hospital == "Red Cross Blood Bank" %}selected{% endif %}>Red Cross Blood Bank</option>
+    <option {% if hospital == "Sub District Hospital Blood Bank" %}selected{% endif %}>Sub District Hospital Blood Bank</option>
+    <option {% if hospital == "Vrundavan Hospital Blood Bank" %}selected{% endif %}>Vrundavan Hospital Blood Bank</option>
+    <option {% if hospital == "Apollo Victor Hospital Blood Bank" %}selected{% endif %}>Apollo Victor Hospital Blood Bank</option>
+    <option {% if hospital == "Shri Sai Central Blood Bank & Lab" %}selected{% endif %}>Shri Sai Central Blood Bank & Lab</option>
+    <option {% if hospital == "Fonsecas Pathology Laboratory / Blood Bank" %}selected{% endif %}>Fonsecas Pathology Laboratory / Blood Bank</option>
+    <option {% if hospital == "Jeevandhara Blood Bank" %}selected{% endif %}>Jeevandhara Blood Bank</option>
+  </select>
+</div>
+
+                                <div>
                                     <label for="location" class="block text-sm font-semibold text-gray-700">City / Location</label>
                                     <input type="text" name="location" id="location" placeholder="e.g., Mumbai" class="mt-1 block w-full px-4 py-3 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-red-500 focus:border-red-500" value="{{ location|default:"" }}" required>
                                 </div>

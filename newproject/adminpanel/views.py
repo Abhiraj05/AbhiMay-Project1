@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
-from adminpanel.models import User_Registration
+# from adminpanel.models import User_Registration
 from django.contrib.auth import login, authenticate, logout
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.decorators import login_required
@@ -12,7 +12,25 @@ import datetime
 from django.utils import timezone
 from django.core.paginator import Paginator
 from django.contrib.auth.models import User
+from django.core.mail import send_mail
+
 # Create your views here.
+
+
+def send_email(hospital_email,donor_email,message,mail_subject):
+    try:
+        send_mail(
+        f"{mail_subject}",
+        f"""
+        {message}
+        """,
+        hospital_email,
+        [donor_email],
+        fail_silently=False,
+        )
+    except:
+        messages.error("email not sent!")
+        
 def main(request):
     return render(request,"main.html")
 
@@ -21,7 +39,8 @@ def all_donors_view(request):
     if not request.user.is_staff:
         messages.error(request,"You do not have access to this page.")
         return redirect('/')
-    donor_list=Donor.objects.all().order_by('-created_at')
+    hospital_name=request.user.profile.hospital
+    donor_list=Donor.objects.filter(hospital=hospital_name).all()
     paginator=Paginator(donor_list,10)
     page_number=request.GET.get('page')
     display_page=paginator.get_page(page_number)
@@ -34,7 +53,9 @@ def show_blood_requests_view(request):
     if not request.user.is_staff:
         messages.error(request,"You do not have access to this page.")
         return redirect("/")
-    request_list=Request_Blood.objects.all().order_by('-created_at')
+    
+    hospital_name=request.user.profile.hospital
+    request_list=Request_Blood.objects.filter(hospital_name=hospital_name).all()
     paginator = Paginator(request_list, 10)
     page_number =request.GET.get('page')
     display_page=paginator.get_page(page_number)
@@ -54,12 +75,50 @@ def admin_dashboard_view(request, donor_id=None, action=None):
         donor = get_object_or_404(Donor, id=donor_id)
         donor.is_verified=True
         donor.save()
+        donor_name=donor.name
+        donor_email=donor.email
+        hospital_email=request.user.profile.email
+        hospital_name=request.user.profile.hospital
+        mail_subject="Donor Registration Approved — Welcome Aboard!"
+        message= f"""
+        Hello {donor_name},
+        
+        We’re happy to inform you that your donor registration has been successfully approved!
+
+        Thank you for choosing to be part of our mission to save lives through blood donation.  
+        You can now log in to your account to access your donor profile and stay updated on upcoming donation drives.
+
+        We truly appreciate your kindness and support.
+
+        Warm regards,  
+        {hospital_name} Team  
+        """
+        send_email(hospital_email,donor_email,message,mail_subject)
         messages.success(request, f"Donor '{donor.name}' has been successfully approved.")
         return redirect('admin_dashboard')
     # decline donor logic
     if donor_id and action =="decline":
         donor = get_object_or_404(Donor, id=donor_id)
         donor_name=donor.name
+        donor_email=donor.email
+        hospital_email=request.user.profile.email
+        hospital_name=request.user.profile.hospital
+        mail_subject="Donor Registration Status — Request Declined!"
+        message=f"""
+        Hello {donor_name},
+        
+        We appreciate your interest in registering as a blood donor. 
+        After reviewing your details, we regret to inform you that your registration request could not be approved at this time.
+        
+        This decision may be due to incomplete information or eligibility criteria not being met.  
+        You are welcome to reapply in the future once the necessary requirements are fulfilled.
+        
+        Thank you for your understanding and willingness to help others.
+        
+        Warm regards,
+        {hospital_name} Team   
+        """
+        send_email(hospital_email,donor_email,message,mail_subject)
         if hasattr(donor,'user') and donor.user is not None:
             donor.user.delete()
         else:
@@ -67,14 +126,15 @@ def admin_dashboard_view(request, donor_id=None, action=None):
         messages.info(request, f"The application for '{donor_name}' has been declined and removed.")
         return redirect('admin_dashboard')
     # Data for stats showing cards
-    pending_donors = Donor.objects.filter(is_verified=False)
+    hospital_name=request.user.profile.hospital
+    pending_donors = Donor.objects.filter(is_verified=False,hospital=hospital_name)
     pending_donors_count = pending_donors.count()
-    verified_donors_count = Donor.objects.filter(is_verified=True).count()
+    verified_donors_count = Donor.objects.filter(is_verified=True,hospital=hospital_name).count()
     #logic for request this month card
     day_30_days_ago = timezone.now()-datetime.timedelta(days=30)
-    this_month_req_count = Request_Blood.objects.filter(created_at__gte=day_30_days_ago).count()
+    this_month_req_count = Request_Blood.objects.filter(created_at__gte=day_30_days_ago,hospital_name=hospital_name).count()
 
-    latest_blood_requests = Request_Blood.objects.all().order_by('-created_at')[:5]
+    latest_blood_requests = Request_Blood.objects.filter(hospital_name=hospital_name).all()[:5]
 
     context = {
         'pending_donors': pending_donors,
@@ -107,9 +167,9 @@ def admin_settings_view(request):
     return render(request, 'admin_settings.html', {'form': form})
 
 
-def user_exist(username,password):
-    user=User_Registration.objects.filter(username=username,password=password).first()
-    return user
+# def user_exist(username,password):
+#     user=User_Registration.objects.filter(username=username,password=password).first()
+#     return user
 
 def login_view(request):
     if request.method == "POST":
