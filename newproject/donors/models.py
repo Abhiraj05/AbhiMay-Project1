@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+from phonenumber_field.modelfields import PhoneNumberField
 
 class BloodGroup(models.TextChoices):
     A_POSITIVE = "A+", "A+"
@@ -32,7 +33,7 @@ class Donor(models.Model):
     age = models.IntegerField()
     gender = models.CharField(max_length=10, null=True, blank=True)
     blood_group = models.CharField(max_length=3, choices=BloodGroup.choices, blank=False, null=False)
-    phone_number = models.CharField(max_length=15, unique=True, blank=True, null=True)
+    phone_number = PhoneNumberField(region="IN", null=True, blank=True, unique=True)
     email = models.EmailField(unique=True, blank=True, null=True)
     address = models.TextField(blank=True, null=True)
     hospital=models.CharField(max_length=100,choices=HospitalChoices.choices, blank=True,null=True)
