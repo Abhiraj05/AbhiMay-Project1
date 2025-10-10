@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'adminpanel',
     'donors',
     'home',
+    'phonenumber_field', #for removing +91 entering manually
 ]
 
 MIDDLEWARE = [

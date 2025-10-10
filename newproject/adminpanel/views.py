@@ -74,13 +74,14 @@ def admin_dashboard_view(request, donor_id=None, action=None):
     day_30_days_ago = timezone.now()-datetime.timedelta(days=30)
     this_month_req_count = Request_Blood.objects.filter(created_at__gte=day_30_days_ago).count()
 
-
+    latest_blood_requests = Request_Blood.objects.all().order_by('-created_at')[:5]
 
     context = {
         'pending_donors': pending_donors,
         'pending_donors_count': pending_donors_count,
         'verified_donors_count': verified_donors_count,
         'this_month_req_count': this_month_req_count,
+        'latest_blood_requests': latest_blood_requests,
     }
     return render(request, "hospital_admin.html" , context)
 

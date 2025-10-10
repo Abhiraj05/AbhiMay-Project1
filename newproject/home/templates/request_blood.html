@@ -1,4 +1,3 @@
-
 {% extends "base.html" %}
 {% block start %}
 <!-- 🔄 Loading Spinner -->
@@ -61,13 +60,6 @@
 
         <!-- Desktop Navigation Links -->
         <div class="hidden md:flex items-center space-x-2">
-          {% comment %} 
-          <a
-            href="/blood_request/"
-            class="text-red-500 font-semibold bg-red-100 px-3 py-2 rounded-lg"
-            >Request Blood</a
-          >
-          {% endcomment %}
           <a
             href="/"
             class="text-gray-600 font-semibold hover:bg-gray-100 px-3 py-2 rounded-lg transition-colors"
@@ -352,19 +344,17 @@
                 <option>O-</option>
               </select>
             </div>
+            <!-- CONTACT NUMBER INPUT - UPDATED -->
             <div>
-              <label
-                for="contact-number"
-                class="block text-sm font-semibold text-gray-700"
-                >Your Contact Number</label
-              >
-              <input
-                type="tel"
-                id="contact-number"
-                name="contact_number"
-                placeholder="+91 12345 67890"
-                class="mt-1 w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-red-500 focus:border-red-500 transition"
-              />
+                <label for="contact-number" class="block text-sm font-semibold text-gray-700">Your Contact Number</label>
+                <div class="flex mt-1">
+                    <span class="inline-flex items-center px-3 border border-r-0 border-gray-300 bg-gray-50 text-gray-500 rounded-l-md">
+                      +91
+                    </span>
+                    <input type="tel" name="contact_number" id="contact-number" placeholder="98765 43210" 
+                           class="block w-full px-4 py-3 bg-white border border-gray-300 rounded-r-md shadow-sm focus:outline-none focus:ring-red-500 focus:border-red-500" 
+                           maxlength="10">
+                </div>
             </div>
             <div>
               <label
@@ -478,7 +468,6 @@
           <ul class="text-gray-400 space-y-2">
             <li><a href="/" class="hover:text-white">Home</a></li>
             <li><a href="/about" class="hover:text-white">About Us</a></li>
-            {% comment %} <li><a href="#" class="hover:text-white">FAQs</a></li> {% endcomment %}
           </ul>
         </div>
         <div>
@@ -530,16 +519,14 @@
       loader.classList.remove("hidden");
       loader.style.opacity = "1";
 
-      // Save a flag to detect if we are navigating
       sessionStorage.setItem("navigating", "true");
 
       setTimeout(() => {
         window.location = target.getAttribute("href");
-      }, 1000); // 1 second delay
+      }, 1000); 
     }
 
    const internalLinks = document.querySelectorAll(
-
       'a[href="/blood_bank"], ' +
       'a[href="/about"], ' +
       'a[href="/contact_us"], ' +
@@ -552,31 +539,20 @@
         showLoaderAndNavigate(this);
       });
     });
-   
-  
-
   });
 
-  // Hide loader when page loads
   window.addEventListener("load", function() {
     const loader = document.getElementById("loader");
-
-    // Only hide if it exists
     if (loader) {
       loader.style.opacity = "0";
       loader.style.transition = "opacity 0.5s ease";
       setTimeout(() => loader.classList.add("hidden"), 500);
     }
-
-    // Remove the navigation flag
     sessionStorage.removeItem("navigating");
   });
 
-  // Prevent infinite spinner when coming from back button
   window.addEventListener("pageshow", function(event) {
     const loader = document.getElementById("loader");
-
-    // If this is a back/forward navigation, ensure loader is hidden
     if (event.persisted || sessionStorage.getItem("navigating") !== "true") {
       if (loader) loader.classList.add("hidden");
     }
@@ -586,12 +562,11 @@ const spinnerOverlay = document.getElementById('spinnerOverlay');
 const form = document.getElementById('requestForm');
 
 urgentBtn.addEventListener('click', () => {
-  spinnerOverlay.classList.remove('hidden'); // show spinner
+  spinnerOverlay.classList.remove('hidden'); 
 
-  // optional delay for spinner effect
   setTimeout(() => {
-    form.submit(); // now submit the form after showing spinner
-  }, 500); // 0.5s delay
+    form.submit(); 
+  }, 500); 
 });
   </script>
 </div>
