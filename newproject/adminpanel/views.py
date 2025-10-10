@@ -7,7 +7,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import PasswordChangeForm
 from django.contrib.auth import update_session_auth_hash
 from donors.models import Donor
-from home.models import Request_Blood
+from home.models import Request_Blood 
 import datetime
 from django.utils import timezone
 from django.core.paginator import Paginator
@@ -64,7 +64,7 @@ def show_blood_requests_view(request):
 
 
 @login_required
-def admin_dashboard_view(request, donor_id=None, action=None):
+def admin_dashboard_view(request, donor_id=None, action=None, patient_id=None):
     # Check if the user is staff/hospital admin
     if not request.user.is_staff:
         messages.error(request, "You Do not have access to this page. Plz Contact Admin.")
@@ -125,6 +125,24 @@ def admin_dashboard_view(request, donor_id=None, action=None):
             donor.delete()
         messages.info(request, f"The application for '{donor_name}' has been declined and removed.")
         return redirect('admin_dashboard')
+    
+    if patient_id and action == "approve":
+        blood_request = get_object_or_404 (Request_Blood, id=patient_id)
+        blood_request.is_verified=True
+        blood_request.save()
+        patient_name=blood_request.patient_name
+        messages.success(request, f"Blood request for '{patient_name}' has been approved.")
+        return redirect('admin_dashboard')
+    
+    if patient_id and action == "decline":
+        try:
+            blood_request = Request_Blood.objects.get(id=patient_id)
+            patient_name = blood_request.patient_name
+            blood_request.delete()
+            messages.info(request, f"The blood request for '{patient_name}' has been declined and removed.")
+        except Request_Blood.DoesNotExist:
+            pass
+        return redirect('admin_dashboard')
     # Data for stats showing cards
     hospital_name=request.user.profile.hospital
     pending_donors = Donor.objects.filter(is_verified=False,hospital=hospital_name)
@@ -134,7 +152,7 @@ def admin_dashboard_view(request, donor_id=None, action=None):
     day_30_days_ago = timezone.now()-datetime.timedelta(days=30)
     this_month_req_count = Request_Blood.objects.filter(created_at__gte=day_30_days_ago,hospital_name=hospital_name).count()
 
-    latest_blood_requests = Request_Blood.objects.filter(hospital_name=hospital_name).all()[:5]
+    latest_blood_requests = Request_Blood.objects.filter(hospital_name=hospital_name, is_verified=False).order_by('-created_at')[:5]
 
     context = {
         'pending_donors': pending_donors,

@@ -110,6 +110,7 @@
                                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Blood Group</th>
                                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Hospital</th>
                                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date</th>
+                                    <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
                                 </tr>
                             </thead>
                             <tbody class="divide-y divide-gray-200">
@@ -119,10 +120,15 @@
                                     <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 font-bold">{{ req.blood_group }}</td>
                                     <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ req.hospital_name }}</td>
                                     <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ req.created_at|date:"d M, Y" }}</td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium space-x-2">
+                                        {# MODIFIED: Links now point to the correct URL for blood requests #}
+                                        <a href="{% url 'admin_dashboard_request_action' patient_id=req.id action='approve' %}" class="text-green-600 hover:text-green-900 font-semibold">Approve</a>
+                                        <a href="{% url 'admin_dashboard_request_action' patient_id=req.id action='decline' %}" class="text-red-600 hover:text-red-900 font-semibold">Decline</a>
+                                    </td>
                                 </tr>
                                 {% empty %}
                                 <tr>
-                                    <td colspan="4" class="px-6 py-12 text-center text-gray-500">No recent blood requests.</td>
+                                    <td colspan="5" class="px-6 py-12 text-center text-gray-500">No recent blood requests.</td>
                                 </tr>
                                 {% endfor %}
                             </tbody>
@@ -160,8 +166,9 @@
                                         <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-yellow-100 text-yellow-800">Pending</span>
                                     </td>
                                     <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium space-x-2">
-                                        <a href="{% url 'admin_dashboard_action' donor_id=donor.id action='approve' %}" class="text-green-600 hover:text-green-900 font-semibold">Approve</a>
-                                        <a href="{% url 'admin_dashboard_action' donor_id=donor.id action='decline' %}" class="text-red-600 hover:text-red-900 font-semibold">Decline</a>
+                                        {# MODIFIED: Links now point to the correct URL for donors #}
+                                        <a href="{% url 'admin_dashboard_donor_action' donor_id=donor.id action='approve' %}" class="text-green-600 hover:text-green-900 font-semibold">Approve</a>
+                                        <a href="{% url 'admin_dashboard_donor_action' donor_id=donor.id action='decline' %}" class="text-red-600 hover:text-red-900 font-semibold">Decline</a>
                                     </td>
                                 </tr>
                                 {% empty %}
