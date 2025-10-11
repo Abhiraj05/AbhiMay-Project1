@@ -165,7 +165,11 @@ def admin_dashboard_view(request, donor_id=None, action=None, patient_id=None):
         Warm regards,
         {hospital_name} Team
         """
-        for mail in donors_email_list:send_email(hospital_email,mail,message_to_donors,donors_mail_subject)
+        if donors_email_list:
+              for mail in donors_email_list:send_email(hospital_email,mail,message_to_donors,donors_mail_subject)
+        else:
+              messages.error(request, f"The blood request for '{patient_name}' cannot be approved because no donor with blood group {patient_blood_group} is currently available.")
+            
     
         return redirect('admin_dashboard')
     
