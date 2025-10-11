@@ -5,6 +5,7 @@ from django.contrib.auth.models import User # Import the User model
 from django.core.mail import send_mail
 
 
+
 def send_email(request, hospital_email, donor_email, message, mail_subject):
     try:
         send_mail(
