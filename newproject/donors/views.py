@@ -84,6 +84,7 @@ def donor_data(request):
             hospital=hospital_name,
             last_donation_date=last_donation_date if last_donation_date else None
         )
+        
         hospital=Profile.objects.filter(hospital=hospital_name).first()
         hospital_email=hospital.email
         hospital_name=hospital.hospital

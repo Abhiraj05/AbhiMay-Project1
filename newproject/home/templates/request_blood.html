@@ -13,13 +13,6 @@
     <p class="text-white font-medium">Sending The Data...</p>
 </div>
 <div>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link
-    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
-    rel="stylesheet"
-  />
   <style>
     body {
       font-family: "Inter", sans-serif;
@@ -86,12 +79,12 @@
         <div class="hidden md:flex items-center space-x-4">
           {% if user.is_authenticated %} {% if user.is_staff %}
           <a
-            href="/admin-dashboard/"
+            href="/admin-dashboard"
             class="bg-blue-500 text-white font-semibold px-5 py-2 rounded-lg hover:bg-blue-600 shadow-md"
             >Admin Dashboard</a
           >
           <a
-            href="/logout/"
+            href="/logout"
             class="text-gray-600 font-semibold px-4 py-2 hover:text-red-500"
             >Logout</a
           >
@@ -102,7 +95,7 @@
             >My Profile</a
           >
           <a
-            href="/logout/"
+            href="/logout"
             class="text-gray-600 font-semibold px-4 py-2 hover:text-red-500"
             >Logout</a
           >
@@ -159,42 +152,42 @@
     >
       <div class="px-6 py-4 space-y-2">
         <a
-          href="/blood_request/"
+          href="/blood_request"
           class="block text-red-500 font-semibold bg-red-100 py-2 px-3 rounded-lg"
           >Request Blood</a
         >
         <a
-          href="/blood_banks/"
+          href="/blood_banks"
           class="block text-gray-600 font-semibold py-2 px-3 rounded-lg hover:bg-gray-100"
           >Blood Banks</a
         >
         <a
-          href="/about/"
+          href="/about"
           class="block text-gray-600 font-semibold py-2 px-3 rounded-lg hover:bg-gray-100"
           >About</a
         >
         <div class="border-t border-gray-200 pt-4 mt-2 space-y-2">
           {% if user.is_authenticated %} {% if user.is_staff %}
           <a
-            href="/admin-dashboard/"
+            href="/admin-dashboard"
             class="block w-full text-center bg-blue-500 text-white font-semibold px-5 py-2 rounded-lg hover:bg-blue-600"
             >Admin Dashboard</a
           >
           {% else %}
           <a
-            href="/donor-profile/"
+            href="/donor-profile"
             class="block w-full text-center bg-gray-100 text-gray-800 font-semibold px-5 py-2 rounded-lg"
             >My Profile</a
           >
           {% endif %}
           <a
-            href="/logout/"
+            href="/logout"
             class="block w-full text-center bg-red-500 text-white font-semibold px-5 py-2 rounded-lg hover:bg-red-600"
             >Logout</a
           >
           {% else %}
           <a
-            href="/login/"
+            href="/login"
             class="block w-full text-center bg-red-500 text-white font-semibold px-5 py-2 rounded-lg hover:bg-red-600"
             >Login</a
           >
@@ -472,6 +465,8 @@
           <ul class="text-gray-400 space-y-2">
             <li><a href="/" class="hover:text-white">Home</a></li>
             <li><a href="/about" class="hover:text-white">About Us</a></li>
+            <li><a href="/contact_us" class="hover:text-white">Contact Us</a></li>
+
           </ul>
         </div>
         <div>
@@ -530,19 +525,25 @@
       }, 1000); 
     }
 
-   const internalLinks = document.querySelectorAll(
-      'a[href="/blood_bank"], ' +
-      'a[href="/about"], ' +
-      'a[href="/contact_us"], ' +
-      'a[href="/login"]'
-    );
+    const internalLinks = document.querySelectorAll(
+  'a[href="/blood_bank"], ' +
+  'a[href="/about"], ' +
+  'a[href="/contact_us"], ' +
+  'a[href="/login"], ' +
+  'a[href="/logout"], ' +
+  'a[href="/admin-dashboard"], ' +
+  'a[href="/profile"], ' +
+  'a[href="/form"],'+
+  'a[href="/blood_request"]'
+);
 
-    internalLinks.forEach(link => {
-      link.addEventListener("click", function(e) {
-        e.preventDefault();
-        showLoaderAndNavigate(this);
-      });
-    });
+
+      internalLinks.forEach((link) => {
+        link.addEventListener("click", function (e) {
+          e.preventDefault();
+          showLoaderAndNavigate(this);
+        });
+      });
   });
 
   window.addEventListener("load", function() {
