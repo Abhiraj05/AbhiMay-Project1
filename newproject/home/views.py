@@ -18,6 +18,7 @@ def send_email(request,hospital_email,donor_email,message,mail_subject):
         )
     except:
         messages.error(request, "email not sent!")
+    
 
 def blood_request(request):
     error = None
@@ -27,7 +28,7 @@ def blood_request(request):
         blood_group = request.POST.get("blood_group")
         contact_number = request.POST.get("contact_number")
         email_id = request.POST.get("email_id")
-        hospital_name = request.POST.get("hospital_name")
+        hospital_name_from_form = request.POST.get("hospital_name")
 
         if not patient_name:
             error = "Please enter your name."
@@ -37,7 +38,7 @@ def blood_request(request):
             error = "Please enter your phone number."
         elif not email_id:
             error = "Please enter your email id."
-        elif not hospital_name:
+        elif not hospital_name_from_form:
             error = "Please enter your hospital name."
 
         if error:
@@ -47,25 +48,34 @@ def blood_request(request):
                                          blood_group=blood_group,
                                          contact_number=contact_number,
                                          email_id=email_id,
-                                         hospital_name=hospital_name)
+                                         hospital_name=hospital_name_from_form)
             request_blood.save()
-            hospital=Profile.objects.filter(hospital=hospital_name).first()
-            hospital_email=hospital.email
-            hospital_name=hospital.hospital
-            mail_subject="Blood Request Pending — Awaiting Approval"
-            message=f"""
-            Hello {patient_name},
+            
+            # Safely get the hospital profile
+            hospital_profile = Profile.objects.filter(hospital=hospital_name_from_form).first()
 
-            Your blood request has been successfully submitted.
+            # Only send an email if the hospital profile exists
+            if hospital_profile and hospital_profile.email:
+                hospital_email = hospital_profile.email
+                hospital_name = hospital_profile.hospital
+                mail_subject = "Blood Request Pending — Awaiting Approval"
+                message_body = f"""
+                Hello {patient_name},
 
-            It is currently pending approval, and once it is reviewed and approved, we will contact you with further details.
+                Your blood request has been successfully submitted.
 
-            Thank you for your patience and for trusting our service.
+                It is currently pending approval, and once it is reviewed and approved, we will contact you with further details.
 
-            Warm regards,
-            {hospital_name} Team
-            """
-            send_email(request,hospital_email,email_id,message,mail_subject)
+                Thank you for your patience and for trusting our service.
+
+                Warm regards,
+                {hospital_name} Team
+                """
+                send_email(request, hospital_email, email_id, message_body, mail_subject)
+            else:
+                # Optional: Inform the user that a notification could not be sent to the hospital
+                messages.warning(request, "Your request was submitted, but we could not notify the hospital. Please contact them directly.")
+
             message = True
             return render(request, "request_blood.html", {"message": message})
 

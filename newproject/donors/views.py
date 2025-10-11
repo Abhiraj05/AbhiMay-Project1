@@ -75,7 +75,7 @@ def donor_data(request):
         user.save()
         
         
-        Donor.objects.create(
+        donor = Donor.objects.create(
             user=user,
             name=name,
             age=age,
@@ -87,24 +87,10 @@ def donor_data(request):
             hospital=hospital_name,
             last_donation_date=last_donation_date if last_donation_date else None
         )
-        hospital=Profile.objects.filter(hospital=hospital_name).first()
-        hospital_email=hospital.email
-        hospital_name=hospital.hospital
-        mail_subject="Donor Registration Pending — Verification in Progress"
-        message=f"""
-        Hello {name},
+        
+        # Store the new donor's ID in the session to use in the next view
+        request.session['donor_id_for_email'] = donor.id
 
-        Thank you for registering as a blood donor!
-
-        Your registration request is currently pending verification.  
-        Once the verification process is completed, we will contact you with the next steps.
-
-        We appreciate your patience and your willingness to contribute to this noble cause.
-
-        Warm regards,
-        {hospital_name} Team
-        """
-        send_email(request, hospital_email, email, message, mail_subject)
         return redirect("/eligibility")
 
     return render(request, "form.html")
@@ -126,6 +112,37 @@ def donor_eligibility(request):
         )
 
         if is_eligible:
+            # Get the donor's ID from the session
+            donor_id = request.session.get('donor_id_for_email')
+            if donor_id:
+                try:
+                    donor = Donor.objects.get(id=donor_id)
+                    hospital=Profile.objects.filter(hospital=donor.hospital).first()
+                    hospital_email=hospital.email
+                    hospital_name=hospital.hospital
+                    mail_subject="Donor Registration Pending — Verification in Progress"
+                    message=f"""
+                    Hello {donor.name},
+
+                    Thank you for registering as a blood donor!
+
+                    Your registration request is currently pending verification.  
+                    Once the verification process is completed, we will contact you with the next steps.
+
+                    We appreciate your patience and your willingness to contribute to this noble cause.
+
+                    Warm regards,
+                    {hospital_name} Team
+                    """
+                    send_email(request, hospital_email, donor.email, message, mail_subject)
+                    
+                    # Clean up the session
+                    del request.session['donor_id_for_email']
+
+                except Donor.DoesNotExist:
+                    # Handle the case where the donor might not be found
+                    pass
+            
             messages.success(
                 request,
                 "🎉 Thank you! You have successfully registered as a donor."
@@ -145,4 +162,3 @@ def blood_bank(request):
 
 def my_profile(request):
     return render(request, "profile.html")
-

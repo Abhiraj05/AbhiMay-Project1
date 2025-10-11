@@ -44,3 +44,9 @@ class Donor(models.Model):
 
     def __str__(self):
         return self.name
+
+    # Add this new method
+    def delete(self, *args, **kwargs):
+        if self.user:
+            self.user.delete()
+        super(Donor, self).delete(*args, **kwargs)
