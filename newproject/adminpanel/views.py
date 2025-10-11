@@ -17,7 +17,7 @@ from django.core.mail import send_mail
 # Create your views here.
 
 
-def send_email(hospital_email,donor_email,message,mail_subject):
+def send_email(request,hospital_email,donor_email,message,mail_subject):
     try:
         send_mail(
         f"{mail_subject}",
@@ -29,7 +29,7 @@ def send_email(hospital_email,donor_email,message,mail_subject):
         fail_silently=False,
         )
     except:
-        error="email not sent!"
+        messages.error(request, "email not sent!")
         
 def main(request):
     return render(request,"main.html")
@@ -93,7 +93,7 @@ def admin_dashboard_view(request, donor_id=None, action=None, patient_id=None):
         Warm regards,  
         {hospital_name} Team  
         """
-        send_email(hospital_email,donor_email,message,mail_subject)
+        send_email(request,hospital_email,donor_email,message,mail_subject)
         messages.success(request, f"Donor '{donor.name}' has been successfully approved.")
         return redirect('admin_dashboard')
     # decline donor logic
@@ -118,7 +118,7 @@ def admin_dashboard_view(request, donor_id=None, action=None, patient_id=None):
         Warm regards,
         {hospital_name} Team   
         """
-        send_email(hospital_email,donor_email,message,mail_subject)
+        send_email(request,hospital_email,donor_email,message,mail_subject)
         if hasattr(donor,'user') and donor.user is not None:
             donor.user.delete()
         else:
@@ -148,7 +148,7 @@ def admin_dashboard_view(request, donor_id=None, action=None, patient_id=None):
         Warm regards,
         {hospital_name} Team
         """
-        send_email(hospital_email,patient_email,message,mail_subject)
+        send_email(request,hospital_email,patient_email,message,mail_subject)
         messages.success(request, f"Blood request for '{patient_name}' has been approved.")
         patient_blood_group=blood_request.blood_group
         donors=Donor.objects.filter(blood_group=patient_blood_group,hospital=hospital_name).all()
@@ -166,7 +166,7 @@ def admin_dashboard_view(request, donor_id=None, action=None, patient_id=None):
         {hospital_name} Team
         """
         if donors_email_list:
-              for mail in donors_email_list:send_email(hospital_email,mail,message_to_donors,donors_mail_subject)
+              for mail in donors_email_list:send_email(request,hospital_email,mail,message_to_donors,donors_mail_subject)
         else:
               messages.error(request, f"The blood request for '{patient_name}' cannot be approved because no donor with blood group {patient_blood_group} is currently available.")
             
@@ -194,7 +194,7 @@ def admin_dashboard_view(request, donor_id=None, action=None, patient_id=None):
             Warm regards,
             {hospital_name} Team
             """
-            send_email(hospital_email,patient_email,message,mail_subject)
+            send_email(request,hospital_email,patient_email,message,mail_subject)
             blood_request.delete()
             messages.info(request, f"The blood request for '{patient_name}' has been declined and removed.")
         except Request_Blood.DoesNotExist:

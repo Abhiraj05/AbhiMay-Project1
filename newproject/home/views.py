@@ -5,7 +5,7 @@ from django.core.mail import send_mail
 from adminpanel.models import Profile
 
 # Create your views here.
-def send_email(hospital_email,donor_email,message,mail_subject):
+def send_email(request,hospital_email,donor_email,message,mail_subject):
     try:
         send_mail(
         f"{mail_subject}",
@@ -17,8 +17,7 @@ def send_email(hospital_email,donor_email,message,mail_subject):
         fail_silently=False,
         )
     except:
-        error="email not sent!"
-    
+        messages.error(request, "email not sent!")
 
 def blood_request(request):
     error = None
@@ -66,7 +65,7 @@ def blood_request(request):
             Warm regards,
             {hospital_name} Team
             """
-            send_email(hospital_email,email_id,message,mail_subject)
+            send_email(request,hospital_email,email_id,message,mail_subject)
             message = True
             return render(request, "request_blood.html", {"message": message})
 
