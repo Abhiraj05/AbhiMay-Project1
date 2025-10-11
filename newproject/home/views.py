@@ -17,7 +17,7 @@ def send_email(hospital_email,donor_email,message,mail_subject):
         fail_silently=False,
         )
     except:
-        messages.error("email not sent!")
+        error="email not sent!"
     
 
 def blood_request(request):
@@ -36,6 +36,8 @@ def blood_request(request):
             error = "Please select the blood group."
         elif len(contact_number) < 10 or not contact_number:
             error = "Please enter your phone number."
+        elif not email_id:
+            error = "Please enter your email id."
         elif not hospital_name:
             error = "Please enter your hospital name."
 
@@ -45,6 +47,7 @@ def blood_request(request):
             request_blood=Request_Blood.objects.create(patient_name=patient_name,
                                          blood_group=blood_group,
                                          contact_number=contact_number,
+                                         email_id=email_id,
                                          hospital_name=hospital_name)
             request_blood.save()
             hospital=Profile.objects.filter(hospital=hospital_name).first()
