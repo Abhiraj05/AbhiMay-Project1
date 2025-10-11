@@ -13,6 +13,22 @@ from django.utils import timezone
 from django.core.paginator import Paginator
 from django.contrib.auth.models import User
 # Create your views here.
+
+
+def send_email(request,hospital_email,donor_email,message,mail_subject):
+    try:
+        send_mail(
+        f"{mail_subject}",
+        f"""
+        {message}
+        """,
+        hospital_email,
+        [donor_email],
+        fail_silently=False,
+        )
+    except:
+        messages.error(request, "email not sent!")
+        
 def main(request):
     return render(request,"main.html")
 
@@ -54,17 +70,126 @@ def admin_dashboard_view(request, donor_id=None, action=None):
         donor = get_object_or_404(Donor, id=donor_id)
         donor.is_verified=True
         donor.save()
+        donor_name=donor.name
+        donor_email=donor.email
+        hospital_email=request.user.profile.email
+        hospital_name=request.user.profile.hospital
+        mail_subject="Donor Registration Approved — Welcome Aboard!"
+        message= f"""
+        Hello {donor_name},
+        
+        We’re happy to inform you that your donor registration has been successfully approved!
+
+        Thank you for choosing to be part of our mission to save lives through blood donation.  
+        You can now log in to your account to access your donor profile and stay updated on upcoming donation drives.
+
+        We truly appreciate your kindness and support.
+
+        Warm regards,  
+        {hospital_name} Team  
+        """
+        send_email(request,hospital_email,donor_email,message,mail_subject)
         messages.success(request, f"Donor '{donor.name}' has been successfully approved.")
         return redirect('admin_dashboard')
     # decline donor logic
     if donor_id and action =="decline":
         donor = get_object_or_404(Donor, id=donor_id)
         donor_name=donor.name
+        donor_email=donor.email
+        hospital_email=request.user.profile.email
+        hospital_name=request.user.profile.hospital
+        mail_subject="Donor Registration Status — Request Declined!"
+        message=f"""
+        Hello {donor_name},
+        
+        We appreciate your interest in registering as a blood donor. 
+        After reviewing your details, we regret to inform you that your registration request could not be approved at this time.
+        
+        This decision may be due to incomplete information or eligibility criteria not being met.  
+        You are welcome to reapply in the future once the necessary requirements are fulfilled.
+        
+        Thank you for your understanding and willingness to help others.
+        
+        Warm regards,
+        {hospital_name} Team   
+        """
+        send_email(request,hospital_email,donor_email,message,mail_subject)
         if hasattr(donor,'user') and donor.user is not None:
             donor.user.delete()
         else:
             donor.delete()
         messages.info(request, f"The application for '{donor_name}' has been declined and removed.")
+        return redirect('admin_dashboard')
+    
+    if patient_id and action == "approve":
+        blood_request = get_object_or_404 (Request_Blood, id=patient_id)
+        blood_request.is_verified=True
+        blood_request.save()
+        patient_name=blood_request.patient_name
+        patient_email=blood_request.email_id
+        hospital_email=request.user.profile.email
+        hospital_name=request.user.profile.hospital
+        mail_subject="Blood Request Successfully Approved"
+        message=f"""
+        Hello {patient_name},
+
+        We are pleased to inform you that your blood request has been successfully approved.
+
+        Our team at {hospital_name} has reviewed your request and confirmed the availability of the required blood type. 
+        You will be contacted shortly with further details regarding collection or transfusion arrangements.
+        
+        Thank you for trusting {hospital_name}. We are committed to ensuring you receive the best possible care and support.
+
+        Warm regards,
+        {hospital_name} Team
+        """
+        send_email(request,hospital_email,patient_email,message,mail_subject)
+        messages.success(request, f"Blood request for '{patient_name}' has been approved.")
+        patient_blood_group=blood_request.blood_group
+        donors=Donor.objects.filter(blood_group=patient_blood_group,hospital=hospital_name).all()
+        donors_email_list=[donor.email for donor in donors]
+        donors_mail_subject=f"Urgent Request for {patient_blood_group}"
+        message_to_donors=f"""
+        We are reaching out with an urgent request for {patient_blood_group} blood donations to support a patient currently in need at {hospital_name}.
+
+        As a {patient_blood_group} donor, your contribution can make a life-saving difference. 
+        If you are eligible and available, please visit our blood donation center at the earliest convenience.
+
+        Thank you for your kindness, generosity, and continued support in helping those in need.
+
+        Warm regards,
+        {hospital_name} Team
+        """
+        for mail in donors_email_list:send_email(request,hospital_email,mail,message_to_donors,donors_mail_subject)
+    
+        return redirect('admin_dashboard')
+    
+    if patient_id and action == "decline":
+        try:
+            blood_request = Request_Blood.objects.get(id=patient_id)
+            patient_name = blood_request.patient_name
+            patient_email=blood_request.email_id
+            hospital_email=request.user.profile.email
+            hospital_name=request.user.profile.hospital
+            mail_subject="Update on Your Blood Request"
+            message=f"""
+            Hello {patient_name},
+
+            We regret to inform you that your blood request could not be approved at this time.
+
+            After reviewing your request, our team at {hospital_name} found that we are currently unable to fulfill it due to unavailability or other eligibility criteria.
+            We understand how important this request is and encourage you to reach out again later or contact our support team for assistance and alternative options.
+
+            Thank you for your understanding.
+
+            Warm regards,
+            {hospital_name} Team
+            """
+            send_email(request,hospital_email,patient_email,message,mail_subject)
+            blood_request.delete()
+            messages.info(request, f"The blood request for '{patient_name}' has been declined and removed.")
+        except Request_Blood.DoesNotExist:
+            pass
         return redirect('admin_dashboard')
     # Data for stats showing cards
     pending_donors = Donor.objects.filter(is_verified=False)

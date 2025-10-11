@@ -4,7 +4,7 @@ from home.models import Request_Blood
 from django.core.mail import send_mail
 
 # Create your views here.
-def send_email(name,hospital_email,donor_email):
+def send_email(request,hospital_email,donor_email,message,mail_subject):
     try:
         send_mail(
         "Blood Request Pending ",
@@ -18,8 +18,7 @@ def send_email(name,hospital_email,donor_email):
         fail_silently=False,
         )
     except:
-        messages.error("email not sent!")
-    
+        messages.error(request, "email not sent!")
 
 def blood_request(request):
     error = None
@@ -48,8 +47,23 @@ def blood_request(request):
                                          contact_number=contact_number,
                                          hospital_name=hospital_name)
             request_blood.save()
-            hospital_email="xyz@gmail.com"
-            send_email(patient_name,hospital_email,email_id)
+            hospital=Profile.objects.filter(hospital=hospital_name).first()
+            hospital_email=hospital.email
+            hospital_name=hospital.hospital
+            mail_subject="Blood Request Pending — Awaiting Approval"
+            message=f"""
+            Hello {patient_name},
+
+            Your blood request has been successfully submitted.
+
+            It is currently pending approval, and once it is reviewed and approved, we will contact you with further details.
+
+            Thank you for your patience and for trusting our service.
+
+            Warm regards,
+            {hospital_name} Team
+            """
+            send_email(request,hospital_email,email_id,message,mail_subject)
             message = True
             return render(request, "request_blood.html", {"message": message})
 

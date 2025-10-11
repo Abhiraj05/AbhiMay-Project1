@@ -4,7 +4,8 @@ from django.contrib import messages
 from django.contrib.auth.models import User # Import the User model
 from django.core.mail import send_mail
 
-def send_email(name,hospital_email,donor_email):
+
+def send_email(request, hospital_email, donor_email, message, mail_subject):
     try:
         send_mail(
            "Request Is Under Review",
@@ -18,7 +19,7 @@ def send_email(name,hospital_email,donor_email):
         fail_silently=False,
         )
     except:
-        messages.error("email not sent!")
+        messages.error(request, "email not sent!")
     
 def donor_data(request):
     error = None 
@@ -42,9 +43,11 @@ def donor_data(request):
             error = "Sorry, you must be at least 18 years old to register."
         elif not phone_no:
             error = "Please enter your phone number."
+        elif Donor.objects.filter(phone_number=phone_no).exists():
+            error = "A donor with this phone number is already registered."
         elif not email:
             error = "Please enter your email."
-        elif User.objects.filter(email=email).exists():
+        elif User.objects.filter(email=email).exists() or Donor.objects.filter(email=email).exists():
             error = "A user with this email address already exists."
         elif not password or not confirm_password:
             error = "Please enter and confirm your password."
@@ -82,8 +85,24 @@ def donor_data(request):
             address=address,
             last_donation_date=last_donation_date if last_donation_date else None
         )
-        hospital_email="xyzhospital@gmail.com"
-        send_email(name,hospital_email,email)
+        hospital=Profile.objects.filter(hospital=hospital_name).first()
+        hospital_email=hospital.email
+        hospital_name=hospital.hospital
+        mail_subject="Donor Registration Pending — Verification in Progress"
+        message=f"""
+        Hello {name},
+
+        Thank you for registering as a blood donor!
+
+        Your registration request is currently pending verification.  
+        Once the verification process is completed, we will contact you with the next steps.
+
+        We appreciate your patience and your willingness to contribute to this noble cause.
+
+        Warm regards,
+        {hospital_name} Team
+        """
+        send_email(request, hospital_email, email, message, mail_subject)
         return redirect("/eligibility")
 
     return render(request, "form.html")
@@ -124,3 +143,4 @@ def blood_bank(request):
 
 def my_profile(request):
     return render(request, "profile.html")
+
