@@ -32,6 +32,7 @@ class Request_Blood(models.Model):
     blood_group = models.CharField(
     max_length=3, choices=BloodGroup.choices, null=False, blank=False)
     contact_number = models.CharField(max_length=10, null=False, blank=False)
+    email_id=models.EmailField(unique=True, blank=True, null=True)
     hospital_name = models.CharField(max_length=100,choices=HospitalChoices.choices, blank=True,null=True)
     created_at = models.DateTimeField(auto_now_add=True)
     is_verified = models.BooleanField(default=False)
