@@ -1,2 +1,3 @@
-# Ignore the database
+env/
+# Ignore Django SQLite database
 newproject/db.sqlite3
