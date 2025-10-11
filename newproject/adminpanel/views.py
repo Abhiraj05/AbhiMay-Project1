@@ -153,7 +153,6 @@ def admin_dashboard_view(request, donor_id=None, action=None, patient_id=None):
         patient_blood_group=blood_request.blood_group
         donors=Donor.objects.filter(blood_group=patient_blood_group,hospital=hospital_name).all()
         donors_email_list=[donor.email for donor in donors]
-        donors_mail_subject=f"Urgent Request for {patient_blood_group} Blood Donors"
         message_to_donors=f"""
         We are reaching out with an urgent request for {patient_blood_group} blood donations to support a patient currently in need at {hospital_name}.
 
@@ -165,7 +164,10 @@ def admin_dashboard_view(request, donor_id=None, action=None, patient_id=None):
         Warm regards,
         {hospital_name} Team
         """
-        for mail in donors_email_list:send_email(hospital_email,mail,message_to_donors,donors_mail_subject)
+        for mail in donors_email_list:
+            donors_mail_subject=f"Urgent Request for {patient_blood_group}"
+            send_email(hospital_email,mail,message_to_donors,donors_mail_subject)
+    
         return redirect('admin_dashboard')
     
     if patient_id and action == "decline":
