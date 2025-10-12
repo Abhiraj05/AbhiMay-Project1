@@ -103,7 +103,7 @@
             <!-- Contact Information -->
             <div class="mb-12 lg:mb-0">
                 <h2 class="text-2xl font-bold text-gray-800 mb-4">Contact Information</h2>
-             {% if not user.is_authenticated %}   <p class="text-lg text-gray-600 mb-6">You can reach us via email or phone. For urgent blood requests, please use our <a href="/blood_request/" class="text-red-500 font-semibold hover:underline">Request Blood</a> form.</p>
+             {% if not user.is_authenticated %}   <p class="text-lg text-gray-600 mb-6">You can reach us via email or phone. For urgent blood requests, please use our <a href="/blood_bank" class="text-red-500 font-semibold hover:underline">Request Blood</a> form.</p>
              {% else %}
              <p class="text-lg text-gray-600 mb-6">You can reach us via email or phone.</p>
              {% endif %}

@@ -6,7 +6,13 @@ from django.contrib.auth.models import User
 from adminpanel.models import Profile
 
 
-
+def hospitals_blood_availability(hospital_name):
+    blood_bank_list=Donor.objects.filter(hospital=hospital_name).all()
+    unique_blood_group=[]
+    for donor in blood_bank_list:
+         if donor.blood_group not in unique_blood_group:
+                unique_blood_group.append(donor.blood_group)
+    return unique_blood_group
 
 def send_email(request, hospital_email, donor_email, message, mail_subject):
     try:
@@ -159,11 +165,38 @@ def donor_eligibility(request):
     return render(request, "eligibility_form.html")
 
 def blood_bank(request):
-    return render(request, "blood_bank.html")   
+    goa_medical_college_blood_group = hospitals_blood_availability("Goa Medical College Blood Bank")
+    manipal_hospital_blood_group = hospitals_blood_availability("Manipal Hospital Blood Bank")
+    hospicio_hospital_blood_group = hospitals_blood_availability("Hospicio Hospital Blood Bank")
+    asilo_hospital_blood_group = hospitals_blood_availability("Asilo Hospital Blood Bank")
+    district_hospital_blood_group = hospitals_blood_availability("District Hospital Blood Bank")
+    red_cross_blood_group = hospitals_blood_availability("Red Cross Blood Bank")
+    sub_district_hospital_blood_group = hospitals_blood_availability("Sub District Hospital Blood Bank")
+    vrundavan_hospital_blood_group = hospitals_blood_availability("Vrundavan Hospital Blood Bank")
+    apollo_victor_hospital_blood_group = hospitals_blood_availability("Apollo Victor Hospital Blood Bank")
+    shri_sai_central_blood_group = hospitals_blood_availability("Shri Sai Central Blood Bank & Lab")
+    fonsecas_blood_group = hospitals_blood_availability("Fonsecas Pathology Laboratory / Blood Bank")
+    jeevandhara_blood_group = hospitals_blood_availability("Jeevandhara Blood Bank")
+    
+    context = {
+    "gmc_blood_list": goa_medical_college_blood_group,
+    "manipal_blood_list": manipal_hospital_blood_group,
+    "hospicio_blood_list": hospicio_hospital_blood_group,
+    "asilo_blood_list": asilo_hospital_blood_group,
+    "district_blood_list": district_hospital_blood_group,
+    "red_cross_blood_list": red_cross_blood_group,
+    "sub_district_blood_list": sub_district_hospital_blood_group,
+    "vrundavan_blood_list": vrundavan_hospital_blood_group,
+    "apollo_victor_blood_list": apollo_victor_hospital_blood_group,
+    "shri_sai_blood_list": shri_sai_central_blood_group,
+    "fonsecas_blood_list": fonsecas_blood_group,
+    "jeevandhara_blood_list": jeevandhara_blood_group
+}
+    
+    return render(request, "blood_bank.html",context)   
 
 def my_profile(request):
     if request.user.is_authenticated:
-        error=None
         if request.method=="POST":
             user_id=request.user.id
             name=request.POST.get("name")
@@ -193,6 +226,7 @@ def my_profile(request):
                 
             donor.name=name
             donor.email=email
+            donor.age=age
             donor.phone_number=phone_number
             donor.address=address
             donor.last_donation_date=last_donation_date

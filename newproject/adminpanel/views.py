@@ -148,8 +148,6 @@ def admin_dashboard_view(request, donor_id=None, action=None, patient_id=None):
         Warm regards,
         {hospital_name} Team
         """
-        send_email(request,hospital_email,patient_email,message,mail_subject)
-        messages.success(request, f"Blood request for '{patient_name}' has been approved.")
         patient_blood_group=blood_request.blood_group
         donors=Donor.objects.filter(blood_group=patient_blood_group,hospital=hospital_name).all()
         donors_email_list=[donor.email for donor in donors]
@@ -166,9 +164,13 @@ def admin_dashboard_view(request, donor_id=None, action=None, patient_id=None):
         {hospital_name} Team
         """
         if donors_email_list:
-              for mail in donors_email_list:send_email(request,hospital_email,mail,message_to_donors,donors_mail_subject)
+            send_email(request,hospital_email,patient_email,message,mail_subject)
+            messages.success(request, f"Blood request for '{patient_name}' has been approved.")
+            for mail in donors_email_list:send_email(request,hospital_email,mail,message_to_donors,donors_mail_subject)
         else:
-              messages.error(request, f"The blood request for '{patient_name}' cannot be approved because no donor with blood group {patient_blood_group} is currently available.")
+            blood_request.is_verified=False
+            blood_request.save()
+            messages.error(request, f"The blood request for {patient_name} cannot be approved because no donor with blood group {patient_blood_group} is currently available.")
             
     
         return redirect('admin_dashboard')
