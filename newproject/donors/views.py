@@ -7,6 +7,7 @@ from adminpanel.models import Profile
 
 
 
+
 def send_email(request, hospital_email, donor_email, message, mail_subject):
     try:
         send_mail(
@@ -153,7 +154,7 @@ def donor_eligibility(request):
                 request,
                 "❌ Sorry, you are not eligible to donate blood based on your answers."
             )
-            return redirect("eligibility") 
+            return redirect("/eligibility") 
 
     return render(request, "eligibility_form.html")
 
@@ -161,4 +162,47 @@ def blood_bank(request):
     return render(request, "blood_bank.html")   
 
 def my_profile(request):
+    if request.user.is_authenticated:
+        error=None
+        if request.method=="POST":
+            user_id=request.user.id
+            name=request.POST.get("name")
+            age=request.POST.get("age")
+            email=request.POST.get("email")
+            phone_number=request.POST.get("phone_number")
+            address=request.POST.get("address")
+            last_donation_date=request.POST.get("last_donation_date")
+            is_active=request.POST.get("is_active")
+      
+            if not name:
+                messages.error(request,"Please enter your name.")
+            elif not age:
+                 messages.error(request,"Please enter your age.")
+            elif int(age) < 18:
+                 messages.error(request,"Sorry, your age should be more than 18 years old.")
+            elif not phone_number:
+                 messages.error(request,"Please enter your phone number.")
+            elif not email:
+                 messages.error(request,"Please enter your email.")
+            elif not address:
+                 messages.error(request,"Please enter your address.")
+
+            
+            donor=Donor.objects.get(id=user_id)
+            
+                
+            donor.name=name
+            donor.email=email
+            donor.phone_number=phone_number
+            donor.address=address
+            donor.last_donation_date=last_donation_date
+            if is_active=='on':
+                donor.is_active=True
+            else:
+                donor.is_active=False
+            messages.success(request,"profile details updated.")
+            donor.save()
+            return redirect("/profile")
+    else:
+        messages.error(request,"please login..")    
     return render(request, "profile.html")

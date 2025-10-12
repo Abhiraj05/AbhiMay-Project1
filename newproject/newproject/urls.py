@@ -41,4 +41,7 @@ urlpatterns = [
     path('admin_settings/', admin_settings_view, name='admin_settings'),
     path('all_donors/', all_donors_view, name='all_donors'),  
     path('show_blood_requests/', show_blood_requests_view, name='show_blood_requests'),
+    
+    
+    
 ]

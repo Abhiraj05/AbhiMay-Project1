@@ -212,10 +212,21 @@
     <div
       class="max-w-4xl mx-auto bg-white rounded-2xl shadow-lg border border-gray-200 overflow-hidden"
     >
-      <form method="POST">
+      <form method="POST" action="#">
         {% csrf_token %}
         <div class="p-8 space-y-6">
           <!-- Profile Header -->
+          {% if messages %}
+          <div class="container mt-4">
+            {% for message in messages %}
+            <div
+              class="p-3 mb-2 rounded capitalize {% if message.tags == 'error' %} bg-red-100 text-red-700 {% elif message.tags == 'success' %} bg-green-100 text-green-700 {% else %} bg-blue-100 text-blue-700 {% endif %}"
+            >
+              {{ message }}
+            </div>
+            {% endfor %}
+          </div>
+          {% endif %}
           <div class="flex flex-col sm:flex-row items-center sm:space-x-6">
             <div
               class="w-24 h-24 bg-red-100 rounded-full flex items-center justify-center text-red-500 text-4xl font-bold"
@@ -223,7 +234,9 @@
               {{ user.donor.name|first|upper }}
             </div>
             <div class="text-center sm:text-left mt-4 sm:mt-0">
-              <h2 class="text-2xl font-bold text-gray-800 capitalize">{{ user.donor.name }}</h2>
+              <h2 class="text-2xl font-bold text-gray-800 capitalize">
+                {{ user.donor.name }}
+              </h2>
               <p class="text-gray-500">
                 Blood Group:
                 <span class="font-semibold text-red-500"
@@ -251,12 +264,9 @@
                   type="checkbox"
                   name="is_active"
                   class="sr-only peer"
-                  {%
-                  if
-                  user.donor.is_active
-                  %}checked{%
-                  endif
-                  %}
+                  {% if user.donor.is_active %}
+                  checked
+                  {% endif %}
                 />
                 <div
                   class="w-11 h-6 bg-gray-200 rounded-full peer peer-focus:ring-4 peer-focus:ring-red-200 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-green-500"
@@ -281,6 +291,7 @@
                 id="full-name"
                 class="mt-1 block w-full px-4 py-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-red-500 focus:border-red-500"
                 value="{{ user.donor.name }}"
+                required
               />
             </div>
             <div>
@@ -295,6 +306,7 @@
                 id="email"
                 class="mt-1 block w-full px-4 py-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-red-500 focus:border-red-500"
                 value="{{ user.email }}"
+                required
               />
             </div>
 
@@ -318,6 +330,7 @@
                   class="block w-full px-4 py-3 bg-white border border-gray-300 rounded-r-md shadow-sm focus:outline-none focus:ring-red-500 focus:border-red-500"
                   value="{{ user.donor.phone_number.national_number }}"
                   maxlength="10"
+                  required
                 />
               </div>
             </div>
@@ -334,6 +347,20 @@
                 id="address"
                 class="mt-1 block w-full px-4 py-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-red-500 focus:border-red-500"
                 value="{{ user.donor.address }}"
+                required
+              />
+            </div>
+            <div>
+              <label for="age" class="block text-sm font-semibold text-gray-700"
+                >Age</label
+              >
+              <input
+                type="text"
+                name="age"
+                id="age"
+                class="mt-1 block w-full px-4 py-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-red-500 focus:border-red-500"
+                value="{{ user.donor.age }}"
+                required
               />
             </div>
             <div>
@@ -347,7 +374,8 @@
                 name="last_donation_date"
                 id="last_donation_date"
                 class="mt-1 block w-full px-4 py-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-red-500 focus:border-red-500"
-                value="{{ user.donor.last_donation_date|date:'Y-m-d' }}"
+                value="{{ user.donor.last_donation_date | date:'Y-m-d' }}"
+                required
               />
             </div>
           </div>
@@ -381,7 +409,9 @@
           <ul class="text-gray-400 space-y-2">
             <li><a href="/" class="hover:text-white">Home</a></li>
             <li><a href="/about" class="hover:text-white">About Us</a></li>
-            <li><a href="/contact_us" class="hover:text-white">Contact Us</a></li>
+            <li>
+              <a href="/contact_us" class="hover:text-white">Contact Us</a>
+            </li>
           </ul>
         </div>
         <div>
@@ -433,18 +463,17 @@
         }, 1000);
       }
 
-       const internalLinks = document.querySelectorAll(
-  'a[href="/blood_bank"], ' +
-  'a[href="/about"], ' +
-  'a[href="/contact_us"], ' +
-  'a[href="/login"], ' +
-  'a[href="/logout"], ' +
-  'a[href="/admin-dashboard"], ' +
-  'a[href="/profile"], ' +
-  'a[href="/form"],'+
-  'a[href="/blood_request"]'
-);
-
+      const internalLinks = document.querySelectorAll(
+        'a[href="/blood_bank"], ' +
+          'a[href="/about"], ' +
+          'a[href="/contact_us"], ' +
+          'a[href="/login"], ' +
+          'a[href="/logout"], ' +
+          'a[href="/admin-dashboard"], ' +
+          'a[href="/profile"], ' +
+          'a[href="/form"],' +
+          'a[href="/blood_request"]'
+      );
 
       internalLinks.forEach((link) => {
         link.addEventListener("click", function (e) {
