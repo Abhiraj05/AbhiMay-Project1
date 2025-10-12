@@ -7,7 +7,7 @@ from adminpanel.models import Profile
 
 
 def hospitals_blood_availability(hospital_name):
-    blood_bank_list=Donor.objects.filter(hospital=hospital_name).all()
+    blood_bank_list=Donor.objects.filter(hospital=hospital_name,is_verified=1,is_active=1).all()
     unique_blood_group=[]
     for donor in blood_bank_list:
          if donor.blood_group not in unique_blood_group:
