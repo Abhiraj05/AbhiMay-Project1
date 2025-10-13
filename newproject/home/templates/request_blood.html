@@ -151,13 +151,13 @@
       class="hidden md:hidden absolute top-full left-0 w-full bg-white z-40 shadow-md"
     >
       <div class="px-6 py-4 space-y-2">
-        <a
+        {% comment %} <a
           href="/blood_request"
           class="block text-red-500 font-semibold bg-red-100 py-2 px-3 rounded-lg"
           >Request Blood</a
-        >
+        > {% endcomment %}
         <a
-          href="/blood_banks"
+          href="/blood_bank"
           class="block text-gray-600 font-semibold py-2 px-3 rounded-lg hover:bg-gray-100"
           >Blood Banks</a
         >
@@ -165,6 +165,11 @@
           href="/about"
           class="block text-gray-600 font-semibold py-2 px-3 rounded-lg hover:bg-gray-100"
           >About</a
+        >
+          <a
+          href="/contact_us"
+          class="block text-gray-600 font-semibold py-2 px-3 rounded-lg hover:bg-gray-100"
+          >Contact Us</a
         >
         <div class="border-t border-gray-200 pt-4 mt-2 space-y-2">
           {% if user.is_authenticated %} {% if user.is_staff %}
