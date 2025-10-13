@@ -562,24 +562,16 @@
       if (loader) loader.classList.add("hidden");
     }
   });
-
 const urgentBtn = document.getElementById('urgentRequestBtn');
 const spinnerOverlay = document.getElementById('spinnerOverlay');
 const form = document.getElementById('requestForm');
 
 urgentBtn.addEventListener('click', () => {
-      const nameValue = document.getElementById("patient-name").value;
-      const emailValue = document.getElementById("email-id").value;
-      const contactValue = document.getElementById("contact-number").value;
-      const hospitalValue = document.getElementById("hospital").value;
-      const bloodValue= document.getElementById("blood-group").value;
-      if (nameValue && emailValue && contactValue && hospitalValue && bloodValue != "") {
   spinnerOverlay.classList.remove('hidden'); 
 
   setTimeout(() => {
     form.submit(); 
   }, 500); 
-}
 });
   </script>
 </div>
