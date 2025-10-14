@@ -55,12 +55,21 @@ It provides a simple and efficient system where **patients can request blood**, 
 
 Screenshots
 ![alt text](assets/screencapture-127-0-0-1-8000-2025-10-13-02_19_22.png)
+---
 ![alt text](assets/screencapture-127-0-0-1-8000-blood-bank-2025-10-13-02_19_53.png)
+---
 ![alt text](assets/screencapture-127-0-0-1-8000-about-2025-10-13-02_20_10.png)
+---
 ![alt text](assets/screencapture-127-0-0-1-8000-contact-us-2025-10-13-02_20_43.png)
+---
 ![alt text](assets/screencapture-127-0-0-1-8000-login-2025-10-13-02_21_05.png)
+---
 ![alt text](assets/screencapture-127-0-0-1-8000-forgot-password-2025-10-13-17_00_23.png)
+---
 ![alt text](assets/screencapture-127-0-0-1-8000-reset-2025-10-13-17_00_42.png)
+---
 ![alt text](assets/screencapture-127-0-0-1-8000-blood-request-2025-10-13-17_06_15.png)
+---
 ![alt text](assets/screencapture-127-0-0-1-8000-form-2025-10-13-16_58_09.png)
+---
 ![alt text](assets/screencapture-127-0-0-1-8000-eligibility-2025-10-13-16_59_21.png)
