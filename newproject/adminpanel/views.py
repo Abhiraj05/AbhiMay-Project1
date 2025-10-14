@@ -1,6 +1,5 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
-# from adminpanel.models import User_Registration
 from django.contrib.auth import login, authenticate, logout
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.decorators import login_required
@@ -21,7 +20,7 @@ from django.contrib.auth.tokens import PasswordResetTokenGenerator
 
 # Create your views here.
 
-
+#message function which sends emails alerts to donors and patient
 def send_email(request, hospital_email, donor_email, message, mail_subject):
     try:
         send_mail(
@@ -37,10 +36,16 @@ def send_email(request, hospital_email, donor_email, message, mail_subject):
         messages.error(request, "email not sent!")
 
 
+
+
+#loads a main page
 def main(request):
     return render(request, "main.html")
 
 
+
+
+#get data of all donors of particular hospital and displays it in a admin panel
 @login_required
 def all_donors_view(request):
     if not request.user.is_staff:
@@ -55,6 +60,9 @@ def all_donors_view(request):
     return render(request, "all_donors.html", context)
 
 
+
+
+#shows all the blood requests of patients to particular hospital
 @login_required
 def show_blood_requests_view(request):
     if not request.user.is_staff:
@@ -71,6 +79,10 @@ def show_blood_requests_view(request):
     return render(request, "show_blood_requests.html", context)
 
 
+
+
+
+#hospital admin can approve the and decline the blood request from patient and registration as donor
 @login_required
 def admin_dashboard_view(request, donor_id=None, action=None, patient_id=None):
     # Check if the user is staff/hospital admin
@@ -78,6 +90,9 @@ def admin_dashboard_view(request, donor_id=None, action=None, patient_id=None):
         messages.error(
             request, "You Do not have access to this page. Plz Contact Admin.")
         return redirect('/')
+
+
+
 
     # approve donor logic
     if donor_id and action == "approve":
@@ -106,6 +121,11 @@ def admin_dashboard_view(request, donor_id=None, action=None, patient_id=None):
         messages.success(
             request, f"Donor '{donor.name}' has been successfully approved.")
         return redirect('admin_dashboard')
+    
+    
+    
+    
+    
     # decline donor logic
     if donor_id and action == "decline":
         donor = get_object_or_404(Donor, id=donor_id)
@@ -137,6 +157,10 @@ def admin_dashboard_view(request, donor_id=None, action=None, patient_id=None):
             request, f"The application for '{donor_name}' has been declined and removed.")
         return redirect('admin_dashboard')
 
+
+
+
+    # approve patient logic
     if patient_id and action == "approve":
         blood_request = get_object_or_404(Request_Blood, id=patient_id)
         blood_request.is_verified = True
@@ -191,6 +215,11 @@ def admin_dashboard_view(request, donor_id=None, action=None, patient_id=None):
 
         return redirect('admin_dashboard')
 
+
+
+
+
+    #decline patient logic
     if patient_id and action == "decline":
         try:
             blood_request = Request_Blood.objects.get(id=patient_id)
@@ -220,6 +249,7 @@ def admin_dashboard_view(request, donor_id=None, action=None, patient_id=None):
         except Request_Blood.DoesNotExist:
             pass
         return redirect('admin_dashboard')
+    
     # Data for stats showing cards
     hospital_name = request.user.profile.hospital
     pending_donors = Donor.objects.filter(
@@ -227,11 +257,11 @@ def admin_dashboard_view(request, donor_id=None, action=None, patient_id=None):
     pending_donors_count = pending_donors.count()
     verified_donors_count = Donor.objects.filter(
         is_verified=True, hospital=hospital_name).count()
+    
     # logic for request this month card
     day_30_days_ago = timezone.now()-datetime.timedelta(days=30)
     this_month_req_count = Request_Blood.objects.filter(
         created_at__gte=day_30_days_ago, hospital_name=hospital_name).count()
-
     latest_blood_requests = Request_Blood.objects.filter(
         hospital_name=hospital_name, is_verified=False).order_by('-created_at')[:5]
 
@@ -245,6 +275,11 @@ def admin_dashboard_view(request, donor_id=None, action=None, patient_id=None):
     return render(request, "hospital_admin.html", context)
 
 
+
+
+
+
+#hospital admin password changing function
 @login_required
 def admin_settings_view(request):
     if not request.user.is_staff:
@@ -254,6 +289,7 @@ def admin_settings_view(request):
         form = PasswordChangeForm(request.user, request.POST)
         if form.is_valid():
             user = form.save()
+            
             # This is important to keep the user logged in after a password change.
             update_session_auth_hash(request, user)
             messages.success(
@@ -267,10 +303,11 @@ def admin_settings_view(request):
     return render(request, 'admin_settings.html', {'form': form})
 
 
-# def user_exist(username,password):
-#     user=User_Registration.objects.filter(username=username,password=password).first()
-#     return user
 
+
+
+
+#hospital admin and donor login function
 def login_view(request):
     if request.method == "POST":
         form = AuthenticationForm(request, data=request.POST)
@@ -282,6 +319,7 @@ def login_view(request):
         if '@' in identifier:
             try:
                 user_obj = User.objects.get(email=identifier)
+                
                 # getting name of that partcular email user bcz authenticate function only take username or email only one field
                 username = user_obj.username
             except User.DoesNotExist:
@@ -302,11 +340,20 @@ def login_view(request):
     return render(request, "login.html", {"form": form})
 
 
+
+
+
+
+#hospital admin and donor logout function
 def logout_view(request):
     logout(request)
     return redirect(request.META.get("HTTP_REFERER", "/"))
 
 
+
+
+
+#donor password changing function
 def forgot_password(request):
     if request.method == "POST":
         reset_email = request.POST.get("email")
@@ -329,13 +376,17 @@ def forgot_password(request):
     return render(request, "forgot_password.html")
 
 
+
+
+
+
+#donor password reset function
 def reset_password(request):
     if request.method == "POST":
         new_password = request.POST.get("password")
         confirm_password = request.POST.get("confirm_password")
         uid = request.POST.get("uid")
         token = request.POST.get("token")
-
         if new_password != confirm_password:
             messages.error(request, "password not matching.")
         else:
@@ -353,114 +404,3 @@ def reset_password(request):
     return render(request, "reset_password.html")
 
 
-# def sign_up(request):
-#     if request.method  == "POST":
-#         username=request.POST.get("username")
-#         email=request.POST.get("email")
-#         password=request.POST.get("password")
-#         confirm_password=request.POST.get("confirm_password")
-
-#         if value_check(username):
-#             messages.warning("please the enter the username")
-
-#         if value_check(password):
-#             messages.warning("please the enter the password")
-
-#         if password!=confirm_password:
-#             messages.warning("password is not matching")
-
-#         if not user_exist(username,password):
-#             User_Registration.objects.create(username=username,email=email,password=password)
-#             messages.success(request, "user register successfully")
-#             return redirect("login/")
-#         else:
-#             messages.success(request, "user already exist")
-#             return redirect("signup/")
-#     return render(request,"sign_up.html")
-
-
-# def login(request):
-#     if request.method  == "POST":
-#         username=request.POST.get("username")
-#         password=request.POST.get("password")
-
-#         if value_check(username):
-#             messages.warning("please the enter the username")
-
-#         if value_check(password):
-#             messages.warning("please the enter the password")
-
-#         if user_exist(username,password):
-#             messages.warning("user not register")
-#             return redirect("login/")
-#         else:
-#             messages.warning("login successful")
-#             return redirect("finddonors/")
-
-
-#     return render(request,"login.html")
-#     return User_Registration.objects.filter(username=username,password=password).first()
-
-# def sign_up(request):
-#     error=None
-#     message=None
-#     if request.method  == "POST":
-#         username=request.POST.get("username")
-#         email=request.POST.get("email")
-#         password=request.POST.get("password")
-#         confirm_password=request.POST.get("confirm_password")
-
-#         if not username:
-#             error="please the enter the username."
-
-#         elif not password:
-#             error="please the enter the password."
-
-#         elif len(password)>=6:
-#             error="Password length should be a minimum of 6 characters."
-
-#         elif password!=confirm_password:
-#              error="password is not matching"
-
-#              if error:
-#                  return render(request,"sign_up.html",{"error":error})
-
-#         if not user_exist(username,password):
-#             User_Registration.objects.create(username=username,email=email,password=password)
-#             message="user register successfully."
-#             if message:
-#                  return render(request,"sign_up.html",{"message":message})
-#         else:
-#             message="user already exist."
-#             if message:
-#                  return render(request,"sign_up.html",{"message":message})
-#     return render(request,"sign_up.html")
-
-
-# def login(request):
-#     message=None
-#     if request.method  == "POST":
-#         username=request.POST.get("username")
-#         password=request.POST.get("password")
-
-#         if not username:
-#             error="please the enter the username."
-
-#         elif not password:
-#             error="please the enter the password."
-
-#         elif len(password)>=6:
-#             error="Password length should be a minimum of 6 characters."
-
-#             if error:
-#                  return render(request,"login.html",{"error":error})
-
-#         if user_exist(username,password):
-#             message="user not register."
-#             if message:
-#                 return redirect(request,"login.html",{"message":message})
-#         else:
-#             message="login successful."
-#             if message:
-#                 return redirect(request,"login.html",{"message":message})
-#     return render(request,"login.html")

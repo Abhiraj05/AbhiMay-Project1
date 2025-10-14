@@ -26,8 +26,6 @@ urlpatterns = [
     path('', main, name='home'),
     path('form/', donor_data, name='form'),
     path('eligibility/', donor_eligibility, name='eligibility'),
-    # path('finddonors/', find_donor, name='finddonors'),
-    # path('signup/', sign_up, name='signup'),
     path('login/', login_view, name='login'),
     path('logout/', logout_view, name='logout'),
     path('blood_request/', blood_request, name='blood_request'),
@@ -42,9 +40,5 @@ urlpatterns = [
     path('all_donors/', all_donors_view, name='all_donors'),  
     path('show_blood_requests/', show_blood_requests_view, name='show_blood_requests'),
     path('forgot_password/',forgot_password ,name='forgot_password'),
-    path('reset/',reset_password , name='reset_password')
-    
-    
-    
-    
+    path('reset/',reset_password , name='reset_password')  
 ]

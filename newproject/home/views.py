@@ -7,6 +7,7 @@ from adminpanel.models import Profile
 # Create your views here.
 
 
+#message function which sends emails alerts to donors and patient
 def send_email(request, hospital_email, donor_email, message, mail_subject):
     try:
         send_mail(
@@ -22,6 +23,10 @@ def send_email(request, hospital_email, donor_email, message, mail_subject):
         messages.error(request, "email not sent!")
 
 
+
+
+
+#patient blood request function
 def blood_request(request):
     error = None
     message = False
@@ -87,10 +92,18 @@ def blood_request(request):
     return render(request, "request_blood.html")
 
 
+
+
+
+#about page functon
 def about(request):
     return render(request, "about.html")
 
 
+
+
+
+#public contact or feedback function
 def contact_us(request):
     if request.method == "POST":
         name = request.POST.get("name")
@@ -112,5 +125,4 @@ def contact_us(request):
              send_email(request, email, default_mail, message, subject)
              messages.success(request, "your message successfully submitted.")
       
-
     return render(request, "contact_us.html")

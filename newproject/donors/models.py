@@ -2,6 +2,8 @@ from django.db import models
 from django.contrib.auth.models import User
 from phonenumber_field.modelfields import PhoneNumberField
 
+
+#blood group options for blood request model
 class BloodGroup(models.TextChoices):
     A_POSITIVE = "A+", "A+"
     A_NEGATIVE = "A-", "A-"
@@ -13,6 +15,9 @@ class BloodGroup(models.TextChoices):
     O_NEGATIVE = "O-", "O-"
 
 
+
+
+#hospital options for blood request model
 class HospitalChoices(models.TextChoices):
     GOA_MEDICAL_COLLEGE = "Goa Medical College Blood Bank", "Goa Medical College Blood Bank"
     MANIPAL_HOSPITAL = "Manipal Hospital Blood Bank", "Manipal Hospital Blood Bank"
@@ -27,6 +32,10 @@ class HospitalChoices(models.TextChoices):
     FONSECAS_PATHOLOGY = "Fonsecas Pathology Laboratory / Blood Bank", "Fonsecas Pathology Laboratory / Blood Bank"
     JEEVANDHARA = "Jeevandhara Blood Bank", "Jeevandhara Blood Bank"
 
+
+
+
+#donor registration model
 class Donor(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, null=True, blank=True)
     name = models.CharField(max_length=100, blank=False)

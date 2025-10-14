@@ -6,6 +6,7 @@ from django.contrib.auth.models import User
 from adminpanel.models import Profile
 
 
+#hospitals blood availability check function
 def hospitals_blood_availability(hospital_name):
     blood_bank_list=Donor.objects.filter(hospital=hospital_name,is_verified=1,is_active=1).all()
     unique_blood_group=[]
@@ -14,6 +15,10 @@ def hospitals_blood_availability(hospital_name):
                 unique_blood_group.append(donor.blood_group)
     return unique_blood_group
 
+
+
+
+#message function which sends emails alerts to donors and patient
 def send_email(request, hospital_email, donor_email, message, mail_subject):
     try:
         send_mail(
@@ -27,7 +32,12 @@ def send_email(request, hospital_email, donor_email, message, mail_subject):
         )
     except:
         messages.error(request, "email not sent!")
-    
+ 
+ 
+ 
+ 
+ 
+#donor registration function
 def donor_data(request):
     error = None 
     if request.method == "POST":
@@ -103,6 +113,11 @@ def donor_data(request):
     return render(request, "form.html")
 
 
+
+
+
+
+#donor eligibility function
 def donor_eligibility(request):
     if request.method == "POST":
         age_check = request.POST.get("age")
@@ -164,6 +179,12 @@ def donor_eligibility(request):
 
     return render(request, "eligibility_form.html")
 
+
+
+
+
+
+#blood bank availablity display function
 def blood_bank(request):
     goa_medical_college_blood_group = hospitals_blood_availability("Goa Medical College Blood Bank")
     manipal_hospital_blood_group = hospitals_blood_availability("Manipal Hospital Blood Bank")
@@ -195,6 +216,12 @@ def blood_bank(request):
     
     return render(request, "blood_bank.html",context)   
 
+
+
+
+
+
+#donor details updation function
 def my_profile(request):
     if request.user.is_authenticated:
         if request.method=="POST":
@@ -221,9 +248,7 @@ def my_profile(request):
                  messages.error(request,"Please enter your address.")
 
             
-            donor=Donor.objects.get(id=user_id)
-            
-                
+            donor=Donor.objects.get(id=user_id)    
             donor.name=name
             donor.email=email
             donor.age=age
@@ -239,4 +264,5 @@ def my_profile(request):
             return redirect("/profile")
     else:
         messages.error(request,"please login..")    
+        
     return render(request, "profile.html")
