@@ -53,7 +53,9 @@ It provides a simple and efficient system where **patients can request blood**, 
 ---
 
 
-Screenshots
+## Screenshots
+
+
 ![alt text](assets/screencapture-127-0-0-1-8000-2025-10-13-02_19_22.png)
 ---
 ![alt text](assets/screencapture-127-0-0-1-8000-blood-bank-2025-10-13-02_19_53.png)
