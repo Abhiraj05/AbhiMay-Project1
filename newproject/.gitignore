@@ -1,0 +1,4 @@
+env/
+# Ignore Django SQLite database
+newproject/db.sqlite3
+*.png

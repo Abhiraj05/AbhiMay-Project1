@@ -5,21 +5,28 @@ from django.core.mail import send_mail
 from adminpanel.models import Profile
 
 # Create your views here.
-def send_email(request,hospital_email,donor_email,message,mail_subject):
+
+
+#message function which sends emails alerts to donors and patient
+def send_email(request, hospital_email, donor_email, message, mail_subject):
     try:
         send_mail(
-        f"{mail_subject}",
-        f"""
+            f"{mail_subject}",
+            f"""
         {message}
         """,
-        hospital_email,
-        [donor_email],
-        fail_silently=False,
+            hospital_email,
+            [donor_email],
+            fail_silently=False,
         )
     except:
         messages.error(request, "email not sent!")
-    
 
+
+
+
+
+#patient blood request function
 def blood_request(request):
     error = None
     message = False
@@ -44,15 +51,16 @@ def blood_request(request):
         if error:
             return render(request, "request_blood.html", {"error": error})
         else:
-            request_blood=Request_Blood.objects.create(patient_name=patient_name,
-                                         blood_group=blood_group,
-                                         contact_number=contact_number,
-                                         email_id=email_id,
-                                         hospital_name=hospital_name_from_form)
+            request_blood = Request_Blood.objects.create(patient_name=patient_name,
+                                                         blood_group=blood_group,
+                                                         contact_number=contact_number,
+                                                         email_id=email_id,
+                                                         hospital_name=hospital_name_from_form)
             request_blood.save()
-            
+
             # Safely get the hospital profile
-            hospital_profile = Profile.objects.filter(hospital=hospital_name_from_form).first()
+            hospital_profile = Profile.objects.filter(
+                hospital=hospital_name_from_form).first()
 
             # Only send an email if the hospital profile exists
             if hospital_profile and hospital_profile.email:
@@ -71,10 +79,12 @@ def blood_request(request):
                 Warm regards,
                 {hospital_name} Team
                 """
-                send_email(request, hospital_email, email_id, message_body, mail_subject)
+                send_email(request, hospital_email, email_id,
+                           message_body, mail_subject)
             else:
                 # Optional: Inform the user that a notification could not be sent to the hospital
-                messages.warning(request, "Your request was submitted, but we could not notify the hospital. Please contact them directly.")
+                messages.warning(
+                    request, "Your request was submitted, but we could not notify the hospital. Please contact them directly.")
 
             message = True
             return render(request, "request_blood.html", {"message": message})
@@ -82,9 +92,37 @@ def blood_request(request):
     return render(request, "request_blood.html")
 
 
+
+
+
+#about page functon
 def about(request):
     return render(request, "about.html")
 
 
+
+
+
+#public contact or feedback function
 def contact_us(request):
+    if request.method == "POST":
+        name = request.POST.get("name")
+        email = request.POST.get("email")
+        subject = request.POST.get("subject")
+        message = request.POST.get("message")
+
+        if not name:
+            messages.error(request, "Please enter your name.")
+        elif not email:
+            messages.error(request, "Please enter your email.")
+        elif not subject:
+            messages.error(request, "Please enter the subject.")
+        elif not message:
+            messages.error(request, "Please enter your message.")
+
+        default_mail = "contact@rakthadaan.org"
+        if name and email and subject and message:
+             send_email(request, email, default_mail, message, subject)
+             messages.success(request, "your message successfully submitted.")
+      
     return render(request, "contact_us.html")

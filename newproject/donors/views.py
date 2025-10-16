@@ -6,7 +6,19 @@ from django.contrib.auth.models import User
 from adminpanel.models import Profile
 
 
+#hospitals blood availability check function
+def hospitals_blood_availability(hospital_name):
+    blood_bank_list=Donor.objects.filter(hospital=hospital_name,is_verified=1,is_active=1).all()
+    unique_blood_group=[]
+    for donor in blood_bank_list:
+         if donor.blood_group not in unique_blood_group:
+                unique_blood_group.append(donor.blood_group)
+    return unique_blood_group
 
+
+
+
+#message function which sends emails alerts to donors and patient
 def send_email(request, hospital_email, donor_email, message, mail_subject):
     try:
         send_mail(
@@ -20,7 +32,12 @@ def send_email(request, hospital_email, donor_email, message, mail_subject):
         )
     except:
         messages.error(request, "email not sent!")
-    
+ 
+ 
+ 
+ 
+ 
+#donor registration function
 def donor_data(request):
     error = None 
     if request.method == "POST":
@@ -96,6 +113,11 @@ def donor_data(request):
     return render(request, "form.html")
 
 
+
+
+
+
+#donor eligibility function
 def donor_eligibility(request):
     if request.method == "POST":
         age_check = request.POST.get("age")
@@ -153,12 +175,94 @@ def donor_eligibility(request):
                 request,
                 "❌ Sorry, you are not eligible to donate blood based on your answers."
             )
-            return redirect("eligibility") 
+            return redirect("/eligibility") 
 
     return render(request, "eligibility_form.html")
 
-def blood_bank(request):
-    return render(request, "blood_bank.html")   
 
+
+
+
+
+#blood bank availablity display function
+def blood_bank(request):
+    goa_medical_college_blood_group = hospitals_blood_availability("Goa Medical College Blood Bank")
+    manipal_hospital_blood_group = hospitals_blood_availability("Manipal Hospital Blood Bank")
+    hospicio_hospital_blood_group = hospitals_blood_availability("Hospicio Hospital Blood Bank")
+    asilo_hospital_blood_group = hospitals_blood_availability("Asilo Hospital Blood Bank")
+    district_hospital_blood_group = hospitals_blood_availability("District Hospital Blood Bank")
+    red_cross_blood_group = hospitals_blood_availability("Red Cross Blood Bank")
+    sub_district_hospital_blood_group = hospitals_blood_availability("Sub District Hospital Blood Bank")
+    vrundavan_hospital_blood_group = hospitals_blood_availability("Vrundavan Hospital Blood Bank")
+    apollo_victor_hospital_blood_group = hospitals_blood_availability("Apollo Victor Hospital Blood Bank")
+    shri_sai_central_blood_group = hospitals_blood_availability("Shri Sai Central Blood Bank & Lab")
+    fonsecas_blood_group = hospitals_blood_availability("Fonsecas Pathology Laboratory / Blood Bank")
+    jeevandhara_blood_group = hospitals_blood_availability("Jeevandhara Blood Bank")
+    
+    context = {
+    "gmc_blood_list": goa_medical_college_blood_group,
+    "manipal_blood_list": manipal_hospital_blood_group,
+    "hospicio_blood_list": hospicio_hospital_blood_group,
+    "asilo_blood_list": asilo_hospital_blood_group,
+    "district_blood_list": district_hospital_blood_group,
+    "red_cross_blood_list": red_cross_blood_group,
+    "sub_district_blood_list": sub_district_hospital_blood_group,
+    "vrundavan_blood_list": vrundavan_hospital_blood_group,
+    "apollo_victor_blood_list": apollo_victor_hospital_blood_group,
+    "shri_sai_blood_list": shri_sai_central_blood_group,
+    "fonsecas_blood_list": fonsecas_blood_group,
+    "jeevandhara_blood_list": jeevandhara_blood_group
+}
+    
+    return render(request, "blood_bank.html",context)   
+
+
+
+
+
+
+#donor details updation function
 def my_profile(request):
+    if request.user.is_authenticated:
+        if request.method=="POST":
+            user_id=request.user.id
+            name=request.POST.get("name")
+            age=request.POST.get("age")
+            email=request.POST.get("email")
+            phone_number=request.POST.get("phone_number")
+            address=request.POST.get("address")
+            last_donation_date=request.POST.get("last_donation_date")
+            is_active=request.POST.get("is_active")
+      
+            if not name:
+                messages.error(request,"Please enter your name.")
+            elif not age:
+                 messages.error(request,"Please enter your age.")
+            elif int(age) < 18:
+                 messages.error(request,"Sorry, your age should be more than 18 years old.")
+            elif not phone_number:
+                 messages.error(request,"Please enter your phone number.")
+            elif not email:
+                 messages.error(request,"Please enter your email.")
+            elif not address:
+                 messages.error(request,"Please enter your address.")
+
+            
+            donor=Donor.objects.get(id=user_id)    
+            donor.name=name
+            donor.email=email
+            donor.age=age
+            donor.phone_number=phone_number
+            donor.address=address
+            donor.last_donation_date=last_donation_date
+            if is_active=='on':
+                donor.is_active=True
+            else:
+                donor.is_active=False
+            messages.success(request,"profile details updated.")
+            donor.save()
+            return redirect("/profile")
+    else:
+        messages.error(request,"please login..")    
+        
     return render(request, "profile.html")
