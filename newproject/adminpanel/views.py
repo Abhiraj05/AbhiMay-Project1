@@ -185,7 +185,7 @@ def admin_dashboard_view(request, donor_id=None, action=None, patient_id=None):
         """
         patient_blood_group = blood_request.blood_group
         donors = Donor.objects.filter(
-            blood_group=patient_blood_group, hospital=hospital_name).all()
+            blood_group=patient_blood_group, hospital=hospital_name, is_active=True).all()
         donors_email_list = [donor.email for donor in donors]
         donors_mail_subject = f"Urgent Request for {patient_blood_group}"
         message_to_donors = f"""

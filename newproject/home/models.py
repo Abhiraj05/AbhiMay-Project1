@@ -2,7 +2,6 @@ from django.db import models
 
 # Create your models here.
 
-#blood group options for blood request model
 class BloodGroup(models.TextChoices):
     A_POSITIVE = "A+", "A+"
     A_NEGATIVE = "A-", "A-"
@@ -14,7 +13,6 @@ class BloodGroup(models.TextChoices):
     O_NEGATIVE = "O-", "O-"
 
 
-#hospital options for blood request model
 class HospitalChoices(models.TextChoices):
     GOA_MEDICAL_COLLEGE = "Goa Medical College Blood Bank", "Goa Medical College Blood Bank"
     MANIPAL_HOSPITAL = "Manipal Hospital Blood Bank", "Manipal Hospital Blood Bank"

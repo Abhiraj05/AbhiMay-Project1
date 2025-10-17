@@ -15,10 +15,6 @@ from pathlib import Path
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-
-# Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
-
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 'django-insecure-lc$4==rf&&028!#m5z13bt+zy_(6d@9&%s0-2^@)cdz8+(0ig@'
 
@@ -29,7 +25,6 @@ ALLOWED_HOSTS = []
 
 
 # Application definition
-
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -40,7 +35,7 @@ INSTALLED_APPS = [
     'adminpanel',
     'donors',
     'home',
-    'phonenumber_field', #for removing +91 entering manually
+    'phonenumber_field', 
 ]
 
 MIDDLEWARE = [
@@ -74,8 +69,6 @@ WSGI_APPLICATION = 'newproject.wsgi.application'
 
 
 # Database
-# https://docs.djangoproject.com/en/5.2/ref/settings/#databases
-
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
@@ -85,8 +78,6 @@ DATABASES = {
 
 
 # Password validation
-# https://docs.djangoproject.com/en/5.2/ref/settings/#auth-password-validators
-
 AUTH_PASSWORD_VALIDATORS = [
     {
         'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
@@ -103,8 +94,6 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 
-# Internationalization
-# https://docs.djangoproject.com/en/5.2/topics/i18n/
 
 LANGUAGE_CODE = 'en-us'
 
@@ -115,19 +104,18 @@ USE_I18N = True
 USE_TZ = True
 
 
-# Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/5.2/howto/static-files/
+
 
 STATIC_URL = 'static/'
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-# EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_HOST = 'sandbox.smtp.mailtrap.io'
+EMAIL_HOST = 'smtp.gmail.com'
+# EMAIL_HOST = 'sandbox.smtp.mailtrap.io'
 EMAIL_USE_TLS = True
 EMAIL_PORT = 587
-# EMAIL_HOST_USER ="mydjango65@gmail.com"
-# EMAIL_HOST_PASSWORD ="yoqn fpxu mbwj bgwe"
-EMAIL_HOST_USER ="37b8eea349ed5b"
-EMAIL_HOST_PASSWORD ="9ffd3099276736"
+EMAIL_HOST_USER =""
+EMAIL_HOST_PASSWORD =""
+# EMAIL_HOST_USER ="37b8eea349ed5b"
+# EMAIL_HOST_PASSWORD ="9ffd3099276736"
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
