@@ -1,4 +1,5 @@
-﻿# Rakthdaan – Blood Donation & Request Platform
+﻿````markdown
+# Rakthdaan – Blood Donation & Request Platform
 
 **Rakthdaan** is a web-based platform built to bridge the gap between **blood donors**, **patients**, and **hospitals**.  
 It provides a simple and efficient system where patients can request blood, donors can register to donate, and hospital admins can manage and approve these requests — all in one place.
@@ -123,85 +124,57 @@ Follow the steps below to set up the project locally for development and testing
 
 ![Home Page](assets/screencapture-127-0-0-1-8000-2025-10-13-02_19_22.png)
 
----
-
 ### Blood Bank Directory
 
 ![Blood Bank Directory](assets/screencapture-127-0-0-1-8000-blood-bank-2025-10-13-02_19_53.png)
-
----
 
 ### About Us Page
 
 ![About Us Page](assets/screencapture-127-0-0-1-8000-about-2025-10-13-02_20_10.png)
 
----
-
 ### Contact Us Page
 
 ![Contact Us Page](assets/screencapture-127-0-0-1-8000-contact-us-2025-10-13-02_20_43.png)
-
----
 
 ### Login Page
 
 ![Login Page](assets/screencapture-127-0-0-1-8000-login-2025-10-13-02_21_05.png)
 
----
-
 ### Forgot Password Page
 
 ![Forgot Password Page](assets/screencapture-127-0-0-1-8000-forgot-password-2025-10-13-17_00_23.png)
-
----
 
 ### Reset Password Page
 
 ![Reset Password Page](assets/screencapture-127-0-0-1-8000-reset-2025-10-13-17_00_42.png)
 
----
-
 ### Urgent Blood Request Page
 
 ![Urgent Blood Request](assets/screencapture-127-0-0-1-8000-blood-request-2025-10-13-17_06_15.png)
-
----
 
 ### Donor Registration Form
 
 ![Donor Registration Form](assets/screencapture-127-0-0-1-8000-form-2025-10-13-16_58_09.png)
 
----
-
 ### Donor Eligibility Form
 
 ![Donor Eligibility Form](assets/screencapture-127-0-0-1-8000-eligibility-2025-10-13-16_59_21.png)
-
----
 
 ### Donor Profile Page
 
 ![Donor Profile Page](assets/screencapture-127-0-0-1-8000-profile-2025-10-16-21_48_38.png)
 
----
-
 ### Admin Dashboard
 
 ![Admin Dashboard](assets/screencapture-127-0-0-1-8000-admin-dashboard-2025-10-16-21_44_44.png)
-
----
 
 ### All Donors (Admin View)
 
 ![All Donors](assets/screencapture-127-0-0-1-8000-all-donors-2025-10-16-21_45_25.png)
 
----
-
 ### Blood Requests (Admin)
 
 ![Blood Requests](assets/screencapture-127-0-0-1-8000-show-blood-requests-2025-10-16-21_45_54.png)
-
----
 
 ### Admin Settings Page
 
