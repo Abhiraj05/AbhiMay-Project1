@@ -134,10 +134,3 @@ Follow the steps below to set up the project locally for development and testing
 
 ---
 
-## Contact
-
-If you have any questions, suggestions, or issues regarding this project, feel free to reach out via the **Contact Us** page on the platform or open an issue in the repository.
-
----
-
-**Developed with ❤️ using Django & TailwindCSS**
