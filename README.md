@@ -59,8 +59,8 @@ Follow the steps below to set up the project locally for development and testing
 
 1. **Clone the repository**
    ```bash
-   git clone https://github.com/mayurkhedekar65/abhimay-project1.git
-   cd abhimay-project1/AbhiMay-Project1-main
+   git clone https://github.com/mayurkhedekar65/Rakthdaan-A-Blood-Donation-Platform.git
+   cd newproject
    ```
 
 2. **Create and activate a virtual environment**
